@@ -10,7 +10,7 @@ import { footerlinks } from '@/app/types/footerlinks'
 
 // header nav-links data
 const headerData: HeaderItem[] = [
-  { label: 'Game', href: '#' },
+  { label: 'Game', href: '#Game' },
   { label: 'About Us', href: '#About' },
   { label: 'Team', href: '#Team' },
   { label: 'FAQ', href: '#FAQ' },
