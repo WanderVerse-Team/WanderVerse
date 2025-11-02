@@ -26,8 +26,8 @@ const Beliefs = () => {
 
           {/* COLUMN-2 */}
           <div className=''>
-            <div className="bg-[#D6FFEB] pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.svg')] bg-no-repeat bg-bottom">
-              <p className='text-lg font-normal text-primary tracking-widest mb-5 text-center sm:text-start uppercase'>
+            <div className="bg-[#f7b801] pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.svg')] bg-no-repeat bg-bottom">
+              <p className='text-lg font-normal text-[#000000] tracking-widest mb-5 text-center sm:text-start uppercase'>
                 OUTCOME
               </p>
               <h3 className='text-black mb-5 text-center sm:text-start'>
