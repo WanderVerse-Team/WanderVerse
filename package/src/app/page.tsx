@@ -5,7 +5,7 @@ import Digital from '@/app/components/Home/Digital'
 import Beliefs from '@/app/components/Home/Beliefs'
 import Work from '@/app/components/Home/Work'
 import Team from '@/app/components/Home/Team'
-// import Featured from '@/app/components/Home/Featured'
+import Featured from '@/app/components/Home/Featured'
 // import Manage from '@/app/components/Home/Manage'
 import FAQ from '@/app/components/Home/FAQ'
 import Testimonial from '@/app/components/Home/Testimonials'
@@ -28,10 +28,10 @@ export default function Home() {
   <Work />
       
   <Team />
-  {/* <Featured /> */}
+  <Featured />
   {/* <Manage /> */}
       <FAQ />
-      <Testimonial />
+      {/* <Testimonial /> */}
       {/* <Articles />
       <Join />*/}
       <Insta /> 
