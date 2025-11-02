@@ -30,7 +30,7 @@ const Aboutdata: aboutdata[] = [
     heading: 'Goals.',
     imgSrc: '/images/aboutus/imgTwo.svg',
     paragraph:
-      'Developing new applications that enhance quality of life and promote sustainability. Promote technology-based solutions across every domain.',
+      'Developing new applications that enhance quality of life and promote sustainability.\nPromote technology-based solutions across every domain.',
     link: 'Learn more',
   },
   {

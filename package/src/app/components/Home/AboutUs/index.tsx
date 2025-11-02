@@ -61,7 +61,7 @@ const Aboutus = () => {
                       height={100}
                       className='mb-5'
                     />
-                    <p className='text-lg font-normal text-black group-hover:text-white mb-5'>
+                    <p className='text-lg font-normal text-black group-hover:text-white mb-5 whitespace-pre-line'>
                       {item.paragraph}
                     </p>
                   </div>
