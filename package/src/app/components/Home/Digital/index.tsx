@@ -11,11 +11,11 @@ const Digital = () => {
           <div className='grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2'>
             {/* COLUMN-1 */}
             <div className='pt-24 lg:pl-24'>
-              <p className='text-lg font-normal text-white mb-5 tracking-widest text-center lg:text-start uppercase mt-5'>
+              <p className='text-xl font-normal text-white mb-5 tracking-widest text-center lg:text-start uppercase mt-5'>
                 EduVerse
               </p>
               {/* <h2 className='text-white mb-8 leading-tight text-center lg:text-start lg:w-full'> */}
-              <h2 className='text-base lg:text-xl text-white mb-8 leading-relaxed text-center lg:text-start lg:max-w-5xl mx-auto lg:mx-0'>
+              <h2 className='text-base lg:text-5xl text-white mb-8 leading-relaxed text-center lg:text-start lg:max-w-5xl mx-auto lg:mx-0'>
                 Jump into the world of Duo where learning is a game and each level makes you smarter
               </h2>
               <div className='text-center lg:text-start'>
