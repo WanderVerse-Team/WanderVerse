@@ -38,7 +38,7 @@ const Aboutus = () => {
             alt='dots-image'
             className='absolute bottom-1 -left-20'
           />
-          <p className='text-center text-primary text-lg tracking-widest uppercase mt-10'>
+          <p className='text-center text-white text-lg tracking-widest uppercase mt-10'>
             about us
           </p>
           <h2 className='text-center pb-12'>Get to know about us.</h2>
