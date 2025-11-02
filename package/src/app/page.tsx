@@ -24,11 +24,12 @@ export default function Home() {
       <Hero />
   <Digital />
   <Beliefs />
+  <Featured />
   <Aboutus />
   <Work />
       
   <Team />
-  <Featured />
+
   {/* <Manage /> */}
       <FAQ />
       {/* <Testimonial /> */}
