@@ -31,7 +31,7 @@ export default function Home() {
   <Featured />
   {/* <Manage /> */}
       <FAQ />
-      <Testimonial />
+      {/* <Testimonial /> */}
       {/* <Articles />
       <Join />*/}
       <Insta /> 
