@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const Beliefs = () => {
   return (
-    <section className='bg-cover bg-center overflow-hidden'>
+    <section id='Game' className='bg-cover bg-center overflow-hidden'>
       <div className='container mx-auto max-w-7xl px-4'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* COLUMN-1 */}

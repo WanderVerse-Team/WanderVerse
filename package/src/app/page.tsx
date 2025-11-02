@@ -22,10 +22,11 @@ export default function Home() {
   return (
     <main>
       <Hero />
-  <Aboutus />
   <Digital />
-      <Beliefs />
-      <Work />
+  <Beliefs />
+  <Aboutus />
+  <Work />
+      
   <Team />
   {/* <Featured /> */}
   {/* <Manage /> */}
