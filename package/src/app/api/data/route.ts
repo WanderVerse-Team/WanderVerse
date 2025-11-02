@@ -10,11 +10,10 @@ import { footerlinks } from '@/app/types/footerlinks'
 
 // header nav-links data
 const headerData: HeaderItem[] = [
+  { label: 'Game', href: '#' },
   { label: 'About Us', href: '#About' },
   { label: 'Team', href: '#Team' },
   { label: 'FAQ', href: '#FAQ' },
-  { label: 'Blog', href: '#Blog' },
-  { label: 'Docs', href: '/documentation' },
 ]
 
 // about data
@@ -46,32 +45,32 @@ const Aboutdata: aboutdata[] = [
 const WorkData: workdata[] = [
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Seshani Balasooriya',
     imgSrc: '/images/wework/avatar.svg',
   },
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Theshara Rajapaksha',
     imgSrc: '/images/wework/avatar3.svg',
   },
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Vihanga Sathsari',
     imgSrc: '/images/wework/avatar4.svg',
   },
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Himashi Dissanayake',
     imgSrc: '/images/wework/avatar.svg',
   },
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Randiv Mendis',
     imgSrc: '/images/wework/avatar3.svg',
   },
   {
     profession: 'Co-founder',
-    name: 'John Doe',
+    name: 'Senmith Sahajeewa',
     imgSrc: '/images/wework/avatar4.svg',
   },
 ]

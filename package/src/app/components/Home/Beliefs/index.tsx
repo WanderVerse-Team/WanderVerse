@@ -19,16 +19,9 @@ const Beliefs = () => {
                 of every lesson.
               </span>
             </h3>
-            <p className='text-lg text-white/75 pt-2 mb-16 text-center sm:text-start'>
+            <p className='text-2xl text-white/95 pt-2 mb-16 text-center sm:text-start'><br/>
               Dives deeper into each concept in every lesson in the local syllabus, grabbing the expected learning outcomes and gamifying each learning point through levels.
             </p>
-            <div className='text-center sm:text-start'>
-              <Link
-                href='#'
-                className='text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full duration-300 bg-primary border border-primary hover:bg-darkmode hover:border-darkmode'>
-                OUTCOMES
-              </Link>
-            </div>
           </div>
 
           {/* COLUMN-2 */}
@@ -40,18 +33,11 @@ const Beliefs = () => {
               <h3 className='text-black mb-5 text-center sm:text-start'>
                 <span className='text-primary'>Effortless</span> and fun learning
               </h3>
-              <p className='pt-2 mb-16 text-center sm:text-start text-black/75 text-lg'>
-                -	Understanding lesson concepts through colorful graphics and live interaction
--	Extensive practice of each concept through playing “games” instead of “studying” or “learning”
+              <p className='pt-2 mb-16 text-center sm:text-start text-black/75 text-lg'><br/>
+                -	Understanding lesson concepts through colorful graphics and live interaction<br/><br/>
+-	Extensive practice of each concept through playing "games" instead of "studying" or "learning"<br/><br/>
 -	Deep learning of theory and development of cognitive skills in addition to book-based learning in school
               </p>
-              <div className='text-center sm:text-start'>
-                <Link
-                  href='#'
-                  className='text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary border border-primary hover:bg-darkmode hover:border-darkmode'>
-                  Learn more
-                </Link>
-              </div>
             </div>
           </div>
         </div>
