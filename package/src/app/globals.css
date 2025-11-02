@@ -109,3 +109,45 @@ html {
   background-repeat: no-repeat, no-repeat;
   background-position: 90% 100%, 2% 18%;
 }
+
+/* Custom scrollbar styles (WebKit + Firefox) - themed to site colors */
+/* Uses CSS variables defined above (--color-primary, --color-deep-slate) */
+/* Applied globally; replace `*` with a selector like `.custom-scroll` to scope it */
+
+/* WebKit browsers (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  /* subtle two-tone track using site colors */
+  background: linear-gradient(180deg, rgba(243,91,3,0.04), rgba(2,57,138,0.03));
+}
+
+*::-webkit-scrollbar-thumb {
+  /* gradient thumb using primary -> deep-slate for a branded look */
+  background: linear-gradient(180deg, var(--color-primary), var(--color-deep-slate));
+  border-radius: 10px;
+  border: 3px solid rgba(255,255,255,0.85); /* creates a light padding around the thumb */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  filter:brightness(0.9);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin; /* auto | thin | none */
+  /* Firefox doesn't support gradients; use primary for the thumb and a light track */
+  scrollbar-color: var(--color-primary) rgba(243,243,247,0.8);
+}
+
+/* Optional: provide a scoped class example for targeted usage
+.custom-scroll {
+  scrollbar-width: thin;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-primary), var(--color-deep-slate));
+}
+*/
