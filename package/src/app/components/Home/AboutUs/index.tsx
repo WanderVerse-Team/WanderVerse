@@ -38,7 +38,7 @@ const Aboutus = () => {
             alt='dots-image'
             className='absolute bottom-1 -left-20'
           />
-          <p className='text-center text-primary text-lg tracking-widest uppercase mt-10'>
+          <p className='text-center text-white text-lg tracking-widest uppercase mt-10'>
             about us
           </p>
           <h2 className='text-center pb-12'>Get to know about us.</h2>
@@ -61,19 +61,9 @@ const Aboutus = () => {
                       height={100}
                       className='mb-5'
                     />
-                    <p className='text-lg font-normal text-black group-hover:text-white mb-5'>
+                    <p className='text-lg font-normal text-black group-hover:text-white mb-5 whitespace-pre-line'>
                       {item.paragraph}
                     </p>
-                    <Link
-                      href='#'
-                      className='text-18 font-semibold text-primary hover-underline flex items-center'>
-                      {item.link}
-                      <Icon
-                        icon='tabler:chevron-right'
-                        width='20'
-                        height='20'
-                      />
-                    </Link>
                   </div>
                 ))}
           </div>

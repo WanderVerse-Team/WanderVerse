@@ -1,25 +1,18 @@
 'use client'
 import { Key, useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { HeaderItem } from '@/app/types/menu'
 import Logo from './Logo'
 import HeaderLink from './Navigation/HeaderLink'
 import MobileHeaderLink from './Navigation/MobileHeaderLink'
-import Signin from '@/app/components/Auth/SignIn'
-import SignUp from '@/app/components/Auth/SignUp'
 import { Icon } from '@iconify/react/dist/iconify.js'
 
 const Header: React.FC = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
-  const [isSignInOpen, setIsSignInOpen] = useState(false)
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false)
 
   const navbarRef = useRef<HTMLDivElement>(null)
-  const signInRef = useRef<HTMLDivElement>(null)
-  const signUpRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
 
   const handleScroll = () => {
@@ -27,18 +20,6 @@ const Header: React.FC = () => {
   }
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      signInRef.current &&
-      !signInRef.current.contains(event.target as Node)
-    ) {
-      setIsSignInOpen(false)
-    }
-    if (
-      signUpRef.current &&
-      !signUpRef.current.contains(event.target as Node)
-    ) {
-      setIsSignUpOpen(false)
-    }
     if (
       mobileMenuRef.current &&
       !mobileMenuRef.current.contains(event.target as Node) &&
@@ -55,15 +36,15 @@ const Header: React.FC = () => {
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [navbarOpen, isSignInOpen, isSignUpOpen])
+  }, [navbarOpen])
 
   useEffect(() => {
-    if (isSignInOpen || isSignUpOpen || navbarOpen) {
+    if (navbarOpen) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
     }
-  }, [isSignInOpen, isSignUpOpen, navbarOpen])
+  }, [navbarOpen])
 
   // header data fetch
 
@@ -106,56 +87,6 @@ const Header: React.FC = () => {
               sticky ? 'py-3' : 'py-7'
             }`}>
             <button
-              className='hidden lg:block bg-transparent text-darkmode border hover:bg-darkmode border-darkmode hover:text-white px-4 py-2 rounded-lg hover:cursor-pointer'
-              onClick={() => {
-                setIsSignInOpen(true)
-              }}>
-              Sign In
-            </button>
-            {isSignInOpen && (
-              <div className='fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50'>
-                <div
-                  ref={signInRef}
-                  className='relative mx-auto w-full max-w-md bg-white overflow-hidden rounded-lg px-8 pt-14 pb-8 text-center bg-dark_grey/90 backdrop-blur-md'>
-                  <button
-                    onClick={() => setIsSignInOpen(false)}
-                    className='absolute top-0 right-0 mr-8 mt-8 dark:invert'
-                    aria-label='Close Sign In Modal'>
-                    <Icon
-                      icon='tabler:currency-xrp'
-                      className='text-black hover:text-primary text-24 inline-block me-2 cursor-pointer'
-                    />
-                  </button>
-                  <Signin />
-                </div>
-              </div>
-            )}
-            <button
-              className='hidden lg:block bg-darkmode text-white hover:bg-transparent hover:text-darkmode border border-darkmode px-4 py-2 rounded-lg hover:cursor-pointer'
-              onClick={() => {
-                setIsSignUpOpen(true)
-              }}>
-              Sign Up
-            </button>
-            {isSignUpOpen && (
-              <div className='fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50'>
-                <div
-                  ref={signUpRef}
-                  className='relative mx-auto w-full max-w-md overflow-hidden bg-white rounded-lg bg-dark_grey/90 backdrop-blur-md px-8 pt-14 pb-8 text-center'>
-                  <button
-                    onClick={() => setIsSignUpOpen(false)}
-                    className='absolute top-0 right-0 mr-8 mt-8 dark:invert'
-                    aria-label='Close Sign Up Modal'>
-                    <Icon
-                      icon='tabler:currency-xrp'
-                      className='text-black hover:text-primary text-24 inline-block me-2 cursor-pointer'
-                    />
-                  </button>
-                  <SignUp />
-                </div>
-              </div>
-            )}
-            <button
               onClick={() => setNavbarOpen(!navbarOpen)}
               className='block lg:hidden p-2 rounded-lg'
               aria-label='Toggle mobile menu'>
@@ -190,26 +121,6 @@ const Header: React.FC = () => {
                 <MobileHeaderLink key={index} item={item} />
               )
             )}
-            <div className='mt-4 flex flex-col space-y-4 w-full'>
-              <Link
-                href='#'
-                className='bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white'
-                onClick={() => {
-                  setIsSignInOpen(true)
-                  setNavbarOpen(false)
-                }}>
-                Sign In
-              </Link>
-              <Link
-                href='#'
-                className='bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700'
-                onClick={() => {
-                  setIsSignUpOpen(true)
-                  setNavbarOpen(false)
-                }}>
-                Sign Up
-              </Link>
-            </div>
           </nav>
         </div>
       </div>
