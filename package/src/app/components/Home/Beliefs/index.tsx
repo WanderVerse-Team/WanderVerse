@@ -9,7 +9,7 @@ const Beliefs = () => {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
           {/* COLUMN-1 */}
 
-          <div className="bg-purple pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/swirls.svg')] bg-no-repeat bg-right-bottom">
+          <div className="bg-purple pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.png')] bg-no-repeat bg-right-bottom bg-[length:auto_50%]">
             <p className='text-lg font-normal text-white tracking-widest mb-5 text-center sm:text-start uppercase'>
               CORE CONCEPT
             </p>
@@ -26,7 +26,7 @@ const Beliefs = () => {
 
           {/* COLUMN-2 */}
           <div className=''>
-            <div className="bg-[#f7b801] pt-10 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.svg')] bg-no-repeat bg-bottom">
+            <div className="bg-[#f7b801] pt-10 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.svg')] bg-no-repeat bg-bottom bg-[length:auto_30%]">
               <p className='text-lg font-normal text-[#000000] tracking-widest mb-5 text-center sm:text-start uppercase'>
                 OUTCOME
               </p>
