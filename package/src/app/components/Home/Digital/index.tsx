@@ -12,7 +12,7 @@ const Digital = () => {
             {/* COLUMN-1 */}
             <div className='pt-24 lg:pl-24'>
               <p className='text-xl font-normal text-white mb-5 tracking-widest text-center lg:text-start uppercase mt-5'>
-                EduVerse
+                WanderVerse
               </p>
               {/* <h2 className='text-white mb-8 leading-tight text-center lg:text-start lg:w-full'> */}
               <h2 className='text-base lg:text-5xl text-white mb-8 leading-relaxed text-center lg:text-start lg:max-w-5xl mx-auto lg:mx-0'>
