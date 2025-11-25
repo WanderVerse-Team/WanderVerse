@@ -34,7 +34,7 @@ const FAQ = () => {
                         <Icon icon='lucide:chevron-up' width='20' height='20' />
                       </div>
                     </DisclosureButton>
-                    <DisclosurePanel className='text-lg text-black/70 font-normal text-left pt-4 mt-6 border-t border-border'>
+                    <DisclosurePanel className='text-lg text-black/80 font-normal text-left pt-4 mt-6 border-t border-border'>
                       <div className='lg:max-w-70%'>
                         Currently, no. The initial phase of the app only covers Mathematics for the third grade.
                       </div>
@@ -56,7 +56,7 @@ const FAQ = () => {
                         <Icon icon='lucide:chevron-up' width='20' height='20' />
                       </div>
                     </DisclosureButton>
-                    <DisclosurePanel className='text-lg text-black/70 pt-4 mt-6 text-left border-t border-border'>
+                    <DisclosurePanel className='text-lg text-black/80 pt-4 mt-6 text-left border-t border-border'>
                       <div className='lg:max-w-70%'>
                         No. Third grade Mathematics is only taught in Sinhala and Tamil mediums in Sri Lanka. So
 the initial phase of the project will only focus on Sinhala medium.
@@ -80,7 +80,7 @@ the initial phase of the project will only focus on Sinhala medium.
                         <Icon icon='lucide:chevron-up' width='20' height='20' />
                       </div>
                     </DisclosureButton>
-                    <DisclosurePanel className='text-lg text-black/70 pt-4 mt-6 font-normal text-left border-t border-border'>
+                    <DisclosurePanel className='text-lg text-black/80 pt-4 mt-6 font-normal text-left border-t border-border'>
                       <div className='lg:max-w-70%'>
                         Craven omni memoria patriae zombieland clairvius
                         narcisse religionis sunt diri undead historiarum.
