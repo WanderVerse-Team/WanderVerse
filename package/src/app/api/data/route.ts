@@ -36,7 +36,7 @@ const Aboutdata: aboutdata[] = [
     heading: 'Our Works.',
     imgSrc: '/images/aboutus/imgThree.svg',
     paragraph:
-      'EduVerse--our maiden application that gamifies the local syllabus in schools, bridging school education, trends and technology.',
+      'WanderVerse--our maiden application that gamifies the local syllabus in schools, bridging school education, trends and technology.',
     link: 'Learn more',
   },
 ]

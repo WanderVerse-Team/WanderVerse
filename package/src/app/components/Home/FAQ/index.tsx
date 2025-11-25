@@ -25,7 +25,7 @@ const FAQ = () => {
                   <div>
                     <DisclosureButton className='flex w-full justify-between items-center text-left text-2xl font-medium focus:outline-hidden hover:cursor-pointer'>
                       <span className='text-black'>
-                        Is EduVerse available for all grades?
+                        Is WanderVerse available for all grades?
                       </span>
                       <div
                         className={`h-5 w-5 transform transition-transform duration-300 ${
