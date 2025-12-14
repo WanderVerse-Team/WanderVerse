@@ -18,12 +18,12 @@ jobs:
       with:
         node-version: '18'
 
-    # 2. NEW FIX: Change directory before running build commands
+    # 2. CORRECTED: Install dependencies and Build
     - name: Install dependencies and Build
       run: |
-        cd package/src/app/ # <--- CRITICAL FIX: Change directory to where package.json lives
+        # No 'cd' command needed because package.json is at the root
         npm install
-        npm run build
+        npm run build 
     
     # 3. Corrected deployment step
     - name: Sync to FTP
@@ -33,4 +33,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: htdocs/
-        local-dir: package/src/app/build/ # <--- Path to the output, relative to the root
+        local-dir: out/ # <--- FINAL FIX: Next.js often uses 'out' for static export
