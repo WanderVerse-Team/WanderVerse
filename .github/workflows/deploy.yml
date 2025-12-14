@@ -2,7 +2,7 @@ name: Deploy to InfinityFree
 on:
   push:
     branches:
-      - main  # Make sure this matches the branch you work on
+      - main
 
 jobs:
   web-deploy:
@@ -12,11 +12,24 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
+    # 1. NEW: Set up Node.js environment
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Use a stable Node version
+
+    # 2. NEW: Install dependencies and build the app
+    - name: Install dependencies and Build
+      run: |
+        npm install
+        npm run build 
+
+    # 3. Corrected deployment step
     - name: Sync to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: htdocs/  # This is the root folder for InfinityFree websites
-        local-dir: package/src/app/
+        server-dir: htdocs/
+        local-dir: build/ # <--- We are now deploying the contents of the 'build' folder
