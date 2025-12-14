@@ -12,18 +12,19 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
-    # 1. NEW: Set up Node.js environment
+    # 1. Set up Node.js environment
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18' # Use a stable Node version
+        node-version: '18'
 
-    # 2. NEW: Install dependencies and build the app
+    # 2. NEW FIX: Change directory before running build commands
     - name: Install dependencies and Build
       run: |
+        cd package/src/app/ # <--- CRITICAL FIX: Change directory to where package.json lives
         npm install
-        npm run build 
-
+        npm run build
+    
     # 3. Corrected deployment step
     - name: Sync to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -32,4 +33,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: htdocs/
-        local-dir: build/ # <--- We are now deploying the contents of the 'build' folder
+        local-dir: package/src/app/build/ # <--- Path to the output, relative to the root
