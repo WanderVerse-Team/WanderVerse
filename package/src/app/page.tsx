@@ -24,18 +24,18 @@ export default function Home() {
       <Hero />
   <Digital />
   <Beliefs />
-  <Featured />
+  {/* <Featured /> */}
   <Aboutus />
   <Work />
       
-  <Team />
+  {/* <Team /> */}
 
   {/* <Manage /> */}
       <FAQ />
       {/* <Testimonial /> */}
       {/* <Articles />
       <Join />*/}
-      <Insta /> 
+      {/* <Insta />  */}
     </main>
   )
 }
