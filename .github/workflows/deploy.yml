@@ -20,7 +20,6 @@ jobs:
 
     # 2. FINAL FIX: Use working-directory to ensure the npm commands run from the root
     - name: Install dependencies and Build
-      # Set the working directory to the root of the checked-out code
       working-directory: ${{ github.workspace }}
       run: |
         npm install
@@ -34,4 +33,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: htdocs/
-        local-dir: out/
+        local-dir: out/
