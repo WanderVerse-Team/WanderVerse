@@ -78,19 +78,19 @@ const WorkData: workdata[] = [
 // featured data
 const FeaturedData: featureddata[] = [
   {
-    heading: 'Brand design for a computer brand.',
+    heading: 'Feature 1',
     imgSrc: '/images/featured/feat1.jpg',
   },
   {
-    heading: 'Mobile app 3d wallpaper.',
+    heading: 'Feature 2',
     imgSrc: '/images/featured/feat2.jpg',
   },
   {
-    heading: 'Brand design for a computer brand.',
+    heading: 'Feature 3',
     imgSrc: '/images/featured/feat1.jpg',
   },
   {
-    heading: 'Mobile app 3d wallpaper.',
+    heading: 'Feature 4',
     imgSrc: '/images/featured/feat2.jpg',
   },
 ]
