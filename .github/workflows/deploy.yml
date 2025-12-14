@@ -18,14 +18,15 @@ jobs:
       with:
         node-version: '18'
 
-    # 2. CORRECTED: Install dependencies and Build
+    # 2. FINAL FIX: Use working-directory to ensure the npm commands run from the root
     - name: Install dependencies and Build
+      # Set the working directory to the root of the checked-out code
+      working-directory: ${{ github.workspace }}
       run: |
-        # No 'cd' command needed because package.json is at the root
         npm install
         npm run build 
     
-    # 3. Corrected deployment step
+    # 3. Deployment step
     - name: Sync to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -33,4 +34,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: htdocs/
-        local-dir: out/ # <--- FINAL FIX: Next.js often uses 'out' for static export
+        local-dir: out/
