@@ -1,0 +1,28 @@
+# This .gitignore file ensures you don't upload junk to GitHub
+
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures can get excessive
+/[Mm]emoryCaptures/
+
+# Asset meta data should only be ignored when the associated asset is also ignored
+!/[Aa]ssets/**/*.meta
+
+# Autosave files
+sysinfo.txt
+*.stackdump
+*.apk
+*.unitypackage
+
+# Visual Studio / VS Code cache
+.vs/
+.gradle/
+.idea/
+*.csproj
+*.sln
