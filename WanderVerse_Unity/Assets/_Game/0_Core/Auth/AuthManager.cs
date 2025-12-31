@@ -64,8 +64,7 @@ public class AuthManager : MonoBehaviour
             Debug.Log($"Logged In: {_auth.CurrentUser.Email}");
             UpdateFeedback("Success! Loading Menu...");
             
-            // TODO: Load the next scene
-            // SceneManager.LoadScene("Scene_MainMenu");
+            SceneManager.LoadScene("Scene_WorldMap");
         }
     }
 
