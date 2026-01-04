@@ -9,10 +9,10 @@ public class DragAndDropHandler : MonoBehaviour
     [Tooltip("Layer in which target drop zones exist")]
     [SerializeField] private LayerMask dropZoneLayer;
 
-    [Tooltip("How much to scale the object when picking it up (visual feedback).")]
+    [Tooltip("How much to zoom the object when picking it up (for visual feedback).")]
     [SerializeField] private float dragScaleFactor = 1.2f;
 
-    [Tooltip("Sorting order to apply when dragging so item appears on top.")]
+    [Tooltip("Sorting order to apply when dragging so the selected item appears on top.")]
     [SerializeField] private int dragSortingOrder = 100;
 
     private Camera mainCamera;
@@ -32,7 +32,7 @@ public class DragAndDropHandler : MonoBehaviour
 
         if (levelController == null)
         {
-            Debug.LogError("[ItemManipulator] No LevelController found in scene!");
+            Debug.LogError("[DragAndDropHandler] No LevelController found in scene!");
         }
     }
 
