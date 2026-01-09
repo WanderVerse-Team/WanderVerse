@@ -13,10 +13,15 @@ const settings = {
   slidesToShow: 5,
   slidesToScroll: 1,
   arrows: false,
-  autoplay: true,
-  speed: 4000,
-  autoplaySpeed: 2000,
+  autoplay: false,
+  speed: 500,
   cssEase: 'linear',
+  pauseOnHover: true,
+  pauseOnFocus: true,
+  swipeToSlide: true,
+  focusOnSelect: true,
+  draggable: true,
+  touchMove: true,
   responsive: [
     {
       breakpoint: 1200,
@@ -96,15 +101,6 @@ const Work = () => {
                       height={182}
                       className='inline-block m-auto'
                     />
-                    <div className='absolute right-16 bottom-0 bg-white shadow-linckedin p-5 rounded-full'>
-                      <Image
-                        src={'/images/wework/linkedin.svg'}
-                        alt='greenbg'
-                        width={30}
-                        height={30}
-                        className='inline-block'
-                      />
-                    </div>
                   </div>
                   <h6 className='text-xl text-black dark:text-white font-bold pt-14'>
                     {items.name}

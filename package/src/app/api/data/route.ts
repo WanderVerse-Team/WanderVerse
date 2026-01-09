@@ -44,34 +44,34 @@ const Aboutdata: aboutdata[] = [
 // work-data
 const WorkData: workdata[] = [
   {
-    profession: 'Co-founder',
+    profession: 'UI/UX Developer',
     name: 'Seshani Balasooriya',
-    imgSrc: '/images/wework/avatar.svg',
+    imgSrc: '/images/wework/Seshani.jpeg',
   },
   {
-    profession: 'Co-founder',
+    profession: 'Gameplay Designer',
     name: 'Theshara Rajapaksha',
-    imgSrc: '/images/wework/avatar3.svg',
+    imgSrc: '/images/wework/theshara.jpeg',
   },
   {
-    profession: 'Co-founder',
+    profession: 'Level Designer',
     name: 'Vihanga Sathsari',
-    imgSrc: '/images/wework/avatar4.svg',
+    imgSrc: '/images/wework/Sakuni3.jpg',
   },
   {
-    profession: 'Co-founder',
+    profession: 'Cloud Integration Engineer',
     name: 'Himashi Dissanayake',
-    imgSrc: '/images/wework/avatar.svg',
+    imgSrc: '/images/wework/Himashi.jpg',
   },
   {
-    profession: 'Co-founder',
+    profession: 'Systems Engineer',
     name: 'Randiv Mendis',
-    imgSrc: '/images/wework/avatar3.svg',
+    imgSrc: '/images/wework/Randiv.jpg',
   },
   {
-    profession: 'Co-founder',
+    profession: 'Backend Developer',
     name: 'Senmith Sahajeewa',
-    imgSrc: '/images/wework/avatar4.svg',
+    imgSrc: '/images/wework/Senmith.jpeg',
   },
 ]
 
@@ -267,22 +267,7 @@ const FooterLinksData: footerlinks[] = [
       { label: 'View all', href: '/' },
       { label: 'Log In', href: '/' },
     ],
-  },
-  {
-    section: 'Pages',
-    links: [
-      { label: '404', href: '/' },
-      { label: 'Instructions', href: '/' },
-      { label: 'License', href: '/' },
-    ],
-  },
-  {
-    section: 'Others',
-    links: [
-      { label: 'Styleguide', href: '/' },
-      { label: 'Changelog', href: '/' },
-    ],
-  },
+  }
 ]
 
 export const GET = () => {

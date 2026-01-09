@@ -26,7 +26,10 @@ const Beliefs = () => {
 
           {/* COLUMN-2 */}
           <div className=''>
-            <div className="bg-[#f7b801] pt-10 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg.svg')] bg-no-repeat bg-bottom bg-[length:auto_30%]">
+            <div
+              className="bg-[#f7b801] pt-10 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl bg-[url('/images/beliefs/bg2.png')] bg-no-repeat bg-bottom"
+              style={{ backgroundPosition: 'right 10px bottom', backgroundSize: 'auto 45%' }}
+            >
               <p className='text-lg font-normal text-[#000000] tracking-widest mb-5 text-center sm:text-start uppercase'>
                 OUTCOME
               </p>
