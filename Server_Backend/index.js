@@ -14,17 +14,22 @@ var serviceAccount;
 try {
     serviceAccount = require('./firebase-admin-key.json');
 } catch (e) {
-    console.log("Firebase-admin-key.json file not found.");
+    console.log("Service key not found, switching to Environment Variables");
 }
 
 if(!admin.apps.length){
     if(serviceAccount){
+        console.log("Initializing Firebase with Local Key")
         admin.initializeApp({
             // @ts-ignore
             credential: admin.credential.cert(serviceAccount)
         });
     } else {
+        console.log("Initializing Firebase with Environment Variables")
         admin.initializeApp();
     }
 }
+
+
+
 
