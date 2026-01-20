@@ -32,3 +32,6 @@ sysinfo.txt
 
 #Ignore Node Module Dependencies
 node_modules/
+
+#Firbase service account key
+firebase-admin-key.json
