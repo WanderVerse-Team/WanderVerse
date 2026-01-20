@@ -30,6 +30,24 @@ if(!admin.apps.length){
     }
 }
 
+//Import the sync and conflict resolution logic
+const syncController = require('./controllers/syncController');
 
+//When a POST request is made to /api/sync, call the handleSync function
+app.post('/api/sync', syncController.handleSync);
 
+//Test to verify if the server is running
+app.get('/', (req, res) => {
+    res.send('WanderVerse middleware is running!');
+});
 
+//app object is exported so Vercel can use it to start the server
+module.exports = app;
+
+//Local Testing
+const PORT = process.env.PORT || 3000;
+if(require.main === module){
+    app.listen(PORT, () => {
+        console.log(`Server is running locally on http://localhost:${PORT}`);
+    });
+}

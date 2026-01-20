@@ -57,7 +57,7 @@ exports.handleSync = async (req, res) => {
 
     } catch (e) {
         console.error("Error during sync operation:", e);
-        res.status(500).send({ error: 'Internal Server Error' });
+        res.status(500).send({ error: 'Internal Server Error' });   
 
     }
 }
