@@ -1,0 +1,30 @@
+//@ts-check
+
+//Importing dependencies
+require('dotenv').config();
+const express = require('express');
+const admin = require('firebase-admin');
+
+//Initializing express
+const app = express();
+app.use(express.json()); //Allows server to read JSON from Unity
+
+//Initializing Firebase Admin SDK
+var serviceAccount;
+try {
+    serviceAccount = require('./firebase-admin-key.json');
+} catch (e) {
+    console.log("Firebase-admin-key.json file not found.");
+}
+
+if(!admin.apps.length){
+    if(serviceAccount){
+        admin.initializeApp({
+            // @ts-ignore
+            credential: admin.credential.cert(serviceAccount)
+        });
+    } else {
+        admin.initializeApp();
+    }
+}
+
