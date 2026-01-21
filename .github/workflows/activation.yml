@@ -4,11 +4,14 @@ on: [workflow_dispatch]
 
 jobs:
   request-license:
+    name: Request License
     runs-on: ubuntu-latest
     steps:
+      # Checkout the repository 
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Run the Unity activator 
       - name: Request manual activation file
         id: getManualLicenseFile
         uses: game-ci/unity-request-activation-file@v2
@@ -16,8 +19,9 @@ jobs:
           unityEmail: ${{ secrets.UNITY_EMAIL }}
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
+      # Upload the result 
       - name: Upload activation file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Unity_v2022.x.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
