@@ -35,14 +35,16 @@ jobs:
           restore-keys: |
             Library-Android-
 
-      # 4. The Main Event: Build the APK
+      # 4. Build the APK 
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         with:
           targetPlatform: Android
-          projectPath: WanderVerse_Unity   
-          unityVersion: 6000.3.2f1       
+          projectPath: WanderVerse_Unity
+          unityVersion: 6000.3.2f1
           buildName: WanderVerse_v1
+          allowDirtyBuild: true     
+          versioning: None           
 
       # 5. Upload the APK so you can download it
       - name: Upload APK
