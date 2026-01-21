@@ -31,11 +31,12 @@ if(!admin.apps.length){
 }
 
 //Importing the controllers
+const {verifyToken} = require('./authentication/authMiddleware');
 const syncController = require('./controllers/syncController');
 const leaderboardController = require('./controllers/leaderboardController');
 
 //When a POST request is made to /api/sync, call the handleSync function
-app.post('/api/sync', syncController.handleSync);
+app.post('/api/sync', verifyToken, syncController.handleSync);
 
 //Test to verify if the server is running
 app.get('/', (req, res) => {

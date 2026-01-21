@@ -48,7 +48,7 @@ exports.getGlobalLeaderboard = async (req, res) => {
         lastFetchTime = currentTime;
 
         //send response
-        res.status(200).send({
+        return res.status(200).send({
             status: 'SUCCESS',
             source: 'database',
             data: cachedLeaderboard
