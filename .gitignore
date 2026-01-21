@@ -29,3 +29,9 @@ sysinfo.txt
 .idea/
 *.csproj
 *.sln
+
+#Ignore Node Module Dependencies
+node_modules/
+
+#Firbase service account key
+firebase-admin-key.json
