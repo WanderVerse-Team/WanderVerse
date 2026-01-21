@@ -1,0 +1,52 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows to click a button to build manually
+
+env:
+  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+jobs:
+  buildAndroid:
+    name: Build for Android
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Downloads the project code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 2. Restores the Firebase Config file
+      - name: Restore google-services.json
+        run: echo '${{ secrets.FIREBASE_CONFIG }}' > WanderVerse_Unity/Assets/google-services.json
+
+      # 3. Cache the Library 
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: WanderVerse_Unity/Library
+          key: Library-Android-${{ hashFiles('WanderVerse_Unity/Assets/**') }}
+          restore-keys: |
+            Library-Android-
+
+      # 4. The Main Event: Build the APK
+      - name: Build Android APK
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: Android
+          projectPath: WanderVerse_Unity   
+          unityVersion: 6000.3.2f1       
+          buildName: WanderVerse_v1
+
+      # 5. Upload the APK so you can download it
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: WanderVerse-Android-Build
+          path: build/Android/Android.apk
