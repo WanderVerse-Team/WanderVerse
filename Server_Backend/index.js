@@ -30,8 +30,9 @@ if(!admin.apps.length){
     }
 }
 
-//Import the sync and conflict resolution logic
+//Importing the controllers
 const syncController = require('./controllers/syncController');
+const leaderboardController = require('./controllers/leaderboardController');
 
 //When a POST request is made to /api/sync, call the handleSync function
 app.post('/api/sync', syncController.handleSync);
@@ -40,6 +41,9 @@ app.post('/api/sync', syncController.handleSync);
 app.get('/', (req, res) => {
     res.send('WanderVerse middleware is running!');
 });
+
+//GET leaderboard endpoint
+app.get('/api/leaderboard', leaderboardController.getGlobalLeaderboard);
 
 //app object is exported so Vercel can use it to start the server
 module.exports = app;
