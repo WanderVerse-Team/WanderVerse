@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows to click a button to build manually
+  workflow_dispatch:
 
 env:
   UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
@@ -16,17 +16,24 @@ jobs:
     name: Build for Android
     runs-on: ubuntu-latest
     steps:
-      # 1. Downloads the project code
+      # 1. Checkout
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           lfs: true
 
-      # 2. Restores the Firebase Config file
+      # 2. Fix Permissions 
+      - name: Fix File Permissions
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          sudo chmod -R 777 $GITHUB_WORKSPACE
+
+      # 3. Restore Firebase Config
       - name: Restore google-services.json
         run: echo '${{ secrets.FIREBASE_CONFIG }}' > WanderVerse_Unity/Assets/google-services.json
+        continue-on-error: true
 
-      # 3. Cache the Library 
+      # 4. Cache Library
       - name: Cache Library
         uses: actions/cache@v3
         with:
@@ -35,7 +42,7 @@ jobs:
           restore-keys: |
             Library-Android-
 
-      # 4. Build the APK 
+      # 5. Build (With Dirty Build Enabled)
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         with:
@@ -43,10 +50,10 @@ jobs:
           projectPath: WanderVerse_Unity
           unityVersion: 6000.3.2f1
           buildName: WanderVerse_v1
-          allowDirtyBuild: true     
-          versioning: None           
+          allowDirtyBuild: true
+          versioning: None
 
-      # 5. Upload the APK so you can download it
+      # 6. Upload
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
