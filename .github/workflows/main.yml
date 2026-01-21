@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
@@ -42,9 +42,13 @@ jobs:
           restore-keys: |
             Library-Android-
 
-      # 5. Build (With Dirty Build Enabled)
+      # 5. Build
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: Android
           projectPath: WanderVerse_Unity
@@ -58,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: WanderVerse-Android-Build
-          path: build/Android/Android.apk
+          path: build/Android/WanderVerse_v1.apk
