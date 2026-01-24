@@ -4,9 +4,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System;
 
-//Reference to PlayerData class
+//Reference to PlayerData and util classes
 using WanderVerse.Framework.Data;
 using WanderVerse.Framework.Utilities;
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
