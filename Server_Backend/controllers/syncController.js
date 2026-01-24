@@ -7,11 +7,13 @@ const db = admin.firestore();
 exports.handleSync = async (req, res) => {
     try {
         //Take userId and localData from request body
-        const { userId, localData } = req.body;
+        
+        const userId = req.user.uid;
+        const { localData } = req.body;
 
-        if (!userId || !localData) {
-            console.warn("Sync request failed: Missing userId or localData");
-            return res.status(400).send({ error: 'Missing userId or localData' });
+        if (!localData) {
+            console.warn(`Sync failed for ${userId}: Missing localData`);
+            return res.status(400).send({ error: 'Missing localData' });
         }
 
         //Getting user document from Firestore
