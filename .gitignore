@@ -35,3 +35,6 @@ node_modules/
 
 #Firbase service account key
 firebase-admin-key.json
+
+# Environment files
+*.env
