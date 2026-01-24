@@ -1,0 +1,12 @@
+# ninja log v5
+130	956	7890482173471967	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b0ce0d29e0fc22f3
+960	1474	7890482178459967	C:/Users/USER/Documents/IIT/2nd Year/SDGP/WanderVerse/WanderVerse_Unity/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/164n554i/obj/arm64-v8a/libswappywrapper.so	97315f1e1cfb6fdb
+80	3058	7890482194225010	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	c733ab0d6a1a3b46
+47	3075	7890482194309579	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	af1b10681b92b367
+17	3079	7890482194409601	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	f2cd9e40d4485528
+113	3084	7890482194655588	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	da22302863414a8b
+32	3128	7890482195137900	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5419ad260b723aee
+64	3423	7890482198000909	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	252642596e2f758f
+2	3491	7890482198744351	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	ba101892c86907a
+97	3556	7890482199421546	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	461846bf54d41d5d
+3557	3734	7890482201282622	C:/Users/USER/Documents/IIT/2nd Year/SDGP/WanderVerse/WanderVerse_Unity/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/164n554i/obj/arm64-v8a/libgame.so	45589e7b165d06bf
