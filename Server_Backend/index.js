@@ -43,16 +43,16 @@ app.get('/', (req, res) => {
     res.send('WanderVerse middleware is running!');
 });
 
-app.get('/api/keys', (req, res) => {
+app.get('/api/keys', verifyToken, (req, res) => {
 
     //Pulled directly form process.env
     const key=process.env.GAME_ENCRYPTION_KEY;
-    const iv=process.env.GAME_ENV;
+    const iv=process.env.GAME_ENCRYPTION_IV;
 
     //Don't let the game start if the keys are missing    
     if(!key || !iv){
         console.error("CRITICAL: Encryption keys missing in environment variables!");
-        return res.status(500).send({error: "Server configuration error"});
+        return res.status(500).send({status: "ERROR", message: "Encryption keys not found"});
     }
 
     res.status(200).send({
