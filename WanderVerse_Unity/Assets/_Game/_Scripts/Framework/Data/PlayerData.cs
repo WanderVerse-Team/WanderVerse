@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 
-[Serializable]
-public class PlayerData
+namespace WanderVerse.Framework.Data 
 {
-    public int xp;
-    public int currentLevel;
-    public List<int> levelStars; 
-    public string lastUpdated;
-
-    public PlayerData()
+    [Serializable]
+    public class PlayerData
     {
-        xp = 0;
-        currentLevel = 1;
-        levelStars = new List<int>();
-        lastUpdated = DateTime.Now.ToString();
+        public int xp;
+        public int currentLevel;
+        public List<int> levelStars; 
+        public string lastUpdated;
+
+        public PlayerData()
+        {
+            xp = 0;
+            currentLevel = 1;
+            levelStars = new List<int>();
+            lastUpdated = DateTime.Now.ToString();
+        }
     }
 }
