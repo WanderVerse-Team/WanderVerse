@@ -6,6 +6,8 @@ namespace WanderVerse.Framework.Data
     [Serializable]
     public class PlayerData
     {
+        public string userName; 
+
         // Progress Data 
         public int xp;
         public int currentLevel;
@@ -19,9 +21,11 @@ namespace WanderVerse.Framework.Data
         // Metadata for Sync 
         public string lastUpdated; 
 
-
         public PlayerData()
         {
+            // Set a default name so it's never null for the Leaderboard
+            userName = "New Explorer";
+
             // Initial Progress
             xp = 0;
             currentLevel = 1;
@@ -34,7 +38,6 @@ namespace WanderVerse.Framework.Data
 
             lastUpdated = DateTime.UtcNow.ToString("o");
         }
-
         
         public void MarkAsUpdated()
         {
