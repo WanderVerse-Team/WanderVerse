@@ -16,7 +16,7 @@ namespace WanderVerse.Framework.Data
         // User Preferences (Onboarding) 
         public int selectedGrade;        
         public string selectedSubject;  
-        public bool hasCompletedOnboarding; // FALSE = Show Grade/Subject selection; TRUE = Skip to Map
+        public bool hasCompletedOnboarding; 
 
         // Metadata for Sync 
         public string lastUpdated; 
