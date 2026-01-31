@@ -118,12 +118,8 @@ public abstract class BaseLevelController : MonoBehaviour
         }
     }
 
-    // Override this method to validate whether the correct item was dropped in the corredt drop zone
-    public virtual void ValidateDrop(GameObject item, GameObject zone)
-    {
-        Debug.LogWarning($"Drop detected: {item.name} on {zone.name}. " +
-                         "But NotifyDrop logic is not implemented in this LevelController.");
-    }
+    
+    
 
     protected virtual void SubmitAnswer(bool isCorrect)
     {

@@ -154,7 +154,7 @@ public void RemoveFruit()
 
     // 5. The Core Validation (Called by DragDropItem)
     
-public override void ValidateDrop(GameObject item, GameObject zone)
+public  void ValidateDrop(GameObject item, GameObject zone)
 {
     if (zone == null) return; 
 
@@ -216,7 +216,7 @@ public void CheckIfFinished()
     if (isProcessingMistake) return;
     if (currentScore == levelData.targetScore)
     {   
-        SubmitAnswer(true);
+        CheckWinCondition();
         DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
         doorLogic.OpenDoor();
         // SUCCESS: Play a 'Door Opening' sound or animation here!
@@ -225,7 +225,7 @@ public void CheckIfFinished()
     }
     else if (currentScore < levelData.targetScore)
     {
-        SubmitAnswer(false);
+        HandleCorrectAnswer();
         // Too few fruits
         StartCoroutine(AutoSignSequence(underfeedPanel));
         // Tip: Change the text to "The door is still locked! Did the Golem eat enough?"
@@ -234,6 +234,7 @@ public void CheckIfFinished()
     }
     else
     {
+        HandleWrongAnswer();
         // Too many fruits (Overfed)
         StartCoroutine(AutoSignSequence(overfeedPanel));
         currentScore = 0;
