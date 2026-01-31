@@ -1,0 +1,79 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+env:
+  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+jobs:
+  buildAndroid:
+    name: Build for Android
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Free up disk space so Unity 6 fits!
+      - name: Free Disk Space for Unity
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: false
+
+      # 2. Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 3. Fix Permissions
+      - name: Fix File Permissions
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          sudo chmod -R 777 $GITHUB_WORKSPACE
+
+      # 4. Restore Firebase Config
+      - name: Restore google-services.json
+        run: echo '${{ secrets.FIREBASE_CONFIG }}' > WanderVerse_Unity/Assets/google-services.json
+        continue-on-error: true
+
+      # 5. Cache Library
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: WanderVerse_Unity/Library
+          key: Library-Android-${{ hashFiles('WanderVerse_Unity/Assets/**') }}
+          restore-keys: |
+            Library-Android-
+
+      # 6. Build Android APK
+      - name: Build Android APK
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          projectPath: WanderVerse_Unity
+          # Keep this line! It is working.
+          unityVersion: 6000.3.2f1
+          buildName: WanderVerse_v1
+          allowDirtyBuild: true
+          versioning: None
+
+      # 7. Upload APK
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: WanderVerse-Android-Build
+          path: build/Android/WanderVerse_v1.apk
