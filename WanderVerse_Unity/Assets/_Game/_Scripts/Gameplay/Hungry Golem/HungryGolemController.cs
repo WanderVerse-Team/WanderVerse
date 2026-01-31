@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class HungryGolemController : BaseLevelController
 {
@@ -14,17 +15,30 @@ public class HungryGolemController : BaseLevelController
     public Transform spawnLineRight; // Empty GameObject at top-right
     public GameObject mouthZone;     // The "Stomach" trigger area
 
-    [Header("--- UI Setup ---")]
-    public TextMeshProUGUI scoreText;
+    public int maxFruitsOnScreen = 5; // The Limit
+    private int currentActiveFruits = 0; // The Counter
+
+    
 
     [Header("--- Audio Setup ---")]
-public AudioSource audioSource; 
-public AudioClip eatSound;      
-public AudioClip spawnSound;    
-public AudioClip wrongSound;
+    public AudioSource audioSource; 
+    public AudioClip eatSound;      
+    public AudioClip spawnSound;    
+    public AudioClip wrongSound;
+
+    [Header("--- UI Signs ---")]
+    public RectTransform wrongValuePanel; 
+    public RectTransform overfeedPanel;
+    public RectTransform underfeedPanel;
+
+    [Header("--- Settings ---")]
+    public float hiddenY = 800f; // Height above screen
+    public float visibleY = 0f;  // Center of screen
+    public float waitTime = 2.0f; // How long the sign stays visible
 
     private float nextSpawnTime;
     private int fruitsNearMouth = 0;
+    private bool isProcessingMistake = false;
 
     // 1. Tell the framework we are a Spawner game
     protected override GameType SupportedGameType => GameType.Spawner;
@@ -34,7 +48,7 @@ public AudioClip wrongSound;
     // 1. Run Randiv's BaseLevelController logic 
     // This turns on isGameActive, sets the timer, and loads the score!
     base.Start(); 
-    UpdateScoreUI();
+    
     
 
     // 2. Now do your Golem-specific setup
@@ -69,7 +83,11 @@ public AudioClip wrongSound;
 
     private void SpawnFruit()
 {
-    // 1. Pick the prefab (same logic as before)
+    if (currentActiveFruits >= maxFruitsOnScreen) 
+    {
+        return; 
+    }
+    // 1. Pick the prefab 
     bool spawnCorrect = Random.value > 0.4f;
     GameObject prefabToSpawn = spawnCorrect ? 
         levelData.spawnItems[Random.Range(0, levelData.spawnItems.Count)] : 
@@ -91,6 +109,15 @@ public AudioClip wrongSound;
     {
         audioSource.PlayOneShot(spawnSound);
     }
+
+    FruitIdentity fruitScript = fruit.GetComponent<FruitIdentity>();
+    if (fruitScript != null)
+    {
+        fruitScript.controller = this; 
+    }
+
+    // Increase the count
+    currentActiveFruits++;
 }
     // 4. The "State Swap" Logic
     private void OnTriggerEnter2D(Collider2D other)
@@ -102,6 +129,15 @@ public AudioClip wrongSound;
             
         }
     }
+
+    // 2. Add a function to lower the count
+public void RemoveFruit()
+{
+    currentActiveFruits--;
+    
+    // Safety check: prevent negative numbers if something glitches
+    if (currentActiveFruits < 0) currentActiveFruits = 0;
+}
 
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -131,7 +167,7 @@ public override void ValidateDrop(GameObject item, GameObject zone)
         {
             HandleCorrectAnswer(); 
             Debug.Log($"<color=green>SUCCESS!</color> Ate {item.name}. Total Score: {currentScore}");
-            UpdateScoreUI();
+            
             // Play the gulp!
             audioSource.PlayOneShot(eatSound);
             StartCoroutine(GulpRoutine());
@@ -140,11 +176,14 @@ public override void ValidateDrop(GameObject item, GameObject zone)
         {
             // If value is 2, 5, etc., it's WRONG
             HandleWrongAnswer();
+            StartCoroutine(AutoSignSequence(wrongValuePanel));
+            
+            
             
             // Optional: Penalty (Resets score)
             currentScore = 0; 
             Debug.Log($"<color=red>TOO MUCH!</color> The Golem can't eat {fruit.fruitValue} fruits at once!");
-            UpdateScoreUI();
+            
 
             // Play the mistake sound!
             audioSource.PlayOneShot(wrongSound);
@@ -154,14 +193,7 @@ public override void ValidateDrop(GameObject item, GameObject zone)
 
 }
 
-private void UpdateScoreUI()
-    {
-        if (scoreText != null)
-        {
-            
-            scoreText.text = $"Fruits: {currentScore} / {levelData.targetScore}";
-        }
-    }
+
 
 
     private IEnumerator GulpRoutine()
@@ -178,4 +210,72 @@ private void UpdateScoreUI()
         golemRenderer.sprite = idleSprite;
     }
 }
+
+public void CheckIfFinished()
+{
+    if (isProcessingMistake) return;
+    if (currentScore == levelData.targetScore)
+    {   
+        SubmitAnswer(true);
+        DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
+        doorLogic.OpenDoor();
+        // SUCCESS: Play a 'Door Opening' sound or animation here!
+        //ShowWinScreen();
+        Debug.Log("The door creaks open as the Golem is perfectly fed!");
+    }
+    else if (currentScore < levelData.targetScore)
+    {
+        SubmitAnswer(false);
+        // Too few fruits
+        StartCoroutine(AutoSignSequence(underfeedPanel));
+        // Tip: Change the text to "The door is still locked! Did the Golem eat enough?"
+        currentScore = 0;
+        Debug.Log("The door is still locked! Did the Golem eat enough?");
+    }
+    else
+    {
+        // Too many fruits (Overfed)
+        StartCoroutine(AutoSignSequence(overfeedPanel));
+        currentScore = 0;
+    }
+}
+
+    private IEnumerator AutoSignSequence(RectTransform sign)
+{
+    if (sign == null) yield break;
+    isProcessingMistake = true;
+
+    // 1. Reset and Show
+    currentScore = 0;
+    
+    sign.gameObject.SetActive(true);
+    audioSource.PlayOneShot(wrongSound);
+
+    // 2. Slide Down (From 800 to 0)
+    yield return StartCoroutine(MoveSign(sign, hiddenY, visibleY));
+
+    // 3. Wait
+    yield return new WaitForSecondsRealtime(waitTime);
+
+    // 4. Slide Up (From 0 back to 800)
+    yield return StartCoroutine(MoveSign(sign, visibleY, hiddenY));
+
+    // 5. Hide
+    sign.gameObject.SetActive(false);
+    
+    isProcessingMistake = false;
+}
+    private IEnumerator MoveSign(RectTransform rect, float startY, float endY)
+    {
+        float duration = 0.5f;
+        float elapsed = 0;
+        while (elapsed < duration) {
+            elapsed += Time.unscaledDeltaTime;
+            float t = elapsed / duration;
+            // Smooth bounce/ease effect
+            float curve = t * t * (3f - 2f * t); 
+            rect.localPosition = new Vector2(0, Mathf.Lerp(startY, endY, curve));
+            yield return null;
+        }
+    }
 }

@@ -25,6 +25,10 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
         // 2. Disable gravity so it stays in your "hand"
         if (rb != null) rb.gravityScale = 0;
+        // Stop linear movement
+        rb.linearVelocity = Vector3.zero; 
+
+        
         
         Debug.Log("Grabbed: " + gameObject.name);
     }
