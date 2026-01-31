@@ -118,12 +118,8 @@ public abstract class BaseLevelController : MonoBehaviour
         }
     }
 
-    // Override this method to validate whether the correct item was dropped in the corredt drop zone
-    public virtual void ValidateDrop(GameObject item, GameObject zone)
-    {
-        Debug.LogWarning($"Drop detected: {item.name} on {zone.name}. " +
-                         "But NotifyDrop logic is not implemented in this LevelController.");
-    }
+    
+    
 
     protected virtual void SubmitAnswer(bool isCorrect)
     {
@@ -132,6 +128,7 @@ public abstract class BaseLevelController : MonoBehaviour
         if (isCorrect)
         {
             HandleCorrectAnswer();
+            CheckWinCondition();
         }
         else
         {
@@ -150,7 +147,8 @@ public abstract class BaseLevelController : MonoBehaviour
 
         OnScoreUpdated?.Invoke(currentScore);
 
-        CheckWinCondition();
+        //Since the win condition is only checked when the player clicks the temple door, we comment this out.
+        //CheckWinCondition();
     }
 
     protected virtual void HandleWrongAnswer()
