@@ -132,6 +132,7 @@ public abstract class BaseLevelController : MonoBehaviour
         if (isCorrect)
         {
             HandleCorrectAnswer();
+            CheckWinCondition();
         }
         else
         {
@@ -150,7 +151,8 @@ public abstract class BaseLevelController : MonoBehaviour
 
         OnScoreUpdated?.Invoke(currentScore);
 
-        CheckWinCondition();
+        //Since the win condition is only checked when the player clicks the temple door, we comment this out.
+        //CheckWinCondition();
     }
 
     protected virtual void HandleWrongAnswer()

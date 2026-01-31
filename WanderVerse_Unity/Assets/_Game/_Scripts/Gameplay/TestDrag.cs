@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 // We keep your IPointer interfaces because they are great for mobile!
-public class TestDrag : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class TestDrags : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private Rigidbody2D rb;
     private Vector3 offset;

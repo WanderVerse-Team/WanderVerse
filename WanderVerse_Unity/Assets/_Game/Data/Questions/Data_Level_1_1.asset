@@ -23,7 +23,7 @@ MonoBehaviour:
   pointsForWrong: 0
   useTimer: 0
   levelTimeLimit: 0
-  maxMistakes: 3
+  maxMistakes: 1000
   spawnItems:
   - {fileID: 3209910203946846981, guid: 479543023c82126468f82aa0e04a9cdc, type: 3}
   - {fileID: 6397541237196930485, guid: 698f01e8fee372b498106f7c61cbc0a2, type: 3}
