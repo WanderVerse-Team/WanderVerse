@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
 {
+    public int[] possibleTargets;
     // ========================================================================
     // 1. GLOBAL SETTINGS (Applies to all games)
     // ========================================================================
@@ -52,6 +53,7 @@ public class LevelData : ScriptableObject
     // For: Hungry Golem (Counting/Skip Counting)
     public List<GameObject> spawnItems;      // Fruits to spawn
     public List<GameObject> distractors;     // "Junk" fruit (e.g.- Bananas, Oranges)
+    public int validValue = 1;              // Each fruit counts as 1, Change it according to the level
     public int countByStep = 1;              // 1, 2, 5, or -1 (Backwards)
     public float spawnRate = 2.0f;
     public float itemFallSpeed = 3.0f;

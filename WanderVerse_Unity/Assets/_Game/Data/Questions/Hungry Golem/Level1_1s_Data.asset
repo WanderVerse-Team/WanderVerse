@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac25f2abb44d67048b01407e824ebb84, type: 3}
-  m_Name: Data_Level_1_1
+  m_Name: Level1_1s_Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  possibleTargets: 04000000050000000600000008000000090000000a000000
   lessonID: 
-  lessonTitle: Blueberry
+  lessonTitle: Count by 1s
   levelID: 
   levelTitle: 
   description: 
@@ -32,6 +33,7 @@ MonoBehaviour:
   - {fileID: 2245593341331636272, guid: daa1ec0bcc2538b4d960cef5e3da8cf8, type: 3}
   - {fileID: 4241116998263851838, guid: 1d7e77c8bbfed0d4e999a33d2eb8ce54, type: 3}
   - {fileID: 5433251056534110390, guid: d2f457aa863daea48be5d153e0c73f5b, type: 3}
+  validValue: 1
   countByStep: 1
   spawnRate: 2
   itemFallSpeed: 3

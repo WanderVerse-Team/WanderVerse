@@ -128,7 +128,7 @@ public class DragAndDropHandler : MonoBehaviour
             // Tell the Controller to handle the logic
             if (levelController != null)
             {
-                levelController.ValidateDrop(selectedObject, zone);
+                //levelController.ValidateDrop(selectedObject, zone);
             }
         }
         else
