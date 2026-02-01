@@ -20,14 +20,23 @@ MonoBehaviour:
   description: 
   gameType: 0
   targetScore: 10
-  pointsForCorrect: 1
+  pointsForCorrect: 2
   pointsForWrong: 0
   useTimer: 0
   levelTimeLimit: 0
   maxMistakes: 0
-  spawnItems: []
-  distractors: []
-  validValue: 1
+  spawnItems:
+  - {fileID: 5433251056534110390, guid: d2f457aa863daea48be5d153e0c73f5b, type: 3}
+  - {fileID: 2245593341331636272, guid: daa1ec0bcc2538b4d960cef5e3da8cf8, type: 3}
+  - {fileID: 341317529460937898, guid: b44c91fabd310034e8565ce774283675, type: 3}
+  - {fileID: 4241116998263851838, guid: 1d7e77c8bbfed0d4e999a33d2eb8ce54, type: 3}
+  distractors:
+  - {fileID: 6397541237196930485, guid: 698f01e8fee372b498106f7c61cbc0a2, type: 3}
+  - {fileID: 260998855790233345, guid: caf15f172f20d454eb9026cf89aa29ad, type: 3}
+  - {fileID: 3209910203946846981, guid: 479543023c82126468f82aa0e04a9cdc, type: 3}
+  - {fileID: 2432229838946283954, guid: 3ce3c83e47b69114da73c5bc0562293b, type: 3}
+  - {fileID: 5242201971816329609, guid: 882bd1e425929bd45bf6ed954fae64aa, type: 3}
+  validValue: 2
   countByStep: 1
   spawnRate: 2
   itemFallSpeed: 3

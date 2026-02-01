@@ -37,10 +37,20 @@ public class HungryGolemController : BaseLevelController
     public float visibleY = 0f;  // Center of screen
     public float waitTime = 2.0f; // How long the sign stays visible
 
+    [Header("--- UI References ---")]
+    public TMPro.TextMeshProUGUI instructionText;
+
     private float nextSpawnTime;
     private int fruitsNearMouth = 0;
     private bool isProcessingMistake = false;
     private int correctFruitsOnScreen = 0;
+
+    [Header("--- Victory Screen ---")]
+    public GameObject victoryPanel; // Drag your UI Panel here
+    public AudioSource audioSource_victory;
+    public AudioClip victoryChime;
+    public ParticleSystem confetti;
+    public ParticleSystem fireworks;
 
     // 1. Tell the framework we are a Spawner game
     protected override GameType SupportedGameType => GameType.Spawner;
@@ -50,6 +60,9 @@ public class HungryGolemController : BaseLevelController
     // 1. Run Randiv's BaseLevelController logic 
     // This turns on isGameActive, sets the timer, and loads the score!
     base.Start(); 
+    confetti.Stop();
+    fireworks.Stop();
+    victoryPanel.SetActive(false);
     
     
 
@@ -66,6 +79,11 @@ public class HungryGolemController : BaseLevelController
         golemRenderer.sprite = idleSprite;
         nextSpawnTime = Time.time + levelData.spawnRate;
         Debug.Log($"Golem is hungry for {dynamicTargetScore} {levelData.levelTitle}s");
+        if (instructionText != null)
+    {
+        // This puts the random number right into the sentence!
+        instructionText.text = "Feed the Golem " + dynamicTargetScore + " fruits!";
+    }
     }
 
     // 3. Handle the spawning loop
@@ -152,7 +170,7 @@ public void RemoveFruit(FruitIdentity fruit)
     if (currentActiveFruits < 0) currentActiveFruits = 0;
 
     // Check if the fruit that died was a "Valid" one
-    if (fruit.fruitValue == 1)
+    if (fruit.fruitValue == levelData.validValue)
     {
         correctFruitsOnScreen--;
         if (correctFruitsOnScreen < 0) correctFruitsOnScreen = 0;
@@ -239,8 +257,7 @@ public void CheckIfFinished()
         CheckWinCondition();
         DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
         doorLogic.OpenDoor();
-        // SUCCESS: Play a 'Door Opening' sound or animation here!
-        //ShowWinScreen();
+        VictoryScreen();
         Debug.Log("The door creaks open as the Golem is perfectly fed!");
     }
     else if (currentScore < dynamicTargetScore)
@@ -299,4 +316,25 @@ public void CheckIfFinished()
             yield return null;
         }
     }
+    public void VictoryScreen()
+{
+    // 1. Play the particle effects
+    if (confetti != null)
+    {
+        confetti.Play();
+    }   
+    if (fireworks != null)
+    {
+        fireworks.Play();
+    }
+    
+    // 2. Play the sound
+    audioSource_victory.PlayOneShot(victoryChime);
+
+    // 3. Show the UI
+    victoryPanel.SetActive(true); 
+
+
+    
+}
 }
