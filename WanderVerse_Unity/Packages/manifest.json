@@ -1,17 +1,5 @@
 {
-  "scopedRegistries": [
-    {
-      "name": "Game Package Registry by Google",
-      "url": "https://unityregistry-pa.googleapis.com",
-      "scopes": [
-        "com.google"
-      ]
-    }
-  ],
   "dependencies": {
-    "com.google.external-dependency-manager": "1.2.179",
-    "com.google.firebase.app": "11.6.0",
-    "com.google.firebase.auth": "11.6.0",
     "com.unity.2d.animation": "13.0.2",
     "com.unity.2d.aseprite": "3.0.1",
     "com.unity.2d.enhancers": "1.0.0",
