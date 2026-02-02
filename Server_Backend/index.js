@@ -1,4 +1,4 @@
-//@ts-check
+
 
 //Importing dependencies
 require('dotenv').config();
