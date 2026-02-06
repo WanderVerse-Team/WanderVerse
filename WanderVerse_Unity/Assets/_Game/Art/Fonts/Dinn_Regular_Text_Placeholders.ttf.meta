@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-<<<<<<< HEAD
-guid: 3bd72e89cf2442b46bc505a363391324
-=======
-guid: 25ba318f76af4a74baa4bdd118b72ac2
->>>>>>> 39305dc74e463f1af33b6c94b736a4eabe4b9319
-=======
-guid: 25ba318f76af4a74baa4bdd118b72ac2
->>>>>>> 39305dc74e463f1af33b6c94b736a4eabe4b9319
+guid: 021a1e05073db1f4eb6b42b1c376eadf
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -17,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Feather
+  - DINNextRoundedLTW01-Regular
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
