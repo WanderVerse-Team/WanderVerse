@@ -20,6 +20,7 @@ public class LevelData : ScriptableObject
 
     [Header("--- 3. WIN CONDITIONS ---")]
     public int targetScore = 10;
+    public int[] possibleTargets;
 
     [Tooltip("How many points does a correct answer get?")]
     public int pointsForCorrect = 1;
