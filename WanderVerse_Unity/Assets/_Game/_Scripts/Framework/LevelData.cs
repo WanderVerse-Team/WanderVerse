@@ -79,7 +79,6 @@ public class LevelData : ScriptableObject
     // For: Hungry Golem (Counting/Skip Counting)
     public List<GameObject> spawnItems;      // Fruits to spawn
     public List<GameObject> distractors;     // "Junk" fruit (e.g.- Bananas, Oranges)
-    //public int countByStep = 1;              // 1, 2, 5, or -1 (Backwards)
     public float spawnRate = 2.0f;
     public float itemFallSpeed = 3.0f;
 
