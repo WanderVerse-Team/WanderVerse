@@ -13,7 +13,7 @@ public class FruitIdentity : MonoBehaviour
         // Tell the controller "I am gone, you can spawn another one!"
         if (controller != null)
         {
-            controller.RemoveFruit();
+            controller.RemoveFruit(this);
         }
     }
 }

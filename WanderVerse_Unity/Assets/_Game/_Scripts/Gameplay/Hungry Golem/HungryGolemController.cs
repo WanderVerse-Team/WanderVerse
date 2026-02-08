@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class HungryGolemController : BaseLevelController
 {
+    
     [Header("--- Golem Visuals ---")]
     public SpriteRenderer golemRenderer;
     public Sprite idleSprite;
@@ -36,9 +37,20 @@ public class HungryGolemController : BaseLevelController
     public float visibleY = 0f;  // Center of screen
     public float waitTime = 2.0f; // How long the sign stays visible
 
+    [Header("--- UI References ---")]
+    public TMPro.TextMeshProUGUI instructionText;
+
     private float nextSpawnTime;
     private int fruitsNearMouth = 0;
     private bool isProcessingMistake = false;
+    private int correctFruitsOnScreen = 0;
+
+    [Header("--- Victory Screen ---")]
+    public GameObject victoryPanel; // Drag your UI Panel here
+    public AudioSource audioSource_victory;
+    public AudioClip victoryChime;
+    public ParticleSystem confetti;
+    public ParticleSystem fireworks;
 
     // 1. Tell the framework we are a Spawner game
     protected override GameType SupportedGameType => GameType.Spawner;
@@ -48,6 +60,9 @@ public class HungryGolemController : BaseLevelController
     // 1. Run Randiv's BaseLevelController logic 
     // This turns on isGameActive, sets the timer, and loads the score!
     base.Start(); 
+    confetti.Stop();
+    fireworks.Stop();
+    victoryPanel.SetActive(false);
     
     
 
@@ -63,7 +78,12 @@ public class HungryGolemController : BaseLevelController
     {
         golemRenderer.sprite = idleSprite;
         nextSpawnTime = Time.time + levelData.spawnRate;
-        Debug.Log($"Golem is hungry for {levelData.targetScore} {levelData.levelTitle}s");
+        Debug.Log($"Golem is hungry for {dynamicTargetScore} {levelData.levelTitle}s");
+        if (instructionText != null)
+    {
+        // This puts the random number right into the sentence!
+        instructionText.text = "Feed the Golem " + dynamicTargetScore + " fruits!";
+    }
     }
 
     // 3. Handle the spawning loop
@@ -83,16 +103,27 @@ public class HungryGolemController : BaseLevelController
 
     private void SpawnFruit()
 {
+    
     if (currentActiveFruits >= maxFruitsOnScreen) 
     {
         return; 
     }
+
+    GameObject prefabToSpawn;
+
+    if (correctFruitsOnScreen == 0)
+    {
+        int index = Random.Range(0, levelData.spawnItems.Count);
+        prefabToSpawn = levelData.spawnItems[index];
+        correctFruitsOnScreen++; // We just added one!
+    }
+    else{
     // 1. Pick the prefab 
-    bool spawnCorrect = Random.value > 0.4f;
-    GameObject prefabToSpawn = spawnCorrect ? 
+    bool spawnCorrect = Random.value > 0.6f;
+        prefabToSpawn = spawnCorrect ? 
         levelData.spawnItems[Random.Range(0, levelData.spawnItems.Count)] : 
         levelData.distractors[Random.Range(0, levelData.distractors.Count)];
-
+    }
     // 2. THE AREA LOGIC
     // We pick a random number between the Left point and the Right point
     float randomX = Random.Range(spawnLineLeft.position.x, spawnLineRight.position.x);
@@ -131,12 +162,19 @@ public class HungryGolemController : BaseLevelController
     }
 
     // 2. Add a function to lower the count
-public void RemoveFruit()
+public void RemoveFruit(FruitIdentity fruit)
 {
     currentActiveFruits--;
     
     // Safety check: prevent negative numbers if something glitches
     if (currentActiveFruits < 0) currentActiveFruits = 0;
+
+    // Check if the fruit that died was a "Valid" one
+    if (fruit.fruitValue == levelData.validValue)
+    {
+        correctFruitsOnScreen--;
+        if (correctFruitsOnScreen < 0) correctFruitsOnScreen = 0;
+    }
 }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -163,7 +201,7 @@ public  void ValidateDrop(GameObject item, GameObject zone)
     if (fruit != null)
     {
         // RULE: Golem only eats things worth EXACTLY 1
-        if (fruit.fruitValue == 1)
+        if (fruit.fruitValue == levelData.validValue)
         {
             HandleCorrectAnswer(); 
             Debug.Log($"<color=green>SUCCESS!</color> Ate {item.name}. Total Score: {currentScore}");
@@ -214,16 +252,15 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 public void CheckIfFinished()
 {
     if (isProcessingMistake) return;
-    if (currentScore == levelData.targetScore)
+    if (currentScore == dynamicTargetScore)
     {   
         CheckWinCondition();
         DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
         doorLogic.OpenDoor();
-        // SUCCESS: Play a 'Door Opening' sound or animation here!
-        //ShowWinScreen();
+        VictoryScreen();
         Debug.Log("The door creaks open as the Golem is perfectly fed!");
     }
-    else if (currentScore < levelData.targetScore)
+    else if (currentScore < dynamicTargetScore)
     {
         HandleCorrectAnswer();
         // Too few fruits
@@ -279,4 +316,25 @@ public void CheckIfFinished()
             yield return null;
         }
     }
+    public void VictoryScreen()
+{
+    // 1. Play the particle effects
+    if (confetti != null)
+    {
+        confetti.Play();
+    }   
+    if (fireworks != null)
+    {
+        fireworks.Play();
+    }
+    
+    // 2. Play the sound
+    audioSource_victory.PlayOneShot(victoryChime);
+
+    // 3. Show the UI
+    victoryPanel.SetActive(true); 
+
+
+    
+}
 }
