@@ -120,20 +120,6 @@ public abstract class BaseLevelController : MonoBehaviour
         }
     }
 
-    //protected virtual void SubmitAnswer(bool isCorrect)
-    //{
-    //    if (!isGameActive) return;
-
-    //    if (isCorrect)
-    //    {
-    //        HandleCorrectAnswer();
-    //    }
-    //    else
-    //    {
-    //        HandleWrongAnswer();
-    //    }
-    //}
-
     protected virtual void HandleCorrectAnswer()
     {
         // Add audio manager
@@ -145,7 +131,6 @@ public abstract class BaseLevelController : MonoBehaviour
 
         OnScoreUpdated?.Invoke(currentScore);
 
-        //CheckWinCondition();
     }
 
     protected virtual void HandleWrongAnswer()
@@ -199,22 +184,4 @@ public abstract class BaseLevelController : MonoBehaviour
         OnLevelEnded?.Invoke(isSuccess);
     }
 
-    //        DELETE
-    //protected virtual float CalculateStars(bool isSuccess)
-    //{
-    //    // HAVE TO CHANGE THIS
-    //    // Made the method to always return 3 stars if the player won,
-    //    // and 0 stars of the player lost until we discuss the logic
-
-    //    // Change the return type to int if we don't give "2.5 stars"
-
-    //    if (isSuccess)
-    //    {
-    //        return 3f;
-    //    }
-    //    else
-    //    {
-    //        return 0f;
-    //    }
-    //}
 }
