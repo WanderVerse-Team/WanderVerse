@@ -1,5 +1,5 @@
 using UnityEngine;
-using wanderVerse.Backend;
+using WanderVerse.Backend.Services;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,13 +37,13 @@ public class GameManager : MonoBehaviour
 
         // 3. HIGH SCORE LOGIC
 
-        int previousBest = 0; //CloudSyncManager.Instance.GetHighscoreForLevel(levelID);
+        int previousBest = CloudSyncManager.Instance.GetHighscoreForLevel(levelID);
         int xpToAdd = 0;
 
         if (currentRunScore > previousBest)
         {
             xpToAdd = currentRunScore - previousBest;
-            //CloudSyncManager.Instance.SetHighscoreForLevel(levelID, currentRunScore, stars);
+            CloudSyncManager.Instance.SetHighscoreForLevel(levelID, currentRunScore, stars);
             Debug.Log($"New Personal Best! +{xpToAdd} XP added to Total XP");
         }
         else
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         if (xpToAdd > 0)
         {
-            //CloudSyncManager.Instance.AddTotalXP(xpToAdd);
+            CloudSyncManager.Instance.AddTotalXP(xpToAdd);
         }
 
     }
