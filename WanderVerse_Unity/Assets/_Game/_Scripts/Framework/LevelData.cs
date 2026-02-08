@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
 {
-    public int[] possibleTargets;
     // ========================================================================
     // 1. GLOBAL SETTINGS (Applies to all games)
     // ========================================================================
@@ -21,6 +20,7 @@ public class LevelData : ScriptableObject
 
     [Header("--- 3. WIN CONDITIONS ---")]
     public int targetScore = 10;
+    public int[] possibleTargets;
 
     [Tooltip("How many points to add for a correct answer?")]
     public int pointsForCorrect = 1;
