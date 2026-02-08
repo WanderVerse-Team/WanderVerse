@@ -9,11 +9,18 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Scene_Splash.unity
+    guid: 212fcd1e92f57bd48b9a35902ec225ac
+  - enabled: 1
     path: Assets/_Game/Scenes/Menus/Scene_SignIn.unity
     guid: 5da567da16569e34bbf8e538ccb1a7ab
   - enabled: 1
     path: Assets/_Game/Scenes/Menus/Scene_WorldMap.unity
     guid: 03d7bb7baf020f348af1bddcd7c087c1
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Grade_Selection.unity
+    guid: 8f6b6b7967320e44a8eea3a31d66ed6f
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
