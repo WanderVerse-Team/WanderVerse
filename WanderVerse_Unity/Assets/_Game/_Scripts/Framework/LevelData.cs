@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
 {
+    public int[] possibleTargets;
     // ========================================================================
     // 1. GLOBAL SETTINGS (Applies to all games)
     // ========================================================================
@@ -21,19 +22,45 @@ public class LevelData : ScriptableObject
     [Header("--- 3. WIN CONDITIONS ---")]
     public int targetScore = 10;
 
-    [Tooltip("Enter ONLY POSITIVE values")]
+    [Tooltip("How many points to add for a correct answer?")]
     public int pointsForCorrect = 1;
 
-    [Tooltip("Enter ONLY POSITIVE values")]
+    [Tooltip("How many points to deduct for a wrong answer?")]
     public int pointsForWrong = 1;
-
-    public bool useTimer = false;
-    public float levelTimeLimit = 0f;
 
     [Tooltip("Set to 0 to allow infinite mistakes. Enter ONLY POSITIVE values")]
     public int maxMistakes = 3;
 
-    //[Header("--- 4. AUDIO & VISUALS ---")]
+    [Header("--- 4. TIMER ---")]
+    public bool useTimer = false;
+    public float levelTimeLimit = 0f;
+
+    // ========================================================================
+    // 2. XP SYSTEM
+    // ========================================================================
+    [Header("--- 5. SCORING & XP ---")]
+
+    [Tooltip("The MAXIMUM XP a player gets for a Perfect Run (0 Mistakes).")]
+    public int maxXpReward = 100;
+
+    [Tooltip("The MINIMUM. XP will never drop below this amount, no matter how many mistakes.")]
+    public int baseXpReward = 20;
+
+    [Tooltip("How much XP is lost for every single mistake.")]
+    public int xpDeductionPerMistake = 5;
+
+    [Tooltip("Bonus XP given for replaying a level perfectly (0 mistakes) when the maximum possible high score was achieved in a previous attempt.")]
+    public int perfectRunBonus = 5;
+
+    // ========================================================================
+    // 3. STAR THRESHOLDS (Visuals Only)
+    // ========================================================================
+    [Header("--- 6. VISUAL STARS ---")]
+    [Tooltip("XP does NOT depend on stars. This is just for the UI.")]
+    public int maxMistakesFor3Stars = 0;
+    public int maxMistakesFor2Stars = 2;
+
+    //[Header("--- 7. AUDIO & VISUALS ---")]
     //public Sprite backgroundImage;
     //public GameObject environmentPrefab; // Forest, Cave, Space
     //public AudioClip backgroundMusic;
@@ -52,7 +79,6 @@ public class LevelData : ScriptableObject
     // For: Hungry Golem (Counting/Skip Counting)
     public List<GameObject> spawnItems;      // Fruits to spawn
     public List<GameObject> distractors;     // "Junk" fruit (e.g.- Bananas, Oranges)
-    public int countByStep = 1;              // 1, 2, 5, or -1 (Backwards)
     public float spawnRate = 2.0f;
     public float itemFallSpeed = 3.0f;
 
