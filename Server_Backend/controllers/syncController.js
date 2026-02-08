@@ -11,14 +11,14 @@ exports.handleSync = async (req, res) => {
         const userId = req.user.uid;
         const { localData } = req.body;
 
-        if (!localData) {
+        if (!localData) {           
             console.warn(`Sync failed for ${userId}: Missing localData`);
             return res.status(400).send({ error: 'Missing localData' });
         }
 
         //Getting user document from Firestore
         const userRef = db.collection('users').doc(userId);
-        const doc = await userRef.get();
+        const doc = await userRef.get();            
 
         if (!doc.exists) {
             console.log(`Creating new Profile for user: ${userId}`);
