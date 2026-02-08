@@ -1,47 +1,53 @@
 using System;
 using System.Collections.Generic;
 
-namespace WanderVerse.Framework.Data 
+namespace WanderVerse.Framework.Data
 {
+    [Serializable]
+    public class LevelTracker
+    {
+        public string levelID;    
+        public int attempts;      
+        public int starsEarned; // For Visuals
+        public int highScore;   
+        public bool isUnlocked;
+    }
+
     [Serializable]
     public class PlayerData
     {
-        public string userName; 
-
-        // Progress Data 
-        public int xp;
-        public int currentLevel;
-        public List<int> levelStars; 
-
-        // User Preferences (Onboarding) 
-        public int selectedGrade;        
-        public string selectedSubject;  
-        public bool hasCompletedOnboarding; 
-
-        // Metadata for Sync 
+        public string userID;
+        public string userName = "Explorer";
         public string lastUpdated; 
+
+    
+        public int xp;           
+        public int currentLevel = 1; 
+
+        
+        public int energy = 6;
+        public int maxEnergy = 6;
+        public long lastRechargeTimestamp;   
+        public long lastDailyResetTimestamp; 
+
+        
+        public int selectedGrade = 3;
+        public string selectedSubject = "Maths";
+        public bool hasCompletedOnboarding = false;
+
+        
+        public List<LevelTracker> levelProgress = new List<LevelTracker>();
 
         public PlayerData()
         {
-            // Set a default name so it's never null for the Leaderboard
-            userName = "New Explorer";
-
-            // Initial Progress
-            xp = 0;
-            currentLevel = 1;
-            levelStars = new List<int>();
-
-            // Default Preferences for the Pilot
-            selectedGrade = 3;
-            selectedSubject = "Maths";
-            hasCompletedOnboarding = false;
-
-            lastUpdated = DateTime.UtcNow.ToString("o");
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            this.lastRechargeTimestamp = now;
+            this.lastDailyResetTimestamp = now;
+            MarkAsUpdated();
         }
-        
-        public void MarkAsUpdated()
-        {
-            lastUpdated = DateTime.UtcNow.ToString("o");
-        }
+
+        public void MarkAsUpdated() => lastUpdated = DateTime.UtcNow.ToString("o");
+
+        public LevelTracker GetLevelData(string id) => levelProgress.Find(x => x.levelID == id);
     }
 }
