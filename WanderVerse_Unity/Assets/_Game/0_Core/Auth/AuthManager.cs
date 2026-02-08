@@ -1,75 +1,114 @@
 using UnityEngine;
-using TMPro;                // For TextMeshPro Inputs
-using Firebase.Auth;        // For Firebase
+using TMPro;                
+using Firebase.Auth;        
 using UnityEngine.SceneManagement; 
+using System.Collections;
+using System.Threading.Tasks; 
+using System;                 
+using WanderVerse.Framework.Data; 
 
-public class AuthManager : MonoBehaviour
+namespace WanderVerse.Backend.Services
 {
-    [Header("UI References")]
-    public TMP_InputField emailInput;
-    public TMP_InputField passwordInput;
-    public TextMeshProUGUI feedbackText; // To show "Wrong Password" etc.
-
-    private FirebaseAuth _auth;
-
-    void Start()
+    public class AuthManager : MonoBehaviour
     {
-        _auth = FirebaseAuth.DefaultInstance;
-        if(feedbackText != null) feedbackText.text = "";
-    }
+        [Header("Login Panel References")]
+        public TMP_InputField loginEmailInput;
+        public TMP_InputField loginPasswordInput;
 
-    // --- BUTTON FUNCTIONS ---
+        [Header("Sign Up Panel References")]
+        public TMP_InputField signUpEmailInput;
+        public TMP_InputField signUpPasswordInput;
+        public TMP_InputField signUpConfirmPasswordInput; 
 
-    public void OnSignUpButton()
-    {
-        StartCoroutine(RegisterUser(emailInput.text, passwordInput.text));
-    }
+        [Header("General UI")]
+        public TextMeshProUGUI feedbackText; 
 
-    public void OnLoginButton()
-    {
-        StartCoroutine(LoginUser(emailInput.text, passwordInput.text));
-    }
+        private FirebaseAuth _auth;
+        private bool _isWorking = false; 
 
-    // --- LOGIC ---
-
-    private System.Collections.IEnumerator RegisterUser(string email, string password)
-    {
-        var task = _auth.CreateUserWithEmailAndPasswordAsync(email, password);
-        yield return new WaitUntil(() => task.IsCompleted);
-
-        if (task.Exception != null)
+        void Start()
         {
-            Debug.LogError($"Register Failed: {task.Exception.InnerException?.Message}");
-            UpdateFeedback($"Error: {task.Exception.InnerException?.Message}");
+            _auth = FirebaseAuth.DefaultInstance;
+    
+            if(feedbackText != null) feedbackText.text = "";
+
+            if (_auth.CurrentUser != null)
+            {
+                Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
+                LoadWorldMap();
+            }
+            
         }
-        else
+        
+        public void OnSignUpButton() 
         {
-            Debug.Log("User Created!");
-            UpdateFeedback("Account Created! Logging in...");
-        }
-    }
+            string p1 = signUpPasswordInput.text;
+            string p2 = signUpConfirmPasswordInput.text;
 
-    private System.Collections.IEnumerator LoginUser(string email, string password)
-    {
-        var task = _auth.SignInWithEmailAndPasswordAsync(email, password);
-        yield return new WaitUntil(() => task.IsCompleted);
+            if (string.IsNullOrEmpty(p1))
+            {
+                UpdateFeedback("Password cannot be empty.");
+                return;
+            }
 
-        if (task.Exception != null)
-        {
-            Debug.LogError($"Login Failed: {task.Exception.InnerException?.Message}");
-            UpdateFeedback("Login Failed. Check email/password.");
+            if (p1 != p2)
+            {
+                UpdateFeedback("Passwords do not match!");
+                return; 
+            }
+
+            StartCoroutine(AuthRoutine(
+                () => _auth.CreateUserWithEmailAndPasswordAsync(signUpEmailInput.text, p1), true));
         }
-        else
+
+        public void OnLoginButton() => StartCoroutine(AuthRoutine(
+            () => _auth.SignInWithEmailAndPasswordAsync(loginEmailInput.text, loginPasswordInput.text), false));
+
+        public void OnGuestLoginButton() => StartCoroutine(AuthRoutine(
+            () => _auth.SignInAnonymouslyAsync(), true));
+
+
+        private IEnumerator AuthRoutine(Func<Task<AuthResult>> authTask, bool isNewUser)
         {
-            Debug.Log($"Logged In: {_auth.CurrentUser.Email}");
-            UpdateFeedback("Success! Loading Menu...");
+            if (_isWorking) yield break;
+            _isWorking = true;
+            UpdateFeedback("Processing...");
+
+            var task = authTask();
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (task.Exception != null) 
+            {
+                Debug.LogError($"Auth Error: {task.Exception.InnerException?.Message}");
+                UpdateFeedback($"Error: {task.Exception.InnerException?.Message}");
+                _isWorking = false;
+            } 
+            else 
+            {
+                UpdateFeedback("Success!");
+                string uid = task.Result.User.UserId;
+
+                if (isNewUser) InitializeNewUserData(uid);
+                LoadWorldMap();
+            }
+        }
+
+        private void InitializeNewUserData(string uid)
+        {
+            PlayerData newData = new PlayerData { userID = uid };
+            // TO DO: @Senmith - Uncomment this line when LocalDataManager is ready
+            // LocalDataManager.Save(newData); 
+            Debug.Log("[Auth] Created local data (InMemory only).");
+        }
+
+        private void LoadWorldMap()
+        {
+            if (CloudSyncManager.Instance != null)
+                CloudSyncManager.Instance.InitializeData(_auth.CurrentUser.UserId);
             
             SceneManager.LoadScene("Scene_WorldMap");
         }
-    }
 
-    private void UpdateFeedback(string message)
-    {
-        if (feedbackText != null) feedbackText.text = message;
+        private void UpdateFeedback(string msg) { if (feedbackText) feedbackText.text = msg; }
     }
 }
