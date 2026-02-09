@@ -1299,6 +1299,8 @@ MonoBehaviour:
   signUpPasswordInput: {fileID: 108585746}
   signUpConfirmPasswordInput: {fileID: 1106613664}
   feedbackText: {fileID: 0}
+  panelSignIn: {fileID: 865422493}
+  panelSignUp: {fileID: 215015721}
 --- !u!4 &399160811
 Transform:
   m_ObjectHideFlags: 0
@@ -3133,7 +3135,7 @@ GameObject:
   - component: {fileID: 884982872}
   - component: {fileID: 884982871}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Generate_Username
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6058,7 +6060,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 800, y: 800}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
