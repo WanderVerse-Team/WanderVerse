@@ -26,6 +26,10 @@ namespace WanderVerse.Backend.Services
         [Header("General UI")]
         public TextMeshProUGUI feedbackText; 
 
+        [Header("UI Panels")]
+        public GameObject panelSignIn; 
+        public GameObject panelSignUp; 
+
         private FirebaseAuth _auth;
         private FirebaseFirestore _db; 
         private bool _isWorking = false; 
@@ -42,11 +46,12 @@ namespace WanderVerse.Backend.Services
                 signUpUsernameInput.readOnly = true; 
             }
 
-            if (_auth.CurrentUser != null)
+            // Auto logs in a user
+            /*if (_auth.CurrentUser != null)
             {
                 Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
                 LoadWorldMap();
-            }
+            }*/
         }
 
 
@@ -181,13 +186,24 @@ namespace WanderVerse.Backend.Services
             else 
             {
                 string uid = authTask.Result.User.UserId;
-
-                // Saves the Username-> Email mapping to Firestore
+                
+                // Saves username --> maps username with email
                 yield return StartCoroutine(RegisterUsernameInDB(username, email, uid));
 
-                UpdateFeedback("Success!");
                 InitializeNewUserData(uid);
-                LoadWorldMap();
+
+                UpdateFeedback("Success! Redirecting to Login...");
+                yield return new WaitForSeconds(2.0f);
+
+                _auth.SignOut(); // Stops auto login
+
+                if (panelSignUp != null) panelSignUp.SetActive(false);
+                if (panelSignIn != null) panelSignIn.SetActive(true);
+
+                if (loginEmailInput) loginEmailInput.text = ""; 
+                if (loginPasswordInput) loginPasswordInput.text = "";
+                UpdateFeedback("Account created. Please log in.");
+                _isWorking = false; 
             }
         }
 
