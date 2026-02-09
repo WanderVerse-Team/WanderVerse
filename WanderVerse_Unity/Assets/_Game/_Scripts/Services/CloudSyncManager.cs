@@ -5,9 +5,9 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Firebase.Auth;
-using Firebase.Firestore; // Added for direct Cloud Access
+using Firebase.Firestore; 
 using WanderVerse.Framework.Data;
-using wanderVerse.Backend; // Needed for LocalDataManager
+using wanderVerse.Backend; 
 
 namespace WanderVerse.Backend.Services
 {
@@ -26,12 +26,16 @@ namespace WanderVerse.Backend.Services
         
         // RAM Cache
         public PlayerData CurrentData { get; private set; }
+        public bool IsGuest { get; private set; } = false;
 
         [Header("API Config")]
-        // CHANGED: We point to the KEYS endpoint now, not the sync endpoint
         [SerializeField] private string _keyURL = "https://server-backend-eight.vercel.app/api/keys";
+        
+        private string _leaderboardURL = "https://server-backend-eight.vercel.app/api/leaderboard";
 
-        // Firestore Reference
+        private readonly string _guestKey = "12345678901234567890123456789012"; 
+        private readonly string _guestIV  = "1234567890123456";
+
         private FirebaseFirestore _db;
         private bool _isSaving = false;
 
@@ -46,39 +50,67 @@ namespace WanderVerse.Backend.Services
             _db = FirebaseFirestore.DefaultInstance;
         }
 
-        public void InitializeData(string userId)
+        
+        public void InitializeAsGuest()
         {
-            // We must fetch keys first so LocalDataManager can work
-            StartCoroutine(InitializeRoutine(userId));
-        }
+            Debug.Log("[Sync] Initializing Guest Mode...");
+            IsGuest = true;
 
-        private IEnumerator InitializeRoutine(string userId)
-        {
-            // 1. Get Encryption Keys from Vercel
-            yield return StartCoroutine(FetchKeysFromVercel());
+            if (LocalDataManager.Instance != null)
+            {
+                LocalDataManager.Instance.InitializeSecurity(_guestKey, _guestIV);
+            }
 
-            // 2. Load Local Data (Now that we have keys)
-            
-            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready and delete the "PlayerData local = null;" line below it
+            // 2. Load Local Data
+            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready
             // PlayerData local = LocalDataManager.Instance.LoadGame();
             PlayerData local = null; // Temporary fix to prevent errors
 
             if (local != null)
             {
                 CurrentData = local;
+                Debug.Log($"[Sync] Guest Data Loaded. XP: {CurrentData.xp}");
+            }
+            else
+            {
+                CurrentData = new PlayerData { userID = "guest_" + System.Guid.NewGuid().ToString() };
+                
+                // TO DO: @Senmith - Uncomment the below line
+                // LocalDataManager.Instance.SaveGame(CurrentData);
+                
+                Debug.Log("[Sync] New Guest Profile Created.");
+            }
+        }
+
+        public void InitializeAsUser(string userId)
+        {
+            Debug.Log($"[Sync] Initializing User Mode for {userId}...");
+            IsGuest = false;
+            StartCoroutine(InitializeUserRoutine(userId));
+        }
+
+        private IEnumerator InitializeUserRoutine(string userId)
+        {
+            yield return StartCoroutine(FetchKeysFromVercel());
+            
+            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready and delete the "PlayerData local = null;" line below it
+            // PlayerData local = LocalDataManager.Instance.LoadGame();
+            PlayerData local = null; // Temporary fix to prevent errors
+
+
+            if (local != null)
+            {
+                CurrentData = local;
                 Debug.Log($"[Sync] Loaded Local Data from Disk. XP: {CurrentData.xp}");
                 
-                // Check cloud in background
                 StartCoroutine(FetchCloudData(userId));
             }
             else
             {
-                // If no local data, we MUST fetch from Cloud
                 StartCoroutine(FetchCloudData(userId));
             }
         }
 
-        // --- NEW: Vercel Key Fetcher ---
         private IEnumerator FetchKeysFromVercel()
         {
             var user = FirebaseAuth.DefaultInstance.CurrentUser;
@@ -115,6 +147,7 @@ namespace WanderVerse.Backend.Services
                 }
             }
         }
+
 
         public int GetHighscoreForLevel(string levelID)
         {
@@ -169,6 +202,32 @@ namespace WanderVerse.Backend.Services
             SyncProgress(CurrentData);
         }
 
+        // SAVE GRADE & SUBJECT (ONBOARDING)
+        // Seshani can call this function when her UI is ready.
+        public void UpdateUserPreferences(int grade, string subject)
+        {
+            if (CurrentData == null) 
+            {
+                CurrentData = new PlayerData();
+                if (!IsGuest && FirebaseAuth.DefaultInstance.CurrentUser != null)
+                {
+                    CurrentData.userID = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+                }
+                else if (IsGuest && string.IsNullOrEmpty(CurrentData.userID))
+                {
+                    CurrentData.userID = "guest_" + System.Guid.NewGuid().ToString();
+                }
+            }
+
+            CurrentData.selectedGrade = grade;
+            CurrentData.selectedSubject = subject;
+            CurrentData.hasCompletedOnboarding = true;
+
+            Debug.Log($"[Preferences] Saved: Grade {grade}, Subject {subject}");
+
+            SyncProgress(CurrentData);
+        }
+
         public void SyncProgress(PlayerData dataToSave)
         {
             CurrentData = dataToSave; 
@@ -176,9 +235,8 @@ namespace WanderVerse.Backend.Services
             // TO DO: @Senmith - Uncomment the below line
             // LocalDataManager.Instance.SaveGame(CurrentData); 
 
-            if (FirebaseAuth.DefaultInstance.CurrentUser != null)
+            if (!IsGuest && FirebaseAuth.DefaultInstance.CurrentUser != null)
             {
-                // CHANGED: We now use Firestore for saving to fix the 400 Error & enable Offline Sync
                 StartCoroutine(SaveToFirestoreRoutine(CurrentData));
             }
         }
@@ -200,7 +258,7 @@ namespace WanderVerse.Backend.Services
 
             if (task.Exception != null)
             {
-                Debug.LogError($"[Cloud] Save Failed: {task.Exception.InnerException?.Message}");
+                Debug.LogWarning($"[Cloud] Save Pending (Offline) or Failed: {task.Exception.InnerException?.Message}");
             }
             else
             {
@@ -212,7 +270,7 @@ namespace WanderVerse.Backend.Services
                 // You can use System time or fetch ServerTimestamp separately.
                 if (EnergyManager.Instance != null) 
                 {
-                    EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
+                    // EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
                 }
                 */
             }
@@ -230,7 +288,6 @@ namespace WanderVerse.Backend.Services
             {
                 string json = task.Result.GetValue<string>("json");
                 
-                // Conflict Resolution: Check if cloud is actually newer/better
                 PlayerData cloudData = JsonUtility.FromJson<PlayerData>(json);
                 
                 if (CurrentData == null || cloudData.xp > CurrentData.xp)
@@ -261,9 +318,7 @@ namespace WanderVerse.Backend.Services
         // To get the leaderboard (for senmith's leaderboardController)
         public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
         {
-            string url = "https://server-backend-eight.vercel.app/api/leaderboard";
-            
-            using (UnityWebRequest request = UnityWebRequest.Get(url))
+            using (UnityWebRequest request = UnityWebRequest.Get(_leaderboardURL))
             {
                 yield return request.SendWebRequest();
 
