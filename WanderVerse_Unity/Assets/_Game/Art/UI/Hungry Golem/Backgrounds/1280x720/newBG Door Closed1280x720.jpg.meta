@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 60da02013f335ef4480d2be4d538452f
+guid: 993dfbc2da10f3649adc28c27f71a191
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7456866690553650133
-    second: Gemini_Generated_Image_f3twk7f3twk7f3tw_0
+      213: -1616968297023821906
+    second: newBG Door Closed1280x720_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_f3twk7f3twk7f3tw_0
+      name: newBG Door Closed1280x720_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1376
-        height: 768
+        width: 1280
+        height: 720
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b246b1cc043e38890800000000000000
-      internalID: -7456866690553650133
+      spriteID: ea7a3d2a6ef5f89e0800000000000000
+      internalID: -1616968297023821906
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Gemini_Generated_Image_f3twk7f3twk7f3tw_0: -7456866690553650133
+      newBG Door Closed1280x720_0: -1616968297023821906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

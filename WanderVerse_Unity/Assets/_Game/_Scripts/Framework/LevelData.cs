@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
 {
-    public int[] possibleTargets;
     // ========================================================================
     // 1. GLOBAL SETTINGS (Applies to all games)
     // ========================================================================
@@ -20,6 +19,9 @@ public class LevelData : ScriptableObject
     public GameType gameType;          // Selects which logic to run
 
     [Header("--- 3. WIN CONDITIONS ---")]
+
+    public int[] possibleTargets;
+
     public int targetScore = 10;
 
     [Tooltip("Enter ONLY POSITIVE values")]
