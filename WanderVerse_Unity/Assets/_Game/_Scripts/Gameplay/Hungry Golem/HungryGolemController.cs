@@ -36,6 +36,7 @@ public class HungryGolemController : BaseLevelController
     public float hiddenY = 800f; // Height above screen
     public float visibleY = 0f;  // Center of screen
     public float waitTime = 2.0f; // How long the sign stays visible
+    public float targetX = 0f;
 
     [Header("--- UI References ---")]
     public TMPro.TextMeshProUGUI instructionText;
@@ -262,7 +263,7 @@ public void CheckIfFinished()
     }
     else if (currentScore < dynamicTargetScore)
     {
-        HandleCorrectAnswer();
+        HandleWrongAnswer();
         // Too few fruits
         StartCoroutine(AutoSignSequence(underfeedPanel));
         // Tip: Change the text to "The door is still locked! Did the Golem eat enough?"
@@ -283,39 +284,51 @@ public void CheckIfFinished()
     if (sign == null) yield break;
     isProcessingMistake = true;
 
-    // 1. Reset and Show
+    // 1. Setup Positions
+    Vector2 hiddenPos = new Vector2(targetX, hiddenY);
+    Vector2 visiblePos = new Vector2(targetX, visibleY);
+
+    // 2. Reset Score and Show Sign
     currentScore = 0;
-    
+    sign.anchoredPosition = hiddenPos; // Snap to start position
     sign.gameObject.SetActive(true);
-    audioSource.PlayOneShot(wrongSound);
+    
+    if (audioSource != null && wrongSound != null)
+        audioSource.PlayOneShot(wrongSound);
 
-    // 2. Slide Down (From 800 to 0)
-    yield return StartCoroutine(MoveSign(sign, hiddenY, visibleY));
+    // 3. Slide Down (From hidden to visible)
+    yield return StartCoroutine(MoveSign(sign, hiddenPos, visiblePos));
 
-    // 3. Wait
+    // 4. Wait
     yield return new WaitForSecondsRealtime(waitTime);
 
-    // 4. Slide Up (From 0 back to 800)
-    yield return StartCoroutine(MoveSign(sign, visibleY, hiddenY));
+    // 5. Slide Up (From visible back to hidden)
+    yield return StartCoroutine(MoveSign(sign, visiblePos, hiddenPos));
 
-    // 5. Hide
+    // 6. Finalize
     sign.gameObject.SetActive(false);
-    
     isProcessingMistake = false;
 }
-    private IEnumerator MoveSign(RectTransform rect, float startY, float endY)
+private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPos)
+{
+    float duration = 0.5f;
+    float elapsed = 0;
+
+    while (elapsed < duration)
     {
-        float duration = 0.5f;
-        float elapsed = 0;
-        while (elapsed < duration) {
-            elapsed += Time.unscaledDeltaTime;
-            float t = elapsed / duration;
-            // Smooth bounce/ease effect
-            float curve = t * t * (3f - 2f * t); 
-            rect.localPosition = new Vector2(0, Mathf.Lerp(startY, endY, curve));
-            yield return null;
-        }
+        elapsed += Time.unscaledDeltaTime;
+        float t = elapsed / duration;
+        
+        // Smooth bounce/ease effect
+        float curve = t * t * (3f - 2f * t); 
+        
+        // Use Vector2.Lerp to move both X and Y at the same time
+        rect.anchoredPosition = Vector2.Lerp(startPos, endPos, curve);
+        
+        yield return null;
     }
+    rect.anchoredPosition = endPos;
+}
     public void VictoryScreen()
 {
     // 1. Play the particle effects

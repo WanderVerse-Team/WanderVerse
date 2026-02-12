@@ -16,4 +16,15 @@ public class FruitIdentity : MonoBehaviour
             controller.RemoveFruit(this);
         }
     }
+
+    void OnBecameInvisible()
+{
+    if (!Application.isPlaying) return;
+
+    // Check if THIS object still exists before destroying it
+    if (gameObject != null)
+    {
+        Destroy(gameObject);
+    }
+}
 }
