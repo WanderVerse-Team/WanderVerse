@@ -1,114 +1,283 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System;
 using System.Collections;
-using System.Text;
+using System.Threading.Tasks;
 using Firebase.Auth;
-using WanderVerse.Framework.Data; 
+using Firebase.Firestore; // Added for direct Cloud Access
+using WanderVerse.Framework.Data;
+using wanderVerse.Backend; // Needed for LocalDataManager
 
-[Serializable]
-public class SyncPayload 
+namespace WanderVerse.Backend.Services
 {
-    public PlayerData localData;
-}
-
-public class CloudSyncManager : MonoBehaviour
-{
-    public static CloudSyncManager Instance { get; private set; }
-
-    [SerializeField] private string syncEndpoint = "https://server-backend-eight.vercel.app/api/sync";
-
+    // Helper class to read Senmith's JSON keys
     [Serializable]
-    public class SyncResponse 
+    public class KeyResponse
     {
-        public string status;       
-        public string message;
-        public PlayerData forceUpdate; 
+        public string status;
+        public string key;
+        public string iv;
     }
 
-    private void Awake()
+    public class CloudSyncManager : MonoBehaviour
     {
-        // Singleton Pattern setup
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void SyncProgress(PlayerData localData)
-    {
-        StartCoroutine(SyncRoutine(localData));
-    }
-
-    private IEnumerator SyncRoutine(PlayerData data)
-    {
-        var user = FirebaseAuth.DefaultInstance.CurrentUser;
-        if (user == null) { Debug.LogError("Sync Failed: No user logged in."); yield break; }
+        public static CloudSyncManager Instance { get; private set; }
         
-        // 1. Get the Security Token from Firebase (With 10s Timeout)
-        var tokenTask = user.TokenAsync(true);
-        float timeoutDuration = 10f;
-        float timer = 0f;
+        // RAM Cache
+        public PlayerData CurrentData { get; private set; }
 
-        // Wait while the task is running, but stop if time runs out
-        while (!tokenTask.IsCompleted)
+        [Header("API Config")]
+        // CHANGED: We point to the KEYS endpoint now, not the sync endpoint
+        [SerializeField] private string _keyURL = "https://server-backend-eight.vercel.app/api/keys";
+
+        // Firestore Reference
+        private FirebaseFirestore _db;
+        private bool _isSaving = false;
+
+        private void Awake()
         {
-            timer += Time.deltaTime;
-            if (timer > timeoutDuration)
-            {
-                Debug.LogError($"Sync Failed: Token Request Timed Out after {timeoutDuration} seconds.");
-                yield break; // Stop the routine so the game doesn't hang
-            }
-            yield return null; // Wait for the next frame
+            if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
+            else { Destroy(gameObject); }
         }
 
-        if (tokenTask.IsFaulted || tokenTask.IsCanceled)
+        private void Start()
         {
-             Debug.LogError("Sync Failed: Token Error - " + tokenTask.Exception);
-             yield break;
+            _db = FirebaseFirestore.DefaultInstance;
         }
 
-        string idToken = tokenTask.Result;
-        
-        // 2. Prepare Payload
-        SyncPayload payload = new SyncPayload { localData = data };
-        string jsonToSend = JsonUtility.ToJson(payload);
-
-        // 3. Setup Request
-        UnityWebRequest request = new UnityWebRequest(syncEndpoint, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonToSend);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        // 4. Attach Headers 
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + idToken); 
-
-        // Add a timeout to the WebRequest itself too (Double Safety)
-        request.timeout = 10; 
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
+        public void InitializeData(string userId)
         {
-            SyncResponse response = JsonUtility.FromJson<SyncResponse>(request.downloadHandler.text);
-            Debug.Log($"Sync Result: {response.status} - {response.message}");
+            // We must fetch keys first so LocalDataManager can work
+            StartCoroutine(InitializeRoutine(userId));
+        }
+
+        private IEnumerator InitializeRoutine(string userId)
+        {
+            // 1. Get Encryption Keys from Vercel
+            yield return StartCoroutine(FetchKeysFromVercel());
+
+            // 2. Load Local Data (Now that we have keys)
             
-            if (response.status == "CONFLICT") {
-                Debug.LogWarning("Cloud data is better. Overwrite triggered.");
-                // TODO: Randiv needs to hook this up to GameManager
-                // GameManager.Instance.UpdateFromCloud(response.forceUpdate);
+            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready and delete the "PlayerData local = null;" line below it
+            // PlayerData local = LocalDataManager.Instance.LoadGame();
+            PlayerData local = null; // Temporary fix to prevent errors
+
+            if (local != null)
+            {
+                CurrentData = local;
+                Debug.Log($"[Sync] Loaded Local Data from Disk. XP: {CurrentData.xp}");
+                
+                // Check cloud in background
+                StartCoroutine(FetchCloudData(userId));
+            }
+            else
+            {
+                // If no local data, we MUST fetch from Cloud
+                StartCoroutine(FetchCloudData(userId));
             }
         }
-        else
+
+        // --- NEW: Vercel Key Fetcher ---
+        private IEnumerator FetchKeysFromVercel()
         {
-            Debug.LogError($"Sync Error {request.responseCode}: {request.error}");
-            Debug.LogError($"Server Message: {request.downloadHandler.text}");
+            var user = FirebaseAuth.DefaultInstance.CurrentUser;
+            if (user == null) yield break;
+
+            Task<string> tokenTask = user.TokenAsync(true);
+            yield return new WaitUntil(() => tokenTask.IsCompleted);
+
+            if (tokenTask.Exception != null) 
+            {
+                Debug.LogError("[Sync] Failed to get Auth Token for Keys.");
+                yield break;
+            }
+
+            using (UnityWebRequest request = UnityWebRequest.Get(_keyURL))
+            {
+                request.SetRequestHeader("Authorization", "Bearer " + tokenTask.Result);
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    string json = request.downloadHandler.text;
+                    KeyResponse response = JsonUtility.FromJson<KeyResponse>(json);
+
+                    if (LocalDataManager.Instance != null && response != null)
+                    {
+                        LocalDataManager.Instance.InitializeSecurity(response.key, response.iv);
+                        Debug.Log("[Sync] Keys fetched from Vercel. Security Initialized.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"[Sync] Failed to fetch keys: {request.error}");
+                }
+            }
+        }
+
+        public int GetHighscoreForLevel(string levelID)
+        {
+            if (CurrentData == null) return 0;
+            LevelTracker tracker = CurrentData.GetLevelData(levelID);
+            return tracker != null ? tracker.highScore : 0;
+        }
+
+        public void SetHighscoreForLevel(string levelID, int currentRunScore, int stars)
+        {
+            if (CurrentData == null) return;
+
+            LevelTracker tracker = CurrentData.GetLevelData(levelID);
+
+            if (tracker != null)
+            {
+                if (currentRunScore > tracker.highScore)
+                {
+                    tracker.highScore = currentRunScore;
+                }
+                
+                tracker.attempts++;
+
+                if (stars > tracker.starsEarned)
+                {
+                    tracker.starsEarned = stars;
+                }
+            }
+            else
+            {
+                LevelTracker newTracker = new LevelTracker
+                {
+                    levelID = levelID,
+                    highScore = currentRunScore,
+                    starsEarned = stars,
+                    attempts = 1,
+                    isUnlocked = true
+                };
+                CurrentData.levelProgress.Add(newTracker);
+            }
+
+            SyncProgress(CurrentData);
+        }
+
+        public void AddTotalXP(int xpToAdd)
+        {
+            if (CurrentData == null) return;
+
+            CurrentData.xp += xpToAdd;
+            Debug.Log($"[Sync] Added {xpToAdd} XP. Total Now: {CurrentData.xp}");
+
+            SyncProgress(CurrentData);
+        }
+
+        public void SyncProgress(PlayerData dataToSave)
+        {
+            CurrentData = dataToSave; 
+            
+            // TO DO: @Senmith - Uncomment the below line
+            // LocalDataManager.Instance.SaveGame(CurrentData); 
+
+            if (FirebaseAuth.DefaultInstance.CurrentUser != null)
+            {
+                // CHANGED: We now use Firestore for saving to fix the 400 Error & enable Offline Sync
+                StartCoroutine(SaveToFirestoreRoutine(CurrentData));
+            }
+        }
+
+        private IEnumerator SaveToFirestoreRoutine(PlayerData data)
+        {
+            if (_isSaving) yield break;
+            _isSaving = true;
+
+            var dataMap = new Dictionary<string, object>
+            {
+                { "xp", data.xp },
+                { "json", JsonUtility.ToJson(data) },
+                { "lastUpdated", FieldValue.ServerTimestamp }
+            };
+
+            var task = _db.Collection("users").Document(data.userID).SetAsync(dataMap, SetOptions.MergeAll);            
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (task.Exception != null)
+            {
+                Debug.LogError($"[Cloud] Save Failed: {task.Exception.InnerException?.Message}");
+            }
+            else
+            {
+                Debug.Log("[Cloud] Sync Success!");
+
+                // TO DO: @Randiv - Uncomment this block when EnergyManager is ready
+                /*
+                // Note: Firestore does not return a Date header like HTTP. 
+                // You can use System time or fetch ServerTimestamp separately.
+                if (EnergyManager.Instance != null) 
+                {
+                    EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
+                }
+                */
+            }
+
+            _isSaving = false;
+        }
+        
+        private IEnumerator FetchCloudData(string userId) 
+        {
+            Debug.Log("[Cloud] Fetching profile...");
+            var task = _db.Collection("users").Document(userId).GetSnapshotAsync();
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (task.Result.Exists)
+            {
+                string json = task.Result.GetValue<string>("json");
+                
+                // Conflict Resolution: Check if cloud is actually newer/better
+                PlayerData cloudData = JsonUtility.FromJson<PlayerData>(json);
+                
+                if (CurrentData == null || cloudData.xp > CurrentData.xp)
+                {
+                    CurrentData = cloudData;
+                    Debug.Log($"[Cloud] Profile Loaded! XP: {CurrentData.xp}");
+                    
+                    // TO DO: @Senmith - Update local disk cache with new cloud data
+                    // LocalDataManager.Instance.SaveGame(CurrentData);
+                }
+            }
+            else
+            {
+                // New User logic
+                if (CurrentData == null) 
+                {
+                    CurrentData = new PlayerData { userID = userId };
+                    Debug.Log("[Cloud] New User. Created New Profile.");
+                    
+                    // TO DO: @Senmith - Uncomment the below line
+                    // LocalDataManager.Instance.SaveGame(CurrentData);
+                    
+                    SyncProgress(CurrentData);
+                }
+            }
+        }
+
+        // To get the leaderboard (for senmith's leaderboardController)
+        public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
+        {
+            string url = "https://server-backend-eight.vercel.app/api/leaderboard";
+            
+            using (UnityWebRequest request = UnityWebRequest.Get(url))
+            {
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    Debug.Log("[Leaderboard] Success: " + request.downloadHandler.text);
+                    onSuccess?.Invoke(request.downloadHandler.text);
+                }
+                else
+                {
+                    Debug.LogError("[Leaderboard] Failed: " + request.error);
+                    onFailure?.Invoke(request.error);
+                }
+            }
         }
     }
 }

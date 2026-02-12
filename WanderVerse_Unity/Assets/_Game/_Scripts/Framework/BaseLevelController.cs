@@ -28,7 +28,7 @@ public abstract class BaseLevelController : MonoBehaviour
     // Events to update the UI
     public System.Action<int> OnScoreUpdated;
     public System.Action<float> OnTimerUpdated;
-    public System.Action<bool, float> OnLevelEnded;
+    public System.Action<bool> OnLevelEnded;
 
     protected virtual void Awake()
     {
@@ -58,15 +58,16 @@ public abstract class BaseLevelController : MonoBehaviour
         LoadBaseData();
         InitializeLevel();
 
-        //if (GameManager.Instance != null)
-        //{
-        //    Debug.Log($"[BaseLevelController] Waiting for GameManager to start the {gameObject.name}...");
-        //}
-        //else
-        //{
+        if (GameManager.Instance != null)
+        {
+            Debug.Log($"[BaseLevelController] Waiting for GameManager to start the {gameObject.name}...");
+        }
+        else
+        {
             Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
+
             StartGame();
-        //}
+        }
     }
 
     // Update is called once per frame
@@ -97,7 +98,7 @@ public abstract class BaseLevelController : MonoBehaviour
         return true;
     }
 
-    private void LoadBaseData() 
+    private void LoadBaseData()
     {
         targetScore = dynamicTargetScore;
         pointsForCorrect = levelData.pointsForCorrect;
@@ -136,24 +137,6 @@ public abstract class BaseLevelController : MonoBehaviour
         }
     }
 
-    
-    
-
-    protected virtual void SubmitAnswer(bool isCorrect)
-    {
-        if (!isGameActive) return;
-
-        if (isCorrect)
-        {
-            HandleCorrectAnswer();
-            CheckWinCondition();
-        }
-        else
-        {
-            HandleWrongAnswer();
-        }
-    }
-
     protected virtual void HandleCorrectAnswer()
     {
         // Add audio manager
@@ -165,27 +148,23 @@ public abstract class BaseLevelController : MonoBehaviour
 
         OnScoreUpdated?.Invoke(currentScore);
 
-        //Since the win condition is only checked when the player clicks the temple door, we comment this out.
-        //CheckWinCondition();
     }
 
     protected virtual void HandleWrongAnswer()
     {
         // Add audio manager
-        // Keep wrong answers counter?
-        // Deduct score?
 
         Debug.Log("Wrong Answer!");
+        mistakeCount++;
 
-        if (pointsForWrong > 0) 
+        if (pointsForWrong > 0)
         {
             // Add logic to handle NEGATIVE SCORES
             currentScore -= pointsForWrong;
         }
 
-        if (maxMistakes > 0) 
+        if (maxMistakes > 0)
         {
-            mistakeCount++;
 
             if (mistakeCount >= maxMistakes) EndLevel(false);
         }
@@ -207,28 +186,19 @@ public abstract class BaseLevelController : MonoBehaviour
 
         isGameActive = false;
 
-        float stars = CalculateStars(isSuccess);
-
-        Debug.Log($"[BaseLevel] Level Over. Success: {isSuccess}. Stars: {stars}");
-
-        OnLevelEnded?.Invoke(isSuccess, stars);
-    }
-
-    protected virtual float CalculateStars(bool isSuccess)
-    {
-        // HAVE TO CHANGE THIS
-        // Made the method to always return 3 stars if the player won,
-        // and 0 stars of the player lost until we discuss the logic
-
-        // Change the return type to int if we don't give "2.5 stars"
-
         if (isSuccess)
         {
-            return 3f;
+            // Send the mistake count to GameManager
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ProcessLevelCompletion(levelData.levelID, mistakeCount, levelData);
+            }
         }
-        else
-        {
-            return 0f;
-        }
+
+        Debug.Log($"[BaseLevel] Level Over. Success: {isSuccess}. Mistakes: {mistakeCount}");
+
+        // Tell UI to open the Win/Lose screen
+        OnLevelEnded?.Invoke(isSuccess);
     }
+
 }
