@@ -1,9 +1,13 @@
+using System;
 using UnityEngine;
 using WanderVerse.Backend.Services;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
+    public event Action<string, int, int, int, bool> OnLevelCompleted;
 
     private void Awake()
     {
@@ -20,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)
     {
-        // 1. CALCULATE XP
+        // CALCULATE XP
 
         // Formula: MaxPossibleXP - (Mistakes * Penalty)
         int rawScore = levelData.maxXpReward - (mistakes * levelData.xpDeductionPerMistake);
@@ -28,22 +32,24 @@ public class GameManager : MonoBehaviour
         // Clamp: Ensure it never drops below Base, and never goes above Max
         int currentRunScore = Mathf.Clamp(rawScore, levelData.baseXpReward, levelData.maxXpReward);
 
-        // 2. CALCULATE STARS
+        // CALCULATE STARS
 
         int stars = CalculateStars(mistakes, levelData);
 
         Debug.Log($"[GameManager] Level {levelID} Finished.");
         Debug.Log($"Mistakes: {mistakes} | Score: {currentRunScore} | Stars: {stars}");
 
-        // 3. HIGH SCORE LOGIC
+        // HIGH SCORE LOGIC
 
         int previousBest = CloudSyncManager.Instance.GetHighscoreForLevel(levelID);
         int xpToAdd = 0;
+        bool isNewBest = false;
 
         if (currentRunScore > previousBest)
         {
             xpToAdd = currentRunScore - previousBest;
             CloudSyncManager.Instance.SetHighscoreForLevel(levelID, currentRunScore, stars);
+            isNewBest = true;
             Debug.Log($"New Personal Best! +{xpToAdd} XP added to Total XP");
         }
         else
@@ -57,12 +63,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // 4. SAVE
+        // SAVE
 
         if (xpToAdd > 0)
         {
             CloudSyncManager.Instance.AddTotalXP(xpToAdd);
         }
+
+        // BROADCAST THE EVENT
+        OnLevelCompleted?.Invoke(levelID, currentRunScore, xpToAdd, stars, isNewBest);
 
     }
 
