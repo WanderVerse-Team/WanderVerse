@@ -60,10 +60,10 @@ public class LevelData : ScriptableObject
     public int maxMistakesFor3Stars = 0;
     public int maxMistakesFor2Stars = 2;
 
-    //[Header("--- 7. AUDIO & VISUALS ---")]
+    [Header("--- 7. AUDIO & VISUALS ---")]
     //public Sprite backgroundImage;
     //public GameObject environmentPrefab; // Forest, Cave, Space
-    //public AudioClip backgroundMusic;
+    public AudioClip backgroundMusic;
     //public AudioClip instructionAudio;   // "Find the Cone" 
     //[TextArea] public string instructionText;
 
@@ -80,8 +80,10 @@ public class LevelData : ScriptableObject
     public float spawnRate = 2.0f;
     public float itemFallSpeed = 3.0f;
 
-    //[Header("--- MODE: NUMBERS 1 ---")]
+    [Header("--- MODE: NUMBERS 1 ---")]
     // Add variables needed for Numbers 1 lesson
+
+    public List<QuestionItem> questions; // For Number Recognition (Numbers 1)
 
     //[Header("--- MODE: ADDITION 1 ---")]
     // Add variables needed for Addition 1 lesson
@@ -129,4 +131,21 @@ public enum GameType
     Division1,
     Fractions,
     Directions
+}
+
+[System.Serializable]
+public class QuestionItem 
+{
+    [Header("The Question")]
+    [Tooltip("What the Door says/displays, e.g. 'Fourteen'")]
+    public string promptText;           
+    public AudioClip promptAudio;       
+
+    [Header("The Answer")]
+    [Tooltip("The correct text on the button, e.g. '14'")]
+    public string correctString;        
+
+    [Header("The Distractors")]
+    [Tooltip("Wrong answers to confuse the player, e.g. '41', '4'")]
+    public List<string> wrongAnswers;   
 }
