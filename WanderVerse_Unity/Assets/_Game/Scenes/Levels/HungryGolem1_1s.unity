@@ -444,6 +444,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: VictoryPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.5960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.9843138
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.5960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4288215960
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
