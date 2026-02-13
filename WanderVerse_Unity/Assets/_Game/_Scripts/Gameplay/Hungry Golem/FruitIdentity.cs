@@ -13,7 +13,18 @@ public class FruitIdentity : MonoBehaviour
         // Tell the controller "I am gone, you can spawn another one!"
         if (controller != null)
         {
-            controller.RemoveFruit();
+            controller.RemoveFruit(this);
         }
     }
+
+    void OnBecameInvisible()
+{
+    if (!Application.isPlaying) return;
+
+    // Check if THIS object still exists before destroying it
+    if (gameObject != null)
+    {
+        Destroy(gameObject);
+    }
+}
 }
