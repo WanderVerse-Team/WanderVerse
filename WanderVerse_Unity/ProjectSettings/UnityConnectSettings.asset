@@ -21,10 +21,17 @@ UnityConnectSettings:
     m_LogBufferSize: 10
     m_CaptureEditorExceptions: 1
   UnityPurchasingSettings:
+<<<<<<< HEAD
     m_Enabled: 1
     m_TestMode: 0
   UnityAnalyticsSettings:
     m_Enabled: 1
+=======
+    m_Enabled: 0
+    m_TestMode: 0
+  UnityAnalyticsSettings:
+    m_Enabled: 0
+>>>>>>> 818805b3702f55df0908cb7efd263e8a674b8dad
     m_TestMode: 0
     m_InitializeOnStartup: 1
     m_PackageRequiringCoreStatsPresent: 0

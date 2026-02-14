@@ -9,3 +9,9 @@
 *.bundle filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
 *.dll filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
+=======
+*.dll !text !filter !merge !diff
+*.png !text !filter !merge !diff
+*.ttf !text !filter !merge !diff
+>>>>>>> 818805b3702f55df0908cb7efd263e8a674b8dad

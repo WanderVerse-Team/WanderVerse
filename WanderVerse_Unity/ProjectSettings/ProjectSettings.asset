@@ -761,8 +761,12 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
+<<<<<<< HEAD
   cloudServicesEnabled:
     Purchasing: 1
+=======
+  cloudServicesEnabled: {}
+>>>>>>> 818805b3702f55df0908cb7efd263e8a674b8dad
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
