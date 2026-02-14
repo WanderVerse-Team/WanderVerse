@@ -121,7 +121,7 @@ public class TalkingDoorController : BaseLevelController
             if (doorSpeaker != null) doorSpeaker.PlayOneShot(correctSound);
 
             // Optional: Make button green
-            answerButtons[buttonIndex].image.color = Color.green;
+            //answerButtons[buttonIndex].image.color = Color.green;
 
             // Wait a moment, then next question
             StartCoroutine(WaitAndNext());

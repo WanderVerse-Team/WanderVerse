@@ -17,8 +17,8 @@ MonoBehaviour:
   levelID: 
   levelTitle: 
   description: 
-  gameType: 0
-  targetScore: 10
+  gameType: 1
+  targetScore: 20
   possibleTargets: 
   pointsForCorrect: 1
   pointsForWrong: 1
@@ -31,8 +31,170 @@ MonoBehaviour:
   perfectRunBonus: 5
   maxMistakesFor3Stars: 0
   maxMistakesFor2Stars: 2
+  backgroundMusic: {fileID: 0}
   spawnItems: []
   distractors: []
   validValue: 1
   spawnRate: 2
   itemFallSpeed: 3
+  questions:
+  - promptText: One
+    promptAudio: {fileID: 0}
+    correctString: 1
+    wrongAnswers:
+    - 5
+    - 12
+    - 7
+    - 9
+  - promptText: Two
+    promptAudio: {fileID: 0}
+    correctString: 2
+    wrongAnswers:
+    - 4
+    - 6
+    - 7
+    - 12
+  - promptText: Three
+    promptAudio: {fileID: 0}
+    correctString: 3
+    wrongAnswers:
+    - 1
+    - 7
+    - 5
+    - 13
+  - promptText: Four
+    promptAudio: {fileID: 0}
+    correctString: 4
+    wrongAnswers:
+    - 7
+    - 16
+    - 8
+    - 12
+  - promptText: Five
+    promptAudio: {fileID: 0}
+    correctString: 5
+    wrongAnswers:
+    - 6
+    - 2
+    - 8
+    - 15
+  - promptText: Six
+    promptAudio: {fileID: 0}
+    correctString: 6
+    wrongAnswers:
+    - 8
+    - 9
+    - 16
+    - 2
+  - promptText: Seven
+    promptAudio: {fileID: 0}
+    correctString: 7
+    wrongAnswers:
+    - 4
+    - 8
+    - 1
+    - 9
+  - promptText: Eight
+    promptAudio: {fileID: 0}
+    correctString: 8
+    wrongAnswers:
+    - 6
+    - 17
+    - 7
+    - 12
+  - promptText: Nine
+    promptAudio: {fileID: 0}
+    correctString: 9
+    wrongAnswers:
+    - 5
+    - 11
+    - 6
+    - 19
+  - promptText: Ten
+    promptAudio: {fileID: 0}
+    correctString: 10
+    wrongAnswers:
+    - 15
+    - 7
+    - 20
+    - 1
+  - promptText: Eleven
+    promptAudio: {fileID: 0}
+    correctString: 11
+    wrongAnswers:
+    - 16
+    - 18
+    - 12
+    - 1
+  - promptText: Twelve
+    promptAudio: {fileID: 0}
+    correctString: 12
+    wrongAnswers:
+    - 10
+    - 19
+    - 2
+    - 14
+  - promptText: Thirteen
+    promptAudio: {fileID: 0}
+    correctString: 13
+    wrongAnswers:
+    - 17
+    - 11
+    - 16
+    - 3
+  - promptText: Fourteen
+    promptAudio: {fileID: 0}
+    correctString: 14
+    wrongAnswers:
+    - 6
+    - 18
+    - 4
+    - 16
+  - promptText: Fifteen
+    promptAudio: {fileID: 0}
+    correctString: 15
+    wrongAnswers:
+    - 12
+    - 18
+    - 17
+    - 5
+  - promptText: Sixteen
+    promptAudio: {fileID: 0}
+    correctString: 16
+    wrongAnswers:
+    - 10
+    - 7
+    - 6
+    - 18
+  - promptText: Seventeen
+    promptAudio: {fileID: 0}
+    correctString: 17
+    wrongAnswers:
+    - 12
+    - 8
+    - 7
+    - 11
+  - promptText: Eighteen
+    promptAudio: {fileID: 0}
+    correctString: 18
+    wrongAnswers:
+    - 13
+    - 8
+    - 19
+    - 11
+  - promptText: Nineteen
+    promptAudio: {fileID: 0}
+    correctString: 19
+    wrongAnswers:
+    - 14
+    - 10
+    - 13
+    - 11
+  - promptText: Twenty
+    promptAudio: {fileID: 0}
+    correctString: 20
+    wrongAnswers:
+    - 10
+    - 2
+    - 15
+    - 12
