@@ -8,7 +8,7 @@ using System;
 using WanderVerse.Framework.Data;
 using WanderVerse.Framework.Utilities;
 
-namespace wanderVerse.Backend
+namespace WanderVerse.Backend
 {
     public class LocalDataManager : MonoBehaviour
     {
@@ -103,6 +103,22 @@ namespace wanderVerse.Backend
                 return null;
             }
 
+        }
+        public bool HasSaveFile()
+        {
+            string path = Path.Combine(Application.persistentDataPath, saveFileName);
+            return File.Exists(path);
+        }
+
+        public void DeleteSaveFile()
+        {
+            string path = Path.Combine(Application.persistentDataPath, saveFileName);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                Debug.Log("[LocalDataManager] Save file deleted.");
+    
+            }
         }
     }
 }

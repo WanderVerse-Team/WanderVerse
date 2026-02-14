@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Firebase.Auth;
 using Firebase.Firestore; 
 using WanderVerse.Framework.Data;
-using wanderVerse.Backend; 
+using WanderVerse.Backend; 
 
 namespace WanderVerse.Backend.Services
 {
@@ -62,9 +62,7 @@ namespace WanderVerse.Backend.Services
             }
 
             // 2. Load Local Data
-            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready
-            // PlayerData local = LocalDataManager.Instance.LoadGame();
-            PlayerData local = null; // Temporary fix to prevent errors
+            PlayerData local = LocalDataManager.Instance.LoadGame();
 
             if (local != null)
             {
@@ -75,8 +73,7 @@ namespace WanderVerse.Backend.Services
             {
                 CurrentData = new PlayerData { userID = "guest_" + System.Guid.NewGuid().ToString() };
                 
-                // TO DO: @Senmith - Uncomment the below line
-                // LocalDataManager.Instance.SaveGame(CurrentData);
+                LocalDataManager.Instance.SaveGame(CurrentData);
                 
                 Debug.Log("[Sync] New Guest Profile Created.");
             }
@@ -93,9 +90,7 @@ namespace WanderVerse.Backend.Services
         {
             yield return StartCoroutine(FetchKeysFromVercel());
 
-            // TO DO: @Senmith - Uncomment the below line when LocalDataManager is ready and delete the "PlayerData local = null;" line
-            // PlayerData local = LocalDataManager.Instance.LoadGame();
-            PlayerData local = null; // Temporary fix
+            PlayerData local = LocalDataManager.Instance.LoadGame();
 
             if (local != null)
             {
@@ -234,8 +229,7 @@ namespace WanderVerse.Backend.Services
         {
             CurrentData = dataToSave; 
             
-            // TO DO: @Senmith - Uncomment the below line
-            // LocalDataManager.Instance.SaveGame(CurrentData); 
+            LocalDataManager.Instance.SaveGame(CurrentData); 
 
             if (!IsGuest && FirebaseAuth.DefaultInstance.CurrentUser != null)
             {
@@ -297,8 +291,7 @@ namespace WanderVerse.Backend.Services
                     CurrentData = cloudData;
                     Debug.Log($"[Cloud] Profile Loaded! XP: {CurrentData.xp}");
                     
-                    // TO DO: @Senmith - Update local disk cache with new cloud data
-                    // LocalDataManager.Instance.SaveGame(CurrentData);
+                    LocalDataManager.Instance.SaveGame(CurrentData);
                 }
             }
             else
@@ -308,10 +301,7 @@ namespace WanderVerse.Backend.Services
                 {
                     CurrentData = new PlayerData { userID = userId };
                     Debug.Log("[Cloud] New User. Created New Profile.");
-                    
-                    // TO DO: @Senmith - Uncomment the below line
-                    // LocalDataManager.Instance.SaveGame(CurrentData);
-                    
+                                        
                     SyncProgress(CurrentData);
                 }
             }
