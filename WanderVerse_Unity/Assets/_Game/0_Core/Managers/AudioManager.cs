@@ -6,6 +6,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
+    // private Coroutine musicFadeRoutine; // Add a coroutine to fade music in and out
+
     [Header("--- Audio Mixer ---")]
     [Tooltip("Drag the Master Audio Mixer here")]
     public AudioMixer mainMixer;
@@ -50,7 +52,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // ========================================================================
-    // 1. MUSIC LOGIC (Smart Switching)
+    // 1. MUSIC LOGIC
     // ========================================================================
     public void PlayMusic(AudioClip clip)
     {
@@ -68,7 +70,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // ========================================================================
-    // 2. SFX LOGIC (Global UI)
+    // 2. SFX LOGIC (Global)
     // ========================================================================
     public void PlaySFX(AudioClip clip)
     {
@@ -92,7 +94,7 @@ public class AudioManager : MonoBehaviour
         voiceSource.clip = clip;
         voiceSource.Play();
 
-        // Optional: Lower music volume while voice plays
+        // Lower music volume while voice plays
         StartCoroutine(DuckMusicRoutine(clip.length));
     }
 

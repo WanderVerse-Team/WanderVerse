@@ -29,7 +29,7 @@ public class LevelData : ScriptableObject
     public int pointsForWrong = 1;
 
     [Tooltip("Set to 0 to allow infinite mistakes. Enter ONLY POSITIVE values")]
-    public int maxMistakes = 3;
+    public int maxMistakes = 0;
 
     [Header("--- 4. TIMER ---")]
     public bool useTimer = false;
@@ -60,10 +60,10 @@ public class LevelData : ScriptableObject
     public int maxMistakesFor3Stars = 0;
     public int maxMistakesFor2Stars = 2;
 
-    //[Header("--- 7. AUDIO & VISUALS ---")]
+    [Header("--- 7. AUDIO & VISUALS ---")]
     //public Sprite backgroundImage;
     //public GameObject environmentPrefab; // Forest, Cave, Space
-    //public AudioClip backgroundMusic;
+    public AudioClip backgroundMusic;
     //public AudioClip instructionAudio;   // "Find the Cone" 
     //[TextArea] public string instructionText;
 
