@@ -305,27 +305,39 @@ namespace WanderVerse.Backend.Services
             
             if (string.IsNullOrEmpty(finalUsername)) finalUsername = "Traveler_" + uid.Substring(0, 4);
 
-            PlayerData newData = new PlayerData 
-            { 
-                userID = uid,
-                userName = finalUsername 
-            };
+            PlayerData dataToSave;
 
-            // TODO: @Senmith - Uncomment the below line when LocalDataManager is ready
-            // LocalDataManager.Save(newData); 
-            
-            if (CloudSyncManager.Instance != null)
+            // Checks if we already have Guest data in memory
+            if (CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null)
             {
-                CloudSyncManager.Instance.SyncProgress(newData); 
+                // If we have guest data, just attach the new UserID and Name to it.
+                dataToSave = CloudSyncManager.Instance.CurrentData;
+                dataToSave.userID = uid;
+                dataToSave.userName = finalUsername;
+                Debug.Log($"[Auth] Converted Guest to User. Preserving XP: {dataToSave.xp}");
+            }
+            else
+            {
+                // No guest data, create fresh profile
+                dataToSave = new PlayerData 
+                { 
+                    userID = uid,
+                    userName = finalUsername 
+                };
+                Debug.Log($"[Auth] Created fresh user: {finalUsername}");
             }
 
-            Debug.Log($"[Auth] Created new user: {finalUsername}");
+            // Now sync this merged data to the cloud
+            if (CloudSyncManager.Instance != null)
+            {
+                CloudSyncManager.Instance.SyncProgress(dataToSave); 
+            }
         }
 
         private void LoadWorldMap()
         {
             if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
-                CloudSyncManager.Instance.InitializeData(_auth.CurrentUser.UserId);
+                CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
             
             SceneManager.LoadScene("Scene_WorldMap");
         }
