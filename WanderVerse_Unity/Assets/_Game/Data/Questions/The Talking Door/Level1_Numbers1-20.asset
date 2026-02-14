@@ -38,160 +38,160 @@ MonoBehaviour:
   spawnRate: 2
   itemFallSpeed: 3
   questions:
-  - promptText: One
-    promptAudio: {fileID: 0}
+  - promptText: "\u0D91\u0D9A"
+    promptAudio: {fileID: 8300000, guid: f30f14334ae1a55418c1d4d727f625db, type: 3}
     correctString: 1
     wrongAnswers:
     - 5
     - 12
     - 7
     - 9
-  - promptText: Two
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DD9\u0D9A"
+    promptAudio: {fileID: 8300000, guid: 2ca0018420d540a4eaf91d7fab4c5a30, type: 3}
     correctString: 2
     wrongAnswers:
     - 4
     - 6
     - 7
     - 12
-  - promptText: Three
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAD\u0DD4\u0DB1"
+    promptAudio: {fileID: 8300000, guid: 389af41f9b8cdbd42a85bde83a2d1c28, type: 3}
     correctString: 3
     wrongAnswers:
     - 1
     - 7
     - 5
     - 13
-  - promptText: Four
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DC4\u0DAD\u0DBB"
+    promptAudio: {fileID: 8300000, guid: 1ecded916104cc64b96da6011d9f1408, type: 3}
     correctString: 4
     wrongAnswers:
     - 7
     - 16
     - 8
     - 12
-  - promptText: Five
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DB4\u0DC4"
+    promptAudio: {fileID: 8300000, guid: 5cd1ed89519100d41b334a65529be0d7, type: 3}
     correctString: 5
     wrongAnswers:
     - 6
     - 2
     - 8
     - 15
-  - promptText: Six
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DC4\u0DBA"
+    promptAudio: {fileID: 8300000, guid: 05fffcb2bcfe97641819278eed926a6f, type: 3}
     correctString: 6
     wrongAnswers:
     - 8
     - 9
     - 16
     - 2
-  - promptText: Seven
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DC4\u0DAD"
+    promptAudio: {fileID: 8300000, guid: d48dcd2bbb570184786fc150fa29a867, type: 3}
     correctString: 7
     wrongAnswers:
     - 4
     - 8
     - 1
     - 9
-  - promptText: Eight
-    promptAudio: {fileID: 0}
+  - promptText: "\u0D85\u0DA7"
+    promptAudio: {fileID: 8300000, guid: 829f8f4510280f844bcc4f1d73cad5f4, type: 3}
     correctString: 8
     wrongAnswers:
     - 6
     - 17
     - 7
     - 12
-  - promptText: Nine
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DB1\u0DC0\u0DBA"
+    promptAudio: {fileID: 8300000, guid: 4152233993249134888a192e1b34dde6, type: 3}
     correctString: 9
     wrongAnswers:
     - 5
     - 11
     - 6
     - 19
-  - promptText: Ten
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DBA"
+    promptAudio: {fileID: 8300000, guid: 5abc6f7d1b88dcc46b3edafc84349d68, type: 3}
     correctString: 10
     wrongAnswers:
     - 15
     - 7
     - 20
     - 1
-  - promptText: Eleven
-    promptAudio: {fileID: 0}
+  - promptText: "\u0D91\u0D9A\u0DDC\u0DC5\u0DC4"
+    promptAudio: {fileID: 8300000, guid: bc4b1c555f4f51844893bd1bcb42d1be, type: 3}
     correctString: 11
     wrongAnswers:
     - 16
     - 18
     - 12
     - 1
-  - promptText: Twelve
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DDC\u0DC5\u0DC4"
+    promptAudio: {fileID: 8300000, guid: bf50c55b9eedbbc44aa3b3e9f581a0b2, type: 3}
     correctString: 12
     wrongAnswers:
     - 10
     - 19
     - 2
     - 14
-  - promptText: Thirteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DAD\u0DD4\u0DB1"
+    promptAudio: {fileID: 8300000, guid: e4348ac07c3327742906b0f4ed9e81c7, type: 3}
     correctString: 13
     wrongAnswers:
     - 17
     - 11
     - 16
     - 3
-  - promptText: Fourteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DC4\u0DAD\u0DBB"
+    promptAudio: {fileID: 8300000, guid: 153c06da4da9d094baeb2daad1cbc01c, type: 3}
     correctString: 14
     wrongAnswers:
     - 6
     - 18
     - 4
     - 16
-  - promptText: Fifteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DB4\u0DC4\u0DC5\u0DDC\u0DC0"
+    promptAudio: {fileID: 8300000, guid: b753585bc1ad0a5448b2c48ca5115c79, type: 3}
     correctString: 15
     wrongAnswers:
     - 12
     - 18
     - 17
     - 5
-  - promptText: Sixteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DC3\u0DBA"
+    promptAudio: {fileID: 8300000, guid: 5c61a2a3f21eed24ab8760022e4c4970, type: 3}
     correctString: 16
     wrongAnswers:
     - 10
     - 7
     - 6
     - 18
-  - promptText: Seventeen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DC4\u0DAD"
+    promptAudio: {fileID: 8300000, guid: 4703867e20a21ea4eb291a85695b891d, type: 3}
     correctString: 17
     wrongAnswers:
     - 12
     - 8
     - 7
     - 11
-  - promptText: Eighteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0D85\u0DA7"
+    promptAudio: {fileID: 8300000, guid: 53508cf1a797d944a920b3c35f35271f, type: 3}
     correctString: 18
     wrongAnswers:
     - 13
     - 8
     - 19
     - 11
-  - promptText: Nineteen
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DAF\u0DC4\u0DB1\u0DC0\u0DBA"
+    promptAudio: {fileID: 8300000, guid: 292ee1db9c4ca8142af8c150b8dbe55c, type: 3}
     correctString: 19
     wrongAnswers:
     - 14
     - 10
     - 13
     - 11
-  - promptText: Twenty
-    promptAudio: {fileID: 0}
+  - promptText: "\u0DC0\u0DD2\u0DC3\u0DCA\u0DC3"
+    promptAudio: {fileID: 8300000, guid: 2388bf6f82a51be48b2ad19c793f7e90, type: 3}
     correctString: 20
     wrongAnswers:
     - 10

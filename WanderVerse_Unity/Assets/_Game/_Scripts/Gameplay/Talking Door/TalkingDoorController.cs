@@ -12,6 +12,7 @@ public class TalkingDoorController : BaseLevelController
     public TextMeshProUGUI[] buttonLabels;   // Drag the Text inside those 3 buttons here
 
     [Header("--- Audio ---")]
+    public AudioSource feedbackSpeaker;       // Source for correct/wrong sounds
     public AudioSource doorSpeaker;          // Source for the voice lines
     public AudioClip correctSound;
     public AudioClip wrongSound;
@@ -109,6 +110,22 @@ public class TalkingDoorController : BaseLevelController
                 answerButtons[i].gameObject.SetActive(false); // Hide unused buttons
             }
         }
+        if (doorPromptText != null)
+            {
+                // Try to get the fixer component from the text object
+                SinhalaTextFixer fixer = doorPromptText.GetComponent<SinhalaTextFixer>();
+                
+                if (fixer != null)
+                {
+                    // Use the fixer to display the Sinhala word correctly
+                    fixer.SetFixedText(currentQuestion.promptText);
+                }
+                else
+                {
+                    // Fallback if no fixer is attached
+                    doorPromptText.text = currentQuestion.promptText;
+                }
+            }
     }
 
     public void OnAnswerSelected(string answer, int buttonIndex)
@@ -118,7 +135,7 @@ public class TalkingDoorController : BaseLevelController
             // --- CORRECT ---
             HandleCorrectAnswer(); // Base function updates score
             
-            if (doorSpeaker != null) doorSpeaker.PlayOneShot(correctSound);
+            if (feedbackSpeaker != null) feedbackSpeaker.PlayOneShot(correctSound);
 
             // Optional: Make button green
             //answerButtons[buttonIndex].image.color = Color.green;
@@ -131,7 +148,7 @@ public class TalkingDoorController : BaseLevelController
             // --- WRONG ---
             HandleWrongAnswer(); // Base function tracks mistakes
 
-            if (doorSpeaker != null) doorSpeaker.PlayOneShot(wrongSound);
+            if (feedbackSpeaker != null) feedbackSpeaker.PlayOneShot(wrongSound);
 
             // Visual Feedback: Make button red and disable it
             answerButtons[buttonIndex].image.color = Color.red;
@@ -147,7 +164,7 @@ public class TalkingDoorController : BaseLevelController
 
     private void EndLevel()
     {
-        if (doorSpeaker != null) doorSpeaker.PlayOneShot(victorySound);
+        if (feedbackSpeaker != null) feedbackSpeaker.PlayOneShot(victorySound);
         Debug.Log("Level Complete!");
         
         // Call the Game Manager to save XP/Stars
