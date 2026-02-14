@@ -92,22 +92,24 @@ namespace WanderVerse.Backend.Services
         private IEnumerator InitializeUserRoutine(string userId)
         {
             yield return StartCoroutine(FetchKeysFromVercel());
-            
-            // TO DO: @Senmith - Uncomment the following line when LocalDataManager is ready and delete the "PlayerData local = null;" line below it
-            // PlayerData local = LocalDataManager.Instance.LoadGame();
-            PlayerData local = null; // Temporary fix to prevent errors
 
+            // TO DO: @Senmith - Uncomment the below line when LocalDataManager is ready and delete the "PlayerData local = null;" line
+            // PlayerData local = LocalDataManager.Instance.LoadGame();
+            PlayerData local = null; // Temporary fix
 
             if (local != null)
             {
                 CurrentData = local;
-                Debug.Log($"[Sync] Loaded Local Data from Disk. XP: {CurrentData.xp}");
-                
-                StartCoroutine(FetchCloudData(userId));
+                Debug.Log($"[Sync] Local Data Loaded (XP: {CurrentData.xp}). Checking Cloud...");
             }
-            else
+
+            yield return StartCoroutine(FetchCloudData(userId));
+            
+            if (CurrentData != null && CurrentData.userID != userId)
             {
-                StartCoroutine(FetchCloudData(userId));
+                Debug.Log("[Sync] Cloud was empty or inferior. Uploading Local Data to Cloud.");
+                CurrentData.userID = userId; 
+                SyncProgress(CurrentData);  
             }
         }
 
