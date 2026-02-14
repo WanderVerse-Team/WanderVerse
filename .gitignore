@@ -42,3 +42,15 @@ firebase-admin-key.json
 
 # Environment files
 *.env
+
+# Unity generated
+[Rr]ecordings/
+[Aa]ssets/AddressableAssetsData/*/*.bin*
+[Aa]ssets/StreamingAssets/aa/*
+
+# Project Settings that are user-specific
+/ProjectSettings/ProjectChecklists.asset
+
+# Web backend specific (Senmith's area)
+Server_Backend/.vercel
+Server_Backend/dist
