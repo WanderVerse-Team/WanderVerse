@@ -33,6 +33,10 @@ sysinfo.txt
 #Ignore Node Module Dependencies
 node_modules/
 
+# Google Play Services / Firebase auto-generated files
+**/GvhProjectSettings.xml
+**/GoogleService-Info.plist
+
 #Firbase service account key
 firebase-admin-key.json
 

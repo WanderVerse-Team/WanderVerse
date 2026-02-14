@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 87389ec45dbedca4085b14cd3c54b504
+guid: 9c036d452f1ce9647a2c800e4ee2fbde
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 568281715418623743
-    second: BG-Door Closed_0
+      213: 3159962926801485882
+    second: newBG Door Open 2560x1440_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BG-Door Closed_0
+      name: newBG Door Open 2560x1440_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1392
-        height: 768
+        width: 2560
+        height: 1440
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ffe60e39531f2e700800000000000000
-      internalID: 568281715418623743
+      spriteID: a30086b2a817adb20800000000000000
+      internalID: 3159962926801485882
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BG-Door Closed_0: 568281715418623743
+      newBG Door Open 2560x1440_0: 3159962926801485882
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
