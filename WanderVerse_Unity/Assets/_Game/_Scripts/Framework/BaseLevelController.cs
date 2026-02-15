@@ -48,10 +48,10 @@ public abstract class BaseLevelController : MonoBehaviour
     else
     {
         // Fallback if the list is empty
-        dynamicTargetScore = 10; 
+        dynamicTargetScore = levelData.targetScore; 
     }
 
-    Debug.Log("The Golem wants exactly " + dynamicTargetScore + " fruits!");
+    Debug.Log("The target score is " + dynamicTargetScore );
 
         if (!ValidateLevelData()) return;
 
