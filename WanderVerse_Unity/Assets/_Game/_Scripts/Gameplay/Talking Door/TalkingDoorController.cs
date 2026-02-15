@@ -151,7 +151,7 @@ public class TalkingDoorController : BaseLevelController
             if (feedbackSpeaker != null) feedbackSpeaker.PlayOneShot(wrongSound);
 
             // Visual Feedback: Make button red and disable it
-            answerButtons[buttonIndex].image.color = Color.red;
+            //answerButtons[buttonIndex].image.color = Color.red;
             answerButtons[buttonIndex].interactable = false; 
         }
     }
