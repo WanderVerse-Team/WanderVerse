@@ -66,8 +66,10 @@ public abstract class BaseLevelController : MonoBehaviour
         {
             Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
 
-            StartGame();
+            //StartGame();
         }
+
+        StartGame();
     }
 
     // Update is called once per frame
