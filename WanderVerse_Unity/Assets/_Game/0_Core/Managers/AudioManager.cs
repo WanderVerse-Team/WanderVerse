@@ -46,6 +46,10 @@ public class AudioManager : MonoBehaviour
         float savedSFXVol = PlayerPrefs.GetFloat("SFXVol", 0f);
         mainMixer.SetFloat("SFXVol", savedSFXVol);
 
+        // Load Voice Volume
+        float savedVoiceVol = PlayerPrefs.GetFloat("VoiceVol", 0f);
+        mainMixer.SetFloat("VoiceVol", savedVoiceVol);
+
         // Load Master Volume
         float savedMasterVol = PlayerPrefs.GetFloat("MasterVol", 0f);
         mainMixer.SetFloat("MasterVol", savedMasterVol);
@@ -138,6 +142,15 @@ public class AudioManager : MonoBehaviour
 
         mainMixer.SetFloat("SFXVol", volume);
         PlayerPrefs.SetFloat("SFXVol", volume);
+        PlayerPrefs.Save();
+    }
+
+    public void SetVoiceVolume(float sliderValue) 
+    { 
+        float volume = SliderValueToDB(sliderValue);
+
+        mainMixer.SetFloat("VoiceVol", volume);
+        PlayerPrefs.SetFloat("VoiceVol", volume);
         PlayerPrefs.Save();
     }
 
