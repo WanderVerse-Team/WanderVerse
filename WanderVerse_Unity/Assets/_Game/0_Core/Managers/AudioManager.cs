@@ -23,6 +23,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip errorSound;
     public AudioClip levelCompleteSound;
 
+    private bool isMuted = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -53,6 +55,15 @@ public class AudioManager : MonoBehaviour
         // Load Master Volume
         float savedMasterVol = PlayerPrefs.GetFloat("MasterVol", 0f);
         mainMixer.SetFloat("MasterVol", savedMasterVol);
+
+        // Check Mute State
+        int savedMuteState = PlayerPrefs.GetInt("IsMuted", 0);
+
+        if (savedMuteState == 1) 
+        {
+            isMuted = true;
+            mainMixer.SetFloat("MasterVol", -80f);
+        }
     }
 
     // ========================================================================
@@ -154,7 +165,29 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private float SliderValueToDB(float sliderValue) 
+    // Call this from a UI Button
+    public void ToggleMute() 
+    {
+        isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            mainMixer.SetFloat("MasterVol", -80f);
+
+            PlayerPrefs.SetInt("IsMuted", 1);
+        }
+        else 
+        {
+            float savedMasterVol = PlayerPrefs.GetFloat("MasterVol", 0f);
+            mainMixer.SetFloat("MasterVol", savedMasterVol);
+
+            PlayerPrefs.SetInt("IsMuted", 0);
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private float SliderValueToDB(float sliderValue)
     {
         return Mathf.Log10(Mathf.Max(sliderValue, 0.0001f)) * 20;
     }

@@ -58,6 +58,12 @@ public abstract class BaseLevelController : MonoBehaviour
         LoadBaseData();
         InitializeLevel();
 
+        // Play background music
+        if (AudioManager.Instance != null && levelData.backgroundMusic != null) 
+        {
+            AudioManager.Instance.PlayMusic(levelData.backgroundMusic );
+        }
+
         if (GameManager.Instance != null)
         {
             Debug.Log($"[BaseLevelController] Waiting for GameManager to start the {gameObject.name}...");
@@ -141,21 +147,15 @@ public abstract class BaseLevelController : MonoBehaviour
 
     protected virtual void HandleCorrectAnswer()
     {
-        // Add audio manager
-        // Correct answers counter?
-
         Debug.Log("Correct Answer!");
 
         currentScore += pointsForCorrect;
 
         OnScoreUpdated?.Invoke(currentScore);
-
     }
 
     protected virtual void HandleWrongAnswer()
     {
-        // Add audio manager
-
         Debug.Log("Wrong Answer!");
         mistakeCount++;
 
@@ -190,6 +190,9 @@ public abstract class BaseLevelController : MonoBehaviour
 
         if (isSuccess)
         {
+            // Play Victory sound
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayLevelComplete();
+
             // Send the mistake count to GameManager
             if (GameManager.Instance != null)
             {
