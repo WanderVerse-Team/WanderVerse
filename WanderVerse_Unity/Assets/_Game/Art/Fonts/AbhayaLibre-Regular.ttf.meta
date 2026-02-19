@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2a4e1569bfa86d3429f1b4a7a8d6b21c
+guid: e2cead88d6aa22b478341830c656f01f
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Iskoola Pota
+  - Abhaya Libre
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

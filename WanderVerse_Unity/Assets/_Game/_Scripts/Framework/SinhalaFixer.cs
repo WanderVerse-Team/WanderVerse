@@ -1,12 +1,11 @@
 using UnityEngine;
 using TMPro;
-using System.Text;
+using System.Collections.Generic;
 
 public class SinhalaFixer : MonoBehaviour
 {
     public TMP_Text textComponent;
 
-    // Run this whenever the object starts to fix static text
     void OnEnable()
     {
         if (textComponent == null) textComponent = GetComponent<TMP_Text>();
@@ -16,7 +15,6 @@ public class SinhalaFixer : MonoBehaviour
         }
     }
 
-    // Call this function from your Controller when setting new text!
     public void SetText(string text)
     {
         if (textComponent == null) textComponent = GetComponent<TMP_Text>();
@@ -27,40 +25,74 @@ public class SinhalaFixer : MonoBehaviour
     {
         if (string.IsNullOrEmpty(text)) return text;
 
-        StringBuilder sb = new StringBuilder();
-        char[] chars = text.ToCharArray();
+        List<char> result = new List<char>();
 
-        for (int i = 0; i < chars.Length; i++)
+        foreach (char c in text)
         {
-            char c = chars[i];
-            
-            // CHECK 1: Is this a "Pre-Vowel"? (Kombuva ෙ, Dig Kombuva ේ, Kombu Deva ෛ)
-            // Unicode: \u0DD9, \u0DDA, \u0DDB
+            // 1. Left-Side Vowels: Kombuva (ෙ), Diga Kombuva (ේ), Kombu Deweka (ෛ)
             if (c == '\u0DD9' || c == '\u0DDA' || c == '\u0DDB')
             {
-                // SWAP LOGIC:
-                // If we have a previous character (the consonant), insert this vowel BEFORE it.
-                if (sb.Length > 0)
+                if (result.Count > 0)
                 {
-                    char consonant = sb[sb.Length - 1]; // Get the consonant (e.g. 'k')
-                    sb.Remove(sb.Length - 1, 1);        // Remove 'k'
-                    sb.Append(c);                       // Add 'e'
-                    sb.Append(consonant);               // Add 'k' back -> Result: "ek" (Looks like කෙ)
+                    char prev = result[result.Count - 1]; // Grab the consonant (e.g., 'ද')
+                    result.RemoveAt(result.Count - 1);    
+                    result.Add(c);                        // Put Vowel first (e.g., 'ෙ')
+                    result.Add(prev);                     // Put Consonant next (e.g., 'ද') -> ෙද
                 }
-                else
-                {
-                    sb.Append(c);
-                }
+                else result.Add(c);
             }
-            // CHECK 2: Handle the "O" sounds (Kombuva + Aela-pilla ො) which are tricky
-            // If your font splits these, you might need to handle \u0DDC separately.
-            // For now, standard Unicode usually treats ො as one block, but if it fails, let me know.
+            
+            // 2. Split Vowel: Kombuva haa Aela-pilla (ො)
+            // Used in: එකොළහ, දොළහ, පහළොව
+            else if (c == '\u0DDC')
+            {
+                if (result.Count > 0)
+                {
+                    char prev = result[result.Count - 1]; // Grab the consonant (e.g., 'ළ')
+                    result.RemoveAt(result.Count - 1);
+                    result.Add('\u0DD9');                 // Put Kombuva BEFORE ('ෙ')
+                    result.Add(prev);                     // Put Consonant ('ළ')
+                    result.Add('\u0DCF');                 // Put Aela-pilla AFTER ('ා') -> ෙළා
+                }
+                else result.Add(c);
+            }
+            
+            // 3. Split Vowel: Kombuva haa Diga Aela-pilla (ෝ)
+            else if (c == '\u0DDD')
+            {
+                if (result.Count > 0)
+                {
+                    char prev = result[result.Count - 1]; 
+                    result.RemoveAt(result.Count - 1);
+                    result.Add('\u0DD9');                 // Kombuva
+                    result.Add(prev);                     // Consonant
+                    result.Add('\u0DCF');                 // Aela-pilla
+                    result.Add('\u0DCA');                 // Hal kirima (to make it Diga)
+                }
+                else result.Add(c);
+            }
+            
+            // 4. Split Vowel: Kombuva haa Gayanukitta (ෞ)
+            else if (c == '\u0DDE')
+            {
+                if (result.Count > 0)
+                {
+                    char prev = result[result.Count - 1];
+                    result.RemoveAt(result.Count - 1);
+                    result.Add('\u0DD9');                 // Kombuva
+                    result.Add(prev);                     // Consonant
+                    result.Add('\u0DDF');                 // Gayanukitta
+                }
+                else result.Add(c);
+            }
+            
+            // 5. Normal characters (Consonants, top/bottom vowels)
             else
             {
-                sb.Append(c);
+                result.Add(c);
             }
         }
 
-        return sb.ToString();
+        return new string(result.ToArray());
     }
 }

@@ -53,7 +53,7 @@ public class TalkingDoorController : BaseLevelController
         questionDeck.RemoveAt(0); // Remove it so it doesn't repeat!
 
         // 3. Setup the Door (Visuals/Audio)
-        doorPromptText.text = currentQuestion.promptText; // e.g., "Five"
+         doorPromptText.text = currentQuestion.promptText; // e.g., "Five"
         
         if (currentQuestion.promptAudio != null && doorSpeaker != null)
         {
