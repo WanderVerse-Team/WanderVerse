@@ -22,10 +22,8 @@ public class HungryGolemController : BaseLevelController
     
 
     [Header("--- Audio Setup ---")]
-    public AudioSource audioSource; 
     public AudioClip eatSound;      
-    public AudioClip spawnSound;    
-    public AudioClip wrongSound;
+    public AudioClip spawnSound;
 
     [Header("--- UI Signs ---")]
     public RectTransform wrongValuePanel; 
@@ -48,8 +46,6 @@ public class HungryGolemController : BaseLevelController
 
     [Header("--- Victory Screen ---")]
     public GameObject victoryPanel; // Drag your UI Panel here
-    public AudioSource audioSource_victory;
-    public AudioClip victoryChime;
     public ParticleSystem confetti;
     public ParticleSystem fireworks;
 
@@ -79,11 +75,11 @@ public class HungryGolemController : BaseLevelController
     {
         golemRenderer.sprite = idleSprite;
         nextSpawnTime = Time.time + levelData.spawnRate;
-        Debug.Log($"Golem is hungry for {dynamicTargetScore} {levelData.levelTitle}s");
+        Debug.Log($"Golem is hungry for {targetScore} {levelData.levelTitle}s");
         if (instructionText != null)
     {
         // This puts the random number right into the sentence!
-        instructionText.text = "Feed the Golem " + dynamicTargetScore + " fruits!";
+        instructionText.text = "Feed the Golem " + targetScore + " fruits!";
     }
     }
 
@@ -137,10 +133,7 @@ public class HungryGolemController : BaseLevelController
     Rigidbody2D rb = fruit.GetComponent<Rigidbody2D>();
     if(rb != null) rb.linearVelocity = Vector2.down * levelData.itemFallSpeed;
 
-    if(audioSource != null && spawnSound != null)
-    {
-        audioSource.PlayOneShot(spawnSound);
-    }
+    if(AudioManager.Instance != null) AudioManager.Instance.PlaySFX(spawnSound);
 
     FruitIdentity fruitScript = fruit.GetComponent<FruitIdentity>();
     if (fruitScript != null)
@@ -206,9 +199,9 @@ public  void ValidateDrop(GameObject item, GameObject zone)
         {
             HandleCorrectAnswer(); 
             Debug.Log($"<color=green>SUCCESS!</color> Ate {item.name}. Total Score: {currentScore}");
-            
+
             // Play the gulp!
-            audioSource.PlayOneShot(eatSound);
+            if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(eatSound);
             StartCoroutine(GulpRoutine());
         }
         else
@@ -222,10 +215,10 @@ public  void ValidateDrop(GameObject item, GameObject zone)
             // Optional: Penalty (Resets score)
             currentScore = 0; 
             Debug.Log($"<color=red>TOO MUCH!</color> The Golem can't eat {fruit.fruitValue} fruits at once!");
-            
 
-            // Play the mistake sound!
-            audioSource.PlayOneShot(wrongSound);
+
+                // Play the mistake sound!
+                if (AudioManager.Instance != null) AudioManager.Instance.PlayError();
         }
     }
 
@@ -253,7 +246,7 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 public void CheckIfFinished()
 {
     if (isProcessingMistake) return;
-    if (currentScore == dynamicTargetScore)
+    if (currentScore == targetScore)
     {   
         CheckWinCondition();
         DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
@@ -261,7 +254,7 @@ public void CheckIfFinished()
         VictoryScreen();
         Debug.Log("The door creaks open as the Golem is perfectly fed!");
     }
-    else if (currentScore < dynamicTargetScore)
+    else if (currentScore < targetScore)
     {
         HandleWrongAnswer();
         // Too few fruits
@@ -293,8 +286,7 @@ public void CheckIfFinished()
     sign.anchoredPosition = hiddenPos; // Snap to start position
     sign.gameObject.SetActive(true);
     
-    if (audioSource != null && wrongSound != null)
-        audioSource.PlayOneShot(wrongSound);
+    if (AudioManager.Instance != null) AudioManager.Instance.PlayError();
 
     // 3. Slide Down (From hidden to visible)
     yield return StartCoroutine(MoveSign(sign, hiddenPos, visiblePos));
@@ -340,11 +332,8 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
     {
         fireworks.Play();
     }
-    
-    // 2. Play the sound
-    audioSource_victory.PlayOneShot(victoryChime);
 
-    // 3. Show the UI
+    // 2. Show the UI
     victoryPanel.SetActive(true); 
 
 

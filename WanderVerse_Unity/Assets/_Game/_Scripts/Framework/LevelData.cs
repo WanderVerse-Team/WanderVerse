@@ -29,7 +29,7 @@ public class LevelData : ScriptableObject
     public int pointsForWrong = 1;
 
     [Tooltip("Set to 0 to allow infinite mistakes. Enter ONLY POSITIVE values")]
-    public int maxMistakes = 3;
+    public int maxMistakes = 0;
 
     [Header("--- 4. TIMER ---")]
     public bool useTimer = false;
