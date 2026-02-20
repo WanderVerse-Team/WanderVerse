@@ -16,9 +16,6 @@ public abstract class BaseLevelController : MonoBehaviour
     protected float levelTimeLimit;
     public int maxMistakes;
 
-    [Header("--- Level Settings ---")]
-    protected int dynamicTargetScore;
-
     // STATE
     protected int currentScore = 0;
     protected float timeRemaining;
@@ -38,25 +35,16 @@ public abstract class BaseLevelController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
-
-        // Pick a random target from the list in LevelData
-    if (levelData.possibleTargets != null && levelData.possibleTargets.Length > 0)
-    {
-        int randomIndex = Random.Range(0, levelData.possibleTargets.Length);
-        dynamicTargetScore = levelData.possibleTargets[randomIndex];
-    }
-    else
-    {
-        // Fallback if the list is empty
-        dynamicTargetScore = levelData.targetScore; 
-    }
-
-    Debug.Log("The target score is " + dynamicTargetScore );
-
         if (!ValidateLevelData()) return;
 
         LoadBaseData();
         InitializeLevel();
+
+        // Play background music
+        if (AudioManager.Instance != null && levelData.backgroundMusic != null) 
+        {
+            AudioManager.Instance.PlayMusic(levelData.backgroundMusic );
+        }
 
         if (GameManager.Instance != null)
         {
@@ -66,8 +54,10 @@ public abstract class BaseLevelController : MonoBehaviour
         {
             Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
 
-            StartGame();
+            //StartGame();
         }
+
+        StartGame();
     }
 
     // Update is called once per frame
@@ -100,12 +90,24 @@ public abstract class BaseLevelController : MonoBehaviour
 
     private void LoadBaseData()
     {
-        targetScore = dynamicTargetScore;
+        // targetScore = dynamicTargetScore;
         pointsForCorrect = levelData.pointsForCorrect;
         pointsForWrong = levelData.pointsForWrong;
         useTimer = levelData.useTimer;
         levelTimeLimit = levelData.levelTimeLimit;
         maxMistakes = levelData.maxMistakes;
+        
+        if (levelData.possibleTargets != null && levelData.possibleTargets.Length > 0)
+        {
+            // Pick a random target from the list in LevelData
+            int randomIndex = Random.Range(0, levelData.possibleTargets.Length);
+            targetScore = levelData.possibleTargets[randomIndex];
+        }
+        else
+        {
+            targetScore = levelData.targetScore;
+        }
+        Debug.Log("The target score is " + targetScore);
     }
 
     // Override to load game-specific assets (SpawnItems, Questions) from LevelData.
@@ -139,21 +141,15 @@ public abstract class BaseLevelController : MonoBehaviour
 
     protected virtual void HandleCorrectAnswer()
     {
-        // Add audio manager
-        // Correct answers counter?
-
         Debug.Log("Correct Answer!");
 
         currentScore += pointsForCorrect;
 
         OnScoreUpdated?.Invoke(currentScore);
-
     }
 
     protected virtual void HandleWrongAnswer()
     {
-        // Add audio manager
-
         Debug.Log("Wrong Answer!");
         mistakeCount++;
 
@@ -174,8 +170,6 @@ public abstract class BaseLevelController : MonoBehaviour
     {
         if (currentScore >= targetScore)
         {
-            // AudioManager - Play victory sound?
-
             EndLevel(true);
         }
     }
@@ -188,6 +182,9 @@ public abstract class BaseLevelController : MonoBehaviour
 
         if (isSuccess)
         {
+            // Play Victory sound
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayLevelComplete();
+
             // Send the mistake count to GameManager
             if (GameManager.Instance != null)
             {

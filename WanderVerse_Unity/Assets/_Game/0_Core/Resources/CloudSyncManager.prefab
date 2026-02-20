@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7341143015101500996}
   - component: {fileID: 2120252437718723574}
   m_Layer: 0
-  m_Name: CloudManager
+  m_Name: CloudSyncManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
