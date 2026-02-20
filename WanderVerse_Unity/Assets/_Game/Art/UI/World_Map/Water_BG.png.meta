@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b8c50dfbe0381334ebc502fcfc5e2d0d
+guid: c184aa05c43dc0e4abf9d1e34d862d03
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5086273002169266751
-    second: Golem_GameTemple_0
+      213: -2895157278119961449
+    second: Untitled design_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Golem_GameTemple_0
+      name: Untitled design_0
       rect:
         serializedVersion: 2
-        x: 163
-        y: 33
-        width: 405
-        height: 333
+        x: 0
+        y: 0
+        width: 1080
+        height: 5760
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1cd8a0b17ade969b0800000000000000
-      internalID: -5086273002169266751
+      spriteID: 79cd5c47bc552d7d0800000000000000
+      internalID: -2895157278119961449
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Golem_GameTemple_0: -5086273002169266751
+      Untitled design_0: -2895157278119961449
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
