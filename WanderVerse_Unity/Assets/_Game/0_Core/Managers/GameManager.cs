@@ -24,6 +24,13 @@ public class GameManager : MonoBehaviour
 
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)
     {
+        // Prevent empty IDs from corrupting the save file
+        if (string.IsNullOrEmpty(levelID)) 
+        {
+            Debug.LogError("[GameManager] CRITICAL ERROR: LevelID is empty! Progress will not be saved. Please check your LevelData scriptable object.");
+            return;
+        }
+
         // CALCULATE XP
 
         // Formula: MaxPossibleXP - (Mistakes * Penalty)
