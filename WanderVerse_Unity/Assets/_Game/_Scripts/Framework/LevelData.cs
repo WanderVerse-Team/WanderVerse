@@ -112,6 +112,9 @@ public class LevelData : ScriptableObject
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
 
+    [Header("--- MODE: PLACE VALUE ---")]
+    public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
+
 }
 
 // ========================================================================
@@ -160,4 +163,20 @@ public class QuestionItem
 
     [Tooltip("Maximum number of single ones allowed? (Optional constraint)")]
     public int maxOnesAllowed = 9;
+}
+[System.Serializable]
+public class TreasureRound
+{
+    [Tooltip("The number the player needs to build, e.g., 45")]
+    public int targetValue; 
+
+    [Tooltip("The Legacy Sinhala text to show on the sign")]
+    public string signPromptText; 
+
+    [Tooltip("The voice audio saying the number")]
+    public AudioClip voicePrompt; 
+
+    // --- Helper Math properties (Read-Only) ---
+    public int RequiredTens => targetValue / 10;
+    public int RequiredOnes => targetValue % 10;
 }
