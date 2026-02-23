@@ -1,62 +1,74 @@
 using UnityEngine;
 using TMPro;
-using System.Collections;
 
-public class TreasurePackerController : BaseLevelController
+public class TreasurePackerController : MonoBehaviour
 {
-    [Header("--- UI References ---")]
-    public TextMeshProUGUI signText; // The sign saying "Pack 45"
-    public SinhalaFixer sinhalaFixer;
+    [Header("--- Level Data ---")]
+    public LevelData levelData;
+    private int currentRoundIndex = 0;
 
-    [Header("--- Game State ---")]
-    public int targetNumber;
-    private int currentTotal = 0;
+    [Header("--- UI Elements ---")]
+    public TMP_Text signPromptText;  // The instruction sign
+    public TMP_Text counterText;     // Shows "0 / 45"
 
-    [Header("--- Prefabs/Objects ---")]
-    public GameObject chestOpenEffect; // Visual sparkle when full
+    private int targetValue;
+    private int currentValue = 0;
 
-    protected override GameType SupportedGameType => GameType.PlaceValue;
-
-    protected override void InitializeLevel()
+    void Start()
     {
-        // For testing, let's pick 45. 
-        // In the real game, this would come from your LevelData questions.
-        targetNumber = 45; 
+        LoadRound();
+    }
+
+    void LoadRound()
+    {
+        currentValue = 0;
         
-        // Convert number to Sinhala Legacy text: "45ක් ඇසුරුම් කරන්න"
-        // (You would get the converted string from your data file)
-        if(sinhalaFixer != null)
-            sinhalaFixer.SetText("45la weiqreï lrkak"); 
-
-        currentTotal = 0;
+        // Grab data from your master LevelData file
+        TreasureRound currentRound = levelData.treasureRounds[currentRoundIndex];
+        targetValue = currentRound.targetValue;
+        
+        // Update the legacy Sinhala text
+        signPromptText.text = currentRound.signPromptText;
+        
+        UpdateCounterUI();
     }
 
-    public void AddValue(int value)
+    public void AddGold(int amount)
     {
-        currentTotal += value;
-        Debug.Log("Current Chest Value: " + currentTotal);
+        // Add the coin/bar value to our total
+        currentValue += amount;
+        UpdateCounterUI();
 
-        if (currentTotal == targetNumber)
+        // Check Win/Loss conditions
+        if (currentValue == targetValue)
         {
-            WinGame();
+            Debug.Log("Correct! Moving to next round...");
+            Invoke("NextRound", 2f); // Wait 2 seconds, then go to next round
         }
-        else if (currentTotal > targetNumber)
+        else if (currentValue > targetValue)
         {
-            ResetChest(); // Too much gold!
+            Debug.Log("Oh no, too much gold! Try again.");
+            currentValue = 0; // Reset the chest
+            UpdateCounterUI();
         }
     }
 
-    private void WinGame()
+    void UpdateCounterUI()
     {
-        Debug.Log("Treasure Packed Perfectly!");
-        HandleCorrectAnswer();
-        // Trigger animations/audio
+        // Updates the text on screen to look like "20 / 45"
+        counterText.text = currentValue + " / " + targetValue;
     }
 
-    private void ResetChest()
+    void NextRound()
     {
-        Debug.Log("Too heavy! Try again.");
-        currentTotal = 0;
-        // Logic to return all bars/coins to their starting positions
+        currentRoundIndex++;
+        if (currentRoundIndex < levelData.treasureRounds.Count)
+        {
+            LoadRound();
+        }
+        else
+        {
+            Debug.Log("Level Complete! Give Player XP.");
+        }
     }
 }

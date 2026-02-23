@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class TreasureItem : MonoBehaviour
 {
-    public int value; // The value of this item (e.g., 1 for a coin, 10 for a bar)
+    [Header("Item Value")]
+    public int goldValue = 1; // Set to 10 for Gold Bars, 1 for Coins
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
