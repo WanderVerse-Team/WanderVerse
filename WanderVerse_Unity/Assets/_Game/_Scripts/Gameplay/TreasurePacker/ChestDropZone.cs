@@ -1,29 +1,23 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class ChestDropZone : MonoBehaviour, IDropHandler
+public class ChestDropZone : MonoBehaviour
 {
     [Header("References")]
-    public TreasurePackerController controller; // Drag your Game Controller here in the Inspector
+    public TreasurePackerController controller;
 
-    public void OnDrop(PointerEventData eventData)
+    // This fires the exact frame another collider touches this object's collider
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 1. Get the exact object that was dropped on the chest
-        GameObject droppedItem = eventData.pointerDrag;
+        // 1. Check if the object that touched the chest has a TreasureValue script
+        TreasureItem itemValue = collision.GetComponent<TreasureItem>();
 
-        if (droppedItem != null)
+        if (itemValue != null)
         {
-            // 2. Read its value using the small script we made above
-            TreasureItem itemValue = droppedItem.GetComponent<TreasureItem>();
+            // 2. Tell the controller to add the points
+            controller.ConsumeItem(itemValue.goldValue);
 
-            if (itemValue != null)
-            {
-                // 3. Send that value to your main game controller
-                controller.AddGold(itemValue.goldValue);
-            }
-
-            // 4. Destroy the dragged item so it "disappears" into the chest
-            Destroy(droppedItem);
+            // 3. Destroy the coin immediately
+            Destroy(collision.gameObject);
         }
     }
 }
