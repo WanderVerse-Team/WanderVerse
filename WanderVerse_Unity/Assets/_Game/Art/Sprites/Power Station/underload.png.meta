@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9d4219368376c3c45ab4bad44e5e189b
+guid: 0548457b9189161478c2279f11399657
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -116,10 +116,10 @@ TextureImporter:
       name: underload_0
       rect:
         serializedVersion: 2
-        x: 155
-        y: 35
-        width: 406
-        height: 275
+        x: 643
+        y: 148
+        width: 1646
+        height: 1119
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

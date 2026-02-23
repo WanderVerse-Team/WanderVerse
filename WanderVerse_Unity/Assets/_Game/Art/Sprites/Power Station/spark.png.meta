@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 64dbc8e90a9f5244da05d0781aa46ada
+guid: f63314e0dfb7f4b418f7c3f547f8f7e5
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -8,9 +8,6 @@ TextureImporter:
   - first:
       213: 1521747289839300885
     second: spark_1
-  - first:
-      213: -975601422790825059
-    second: spark_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,10 +119,10 @@ TextureImporter:
       name: spark_0
       rect:
         serializedVersion: 2
-        x: 77
-        y: 56
-        width: 346
-        height: 361
+        x: 319
+        y: 235
+        width: 1410
+        height: 1469
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,10 +141,10 @@ TextureImporter:
       name: spark_1
       rect:
         serializedVersion: 2
-        x: 329
-        y: 360
-        width: 40
-        height: 58
+        x: 1383
+        y: 1541
+        width: 120
+        height: 165
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,28 +155,6 @@ TextureImporter:
       bones: []
       spriteID: 511f8c8f8155e1510800000000000000
       internalID: 1521747289839300885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spark_2
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 185
-        width: 47
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d9bef28cca7f572f0800000000000000
-      internalID: -975601422790825059
       vertices: []
       indices: 
       edges: []
@@ -200,7 +175,6 @@ TextureImporter:
     nameFileIdTable:
       spark_0: -3149389169688070996
       spark_1: 1521747289839300885
-      spark_2: -975601422790825059
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

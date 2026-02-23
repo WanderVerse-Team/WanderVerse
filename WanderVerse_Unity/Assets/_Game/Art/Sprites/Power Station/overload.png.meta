@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2fd46663acdf9f245918f2d5c438f664
+guid: e3c6dd1056fc06c4fa906e75f69ac464
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -116,10 +116,10 @@ TextureImporter:
       name: overload_0
       rect:
         serializedVersion: 2
-        x: 155
-        y: 52
-        width: 404
-        height: 246
+        x: 650
+        y: 220
+        width: 1628
+        height: 995
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

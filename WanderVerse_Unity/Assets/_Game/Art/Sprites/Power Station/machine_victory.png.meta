@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3f100c0c0986ff5429af177c6adb2bc9
+guid: 429dc2fa2c49e7f4ea67061809789e11
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -87,7 +87,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -132,11 +132,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 22
-        width: 409
-        height: 588
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -153,12 +153,12 @@ TextureImporter:
       name: machine_victory_1
       rect:
         serializedVersion: 2
-        x: 471
-        y: 22
-        width: 408
-        height: 588
+        x: 1729
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -175,12 +175,12 @@ TextureImporter:
       name: machine_victory_2
       rect:
         serializedVersion: 2
-        x: 940
-        y: 22
-        width: 409
-        height: 588
+        x: 3458
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -197,12 +197,12 @@ TextureImporter:
       name: machine_victory_3
       rect:
         serializedVersion: 2
-        x: 1410
-        y: 22
-        width: 409
-        height: 588
+        x: 5187
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -219,12 +219,12 @@ TextureImporter:
       name: machine_victory_4
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 22
-        width: 410
-        height: 588
+        x: 6916
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -241,12 +241,12 @@ TextureImporter:
       name: machine_victory_5
       rect:
         serializedVersion: 2
-        x: 2350
-        y: 22
-        width: 409
-        height: 588
+        x: 8645
+        y: 0
+        width: 1729
+        height: 2528
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -263,7 +263,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c7f7bfdb032e20e43af6fad4ecdde7e7
     internalID: 0
     vertices: []
     indices: 
@@ -271,7 +271,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":1729.0,"y":2528.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       machine_victory_0: 5345998505314909513
       machine_victory_1: 6745136836886113629

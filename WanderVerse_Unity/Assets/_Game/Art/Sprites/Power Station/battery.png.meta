@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4f57c527b22dcb045bbcd5c0b09f663b
+guid: 1e724479306b5864a8107e3e49a5c12c
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -116,10 +116,10 @@ TextureImporter:
       name: battery_0
       rect:
         serializedVersion: 2
-        x: 49
-        y: 137
-        width: 410
-        height: 204
+        x: 208
+        y: 564
+        width: 1665
+        height: 827
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
