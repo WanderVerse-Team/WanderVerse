@@ -1,28 +1,14 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import Image from 'next/image'
+import { PlansData } from '@/app/data/siteData'
 import PlansSkeleton from '../../Skeleton/Plans'
 import Link from 'next/link'
 
 const Manage = () => {
-  const [plans, setPlans] = useState<any[]>([])
-  const [loading, setLoding] = useState(true)
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setPlans(data.PlansData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setLoding(false)
-      }
-    }
-    fetchData()
-  }, [])
+  const plans = PlansData
+  const [loading] = useState(false)
 
   const [enabled, setEnabled] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<

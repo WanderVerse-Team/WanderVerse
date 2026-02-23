@@ -1,9 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Slider from 'react-slick'
 import Image from 'next/image'
 import { Icon } from '@iconify/react'
 import { testimonials } from '@/app/types/testimonials'
+import { TestimonialsData } from '@/app/data/siteData'
 import TestimonialSkeleton from '../../Skeleton/Testimonial'
 
 interface TestimonialType {
@@ -100,25 +101,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ items }) => {
 }
 
 const Testimonial: React.FC = () => {
-  // fetch data
-  const [testimonals, setTestimonials] = useState<testimonials[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setTestimonials(data.TestimonialsData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
+  // use static data
+  const testimonals = TestimonialsData
+  const [loading] = useState(false)
 
   return (
     <section

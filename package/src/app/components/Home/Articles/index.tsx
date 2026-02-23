@@ -1,9 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Slider from 'react-slick'
 import Link from 'next/link'
 import { articles } from '@/app/types/articles'
+import { ArticlesData } from '@/app/data/siteData'
 import ArticlesSkeleton from '../../Skeleton/Articles'
 
 const settings = {
@@ -36,27 +37,9 @@ const settings = {
 }
 
 const Articles = () => {
-  // fetch data
-
-  const [articles, setArticles] = useState<articles[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setArticles(data.ArticlesData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
+  // use static data
+  const articles = ArticlesData
+  const [loading] = useState(false)
 
   return (
     <section id='Blog' className='relative bg-grey overflow-hidden'>
