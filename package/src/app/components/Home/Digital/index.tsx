@@ -16,7 +16,7 @@ const Digital = () => {
               </p>
               {/* <h2 className='text-white mb-8 leading-tight text-center lg:text-start lg:w-full'> */}
               <h2 className='text-base lg:text-5xl text-white mb-8 leading-relaxed text-center lg:text-start lg:max-w-5xl mx-auto lg:mx-0'>
-                Jump into the world of Duo where learning is a game and each level makes you smarter
+                Jump into the world of Willow where learning is a game and each level makes you smarter
               </h2>
               <div className='text-center lg:text-start'>
               </div>

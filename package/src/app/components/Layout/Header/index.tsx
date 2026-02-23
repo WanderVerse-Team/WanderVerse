@@ -3,6 +3,7 @@ import { Key, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { HeaderItem } from '@/app/types/menu'
+import { headerData as headerDataImport } from '@/app/data/siteData'
 import Logo from './Logo'
 import HeaderLink from './Navigation/HeaderLink'
 import MobileHeaderLink from './Navigation/MobileHeaderLink'
@@ -46,23 +47,8 @@ const Header: React.FC = () => {
     }
   }, [navbarOpen])
 
-  // header data fetch
-
-  const [headerData, setHeaderData] = useState<HeaderItem[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setHeaderData(data.headerData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      }
-    }
-    fetchData()
-  }, [])
+  // use static header data
+  const headerData = headerDataImport
 
   return (
     <header

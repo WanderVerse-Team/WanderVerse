@@ -2,27 +2,12 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { footerlinks } from '@/app/types/footerlinks'
+import { FooterLinksData } from '@/app/data/siteData'
 
 const footer = () => {
-  // fetch data
-
-  const [footerlinks, setFooterLinks] = useState<footerlinks[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setFooterLinks(data.FooterLinksData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      }
-    }
-    fetchData()
-  }, [])
+  // use static data
+  const footerlinks = FooterLinksData
 
   return (
     <div className='bg-black' id='first-section'>
@@ -93,14 +78,7 @@ const footer = () => {
           <div className='mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8'>
             <div>
               <p className='text-center md:text-start text-white text-lg'>
-                @2025 - All Rights Reserved by{' '}
-                <Link
-                  href='https://getnextjstemplates.com/'
-                  target='_blank'
-                  className='hover:text-white/60 hover:underline'>
-                  {' '}
-                  GetNextJsTemplates.com
-                </Link>
+                @2026 - All Rights Reserved by WanderVerse-Team
               </p>
             </div>
             <div className='flex justify-center md:justify-end'>
