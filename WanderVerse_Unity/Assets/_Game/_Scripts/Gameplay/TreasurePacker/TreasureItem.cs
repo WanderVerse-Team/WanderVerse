@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TreasureItem : MonoBehaviour
@@ -16,14 +17,18 @@ public class TreasureItem : MonoBehaviour
         
     }
     //To delete an item if it goes out of frame
-    void OnBecameInvisible()
-{
-    if (!Application.isPlaying) return;
-
-    // Check if THIS object still exists before destroying it
-    if (gameObject != null)
+   void OnBecameInvisible()
     {
-        Destroy(gameObject);
+        if (!Application.isPlaying) return;
+
+        // 1. Find the controller and the value script
+        TreasurePackerController controller = FindObjectOfType<TreasurePackerController>();
+        TreasureItem itemValue = GetComponent<TreasureItem>();
+
+        // 3. Destroy as usual
+        if (gameObject != null)
+        {
+            Destroy(gameObject);
+        }
     }
-}
 }

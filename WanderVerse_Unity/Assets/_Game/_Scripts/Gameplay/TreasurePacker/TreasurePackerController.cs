@@ -15,8 +15,19 @@ public class TreasurePackerController : BaseLevelController
     public Transform barSpawnPoint;  // Where bars shoot from (e.g., a pipe or off-screen)
     public Transform coinSpawnPoint; // Where coins shoot from
     public int batchSpawnAmount = 5; // How many to shoot out at once
-    public float throwForceUp = 10f; // How high they shoot
-    public float throwForceSide = 3f; // How wide they scatter
+
+    [Header("--- THROW PHYSICS ---")]
+    [Tooltip("Total force applied to the item")]
+    public float throwForce = 12f; 
+    
+    [Tooltip("Angle in degrees. 0=Right, 90=Up, 180=Left")]
+    public float barThrowAngle = 60f;   // Shoots up and to the right
+    
+    [Tooltip("Angle in degrees. 0=Right, 90=Up, 180=Left")]
+    public float coinThrowAngle = 120f; // Shoots up and to the left
+    
+    [Tooltip("How much randomness to add to the angle so they don't all follow the exact same line")]
+    public float throwSpread = 15f;
     [Tooltip("Time in seconds between each item shooting out")]
     public float spawnDelay = 0.5f;
 
@@ -73,7 +84,7 @@ public class TreasurePackerController : BaseLevelController
         {
             GameObject newBar = Instantiate(goldBarPrefab, barSpawnPoint.position, Quaternion.identity);
             activeBarsInScene++;
-            ThrowItem(newBar);
+            ThrowItem(newBar, barThrowAngle);
             
             // Wait for half a second before looping again
             yield return new WaitForSeconds(spawnDelay); 
@@ -90,7 +101,7 @@ public class TreasurePackerController : BaseLevelController
         {
             GameObject newCoin = Instantiate(singleCoinPrefab, coinSpawnPoint.position, Quaternion.identity);
             activeCoinsInScene++;
-            ThrowItem(newCoin);
+            ThrowItem(newCoin, coinThrowAngle);
             
             // Wait for half a second before looping again
             yield return new WaitForSeconds(spawnDelay);
@@ -99,21 +110,27 @@ public class TreasurePackerController : BaseLevelController
         isSpawningCoins = false;
     }
 
-    private void ThrowItem(GameObject item)
+    private void ThrowItem(GameObject item, float baseAngle)
     {
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Dynamic; 
 
-            // Calculate a random arc upwards and slightly sideways
-            float randomX = Random.Range(-throwForceSide, throwForceSide);
-            float randomY = Random.Range(throwForceUp * 0.8f, throwForceUp * 1.2f); 
-
-            // Apply the physical force
-            rb.AddForce(new Vector2(randomX, randomY), ForceMode2D.Impulse);
+            // 1. Add some random spread so it looks like a natural fountain
+            float finalAngle = baseAngle + Random.Range(-throwSpread, throwSpread);
             
-            // Give it a random spin
+            // 2. Convert degrees to radians (Unity's math functions require radians)
+            float angleRad = finalAngle * Mathf.Deg2Rad;
+
+            // 3. Calculate the exact X and Y direction using Cos and Sin
+            Vector2 throwDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+
+            // 4. Apply the force (with a tiny bit of random strength for variety)
+            float randomForce = Random.Range(throwForce * 0.8f, throwForce * 1.2f);
+            rb.AddForce(throwDirection * randomForce, ForceMode2D.Impulse);
+            
+            // 5. Give it a random spin
             rb.AddTorque(Random.Range(-15f, 15f));
         }
     }
@@ -134,7 +151,7 @@ public class TreasurePackerController : BaseLevelController
                 StartCoroutine(SpawnBarsRoutine());
             }
         }
-        else if (amount == 1) 
+        if (amount == 1) 
         {
             activeCoinsInScene--;
             // Only start shooting if we hit 0 AND we aren't already shooting
@@ -165,6 +182,7 @@ public class TreasurePackerController : BaseLevelController
             UpdateCounterUI();
         }
     }
+    
 
     private void LoadNextRound()
     {
