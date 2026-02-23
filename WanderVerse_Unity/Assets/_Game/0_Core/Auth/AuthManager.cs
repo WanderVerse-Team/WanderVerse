@@ -151,8 +151,21 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        public void OnGuestLoginButton() => StartCoroutine(AuthRoutine(
-            () => _auth.SignInAnonymouslyAsync(), true));
+        public void OnGuestLoginButton() 
+        {
+            UpdateFeedback("Starting Offline Mode...");
+            
+            if (CloudSyncManager.Instance != null)
+            {
+                CloudSyncManager.Instance.InitializeAsGuest();
+            }
+            else
+            {
+                Debug.LogWarning("[Auth] CloudSyncManager missing!");
+            }
+
+            SceneManager.LoadScene("Scene_WorldMap");
+        }
 
 
         private IEnumerator SignUpRoutine(string username, string email, string password)
