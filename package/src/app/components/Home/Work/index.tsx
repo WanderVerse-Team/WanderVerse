@@ -1,10 +1,11 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
 import { workdata } from '@/app/types/workdata'
+import { WorkData } from '@/app/data/siteData'
 import WorkSkeleton from '../../Skeleton/Work'
 
 const settings = {
@@ -54,26 +55,9 @@ const settings = {
 }
 
 const Work = () => {
-  // fetch work data
-  const [work, setWork] = useState<workdata[]>([])
-  const [loading, setLoding] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setWork(data.WorkData)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setLoding(false)
-      }
-    }
-
-    fetchData()
-  }, [])
+  // use static data
+  const work = WorkData
+  const [loading] = useState(false)
 
   return (
     <section

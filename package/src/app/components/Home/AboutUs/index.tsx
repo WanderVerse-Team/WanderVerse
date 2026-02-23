@@ -1,31 +1,16 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { aboutdata } from '@/app/types/aboutdata'
+import { Aboutdata } from '@/app/data/siteData'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Icon } from '@iconify/react'
 import AboutSkeleton from '../../Skeleton/AboutUs'
 
 const Aboutus = () => {
-  // fetch about data
-  const [about, setAbout] = useState<aboutdata[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setAbout(data.Aboutdata)
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
+  // use static data
+  const about = Aboutdata
+  const [loading] = useState(false)
 
   return (
     <section id='About' className=' bg-cover bg-center overflow-hidden'>
