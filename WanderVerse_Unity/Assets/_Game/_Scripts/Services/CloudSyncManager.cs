@@ -1,3 +1,4 @@
+using System.Diagnostics; // Added for Randiv's Editor tag
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,6 +9,7 @@ using Firebase.Auth;
 using Firebase.Firestore; 
 using WanderVerse.Framework.Data;
 using WanderVerse.Backend; 
+using Debug = UnityEngine.Debug; // Added to prevent conflict with System.Diagnostics
 
 namespace WanderVerse.Backend.Services
 {
@@ -33,9 +35,6 @@ namespace WanderVerse.Backend.Services
         
         private string _leaderboardURL = "https://server-backend-eight.vercel.app/api/leaderboard";
 
-        private readonly string _guestKey = "12345678901234567890123456789012"; 
-        private readonly string _guestIV  = "1234567890123456";
-
         private FirebaseFirestore _db;
         private bool _isSaving = false;
 
@@ -48,8 +47,20 @@ namespace WanderVerse.Backend.Services
         private void Start()
         {
             _db = FirebaseFirestore.DefaultInstance;
+            PlayFromUnityEditor(); // Randiv's Quality of Life trigger
         }
 
+        // This is erased when building the APK. It lets Theshara/Vihanga test levels directly.
+        [Conditional("UNITY_EDITOR")]
+        private void PlayFromUnityEditor()
+        {
+            if (CurrentData == null)
+            {
+                Debug.LogWarning("[Sync-Editor] Started game directly from a Level Scene. Creating Temporary Dev Profile.");
+                IsGuest = true;
+                CurrentData = new PlayerData { userID = "dev_tester", userName = "Tester", xp = 0 };
+            }
+        }
         
         public void InitializeAsGuest()
         {
@@ -58,10 +69,11 @@ namespace WanderVerse.Backend.Services
 
             if (LocalDataManager.Instance != null)
             {
-                LocalDataManager.Instance.InitializeSecurity(_guestKey, _guestIV);
+                // Tell LocalDataManager to save unencrypted guest data
+                LocalDataManager.Instance.EnableGuestMode(); 
             }
 
-            // 2. Load Local Data
+            // Load Local Data
             PlayerData local = LocalDataManager.Instance.LoadGame();
 
             if (local != null)
@@ -325,6 +337,62 @@ namespace WanderVerse.Backend.Services
                     onFailure?.Invoke(request.error);
                 }
             }
+        }
+
+        // World Map unlock logic for Seshani's UI
+        public bool IsLevelUnlocked(string levelID)
+        {
+            if (CurrentData == null) return false;
+
+            LevelTracker tracker = CurrentData.GetLevelData(levelID);
+            
+            if (tracker != null) 
+            {
+                return tracker.isUnlocked;
+            }
+
+            // The first level is always unlocked for new players
+            if (levelID == "Island1_Lesson1") 
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public int GetStarsForLevel(string levelID)
+        {
+            if (CurrentData == null) return 0;
+
+            LevelTracker tracker = CurrentData.GetLevelData(levelID);
+            return tracker != null ? tracker.starsEarned : 0;
+        }
+
+        public void UnlockLevel(string levelID)
+        {
+            if (CurrentData == null) return;
+
+            LevelTracker tracker = CurrentData.GetLevelData(levelID);
+
+            if (tracker != null)
+            {
+                tracker.isUnlocked = true;
+            }
+            else
+            {
+                LevelTracker newTracker = new LevelTracker
+                {
+                    levelID = levelID,
+                    highScore = 0,
+                    starsEarned = 0,
+                    attempts = 0,
+                    isUnlocked = true
+                };
+                CurrentData.levelProgress.Add(newTracker);
+            }
+
+            SyncProgress(CurrentData); 
+            Debug.Log($"[WorldMap] Unlocked Level: {levelID}");
         }
     }
 }
