@@ -110,7 +110,7 @@ MonoBehaviour:
     - 28
     - 27
     - 17
-  - promptText: ;sia
+  - promptText: ;sy
     promptAudio: {fileID: 8300000, guid: 53ccf7cd6a8560d40926a9daa7372710, type: 3}
     correctString: 30
     wrongAnswers:
@@ -190,7 +190,7 @@ MonoBehaviour:
     - 47
     - 36
     - 31
-  - promptText: y;,sia
+  - promptText: y;,sy
     promptAudio: {fileID: 8300000, guid: fa13d42df29b51b458f2de6c9ebf959d, type: 3}
     correctString: 40
     wrongAnswers:
@@ -278,7 +278,7 @@ MonoBehaviour:
     - 52
     - 16
     - 47
-  - promptText: mkia
+  - promptText: mky
     promptAudio: {fileID: 8300000, guid: 728076853ac7af4408b5f7ed4c677364, type: 3}
     correctString: 50
     wrongAnswers:
@@ -438,7 +438,7 @@ MonoBehaviour:
     - 28
     - 75
     - 72
-  - promptText: ye;a;E
+  - promptText: ye;a;Ej
     promptAudio: {fileID: 8300000, guid: 249f17714af8f1f47aead3c4bf2a7677, type: 3}
     correctString: 70
     wrongAnswers:
@@ -518,7 +518,7 @@ MonoBehaviour:
     - 38
     - 30
     - 70
-  - promptText: wiQ
+  - promptText: wiQj
     promptAudio: {fileID: 8300000, guid: 4e12eb0dea0c0d94fbf837b8783b4de7, type: 3}
     correctString: 80
     wrongAnswers:
@@ -591,7 +591,7 @@ MonoBehaviour:
     - 84
     - 86
     - 20
-  - promptText: wkQ
+  - promptText: wkQj
     promptAudio: {fileID: 8300000, guid: 56d563582281ed445b62a9a1cf67236d, type: 3}
     correctString: 90
     wrongAnswers:

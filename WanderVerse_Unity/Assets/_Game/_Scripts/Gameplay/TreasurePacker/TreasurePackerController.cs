@@ -5,9 +5,20 @@ using System.Collections;
 
 public class TreasurePackerController : BaseLevelController
 {
+    [Header("--- AUDIO SETTINGS ---")]
+    public AudioClip barSpawnSound;
+    public AudioClip coinSpawnSound;
+
+    [Header("--- CHEST VISUALS ---")]
+    [Tooltip("Drag the GameObject that has the SpriteRenderer for your chest here")]
+    public SpriteRenderer chestVisual; 
+    public Sprite chestOpenSprite;
+    public Sprite chestClosedSprite;
+
     [Header("--- PLACE VALUE UI ---")]
     public TMP_Text signPromptText;  // The instruction sign
-    public TMP_Text counterText;     // Shows "0 / 45"
+    public TMP_Text tensCounter; 
+    public TMP_Text onesCounter;     
 
     [Header("--- SPAWNER SETTINGS ---")]
     public GameObject goldBarPrefab;
@@ -83,6 +94,12 @@ public class TreasurePackerController : BaseLevelController
         for (int i = 0; i < batchSpawnAmount; i++)
         {
             GameObject newBar = Instantiate(goldBarPrefab, barSpawnPoint.position, Quaternion.identity);
+
+            // Play the spawn sound for each bar
+            if (AudioManager.Instance != null && barSpawnSound != null)
+            {
+                AudioManager.Instance.PlaySFX(barSpawnSound);
+            }
             activeBarsInScene++;
             ThrowItem(newBar, barThrowAngle);
             
@@ -100,6 +117,12 @@ public class TreasurePackerController : BaseLevelController
         for (int i = 0; i < batchSpawnAmount; i++)
         {
             GameObject newCoin = Instantiate(singleCoinPrefab, coinSpawnPoint.position, Quaternion.identity);
+
+            // Play the spawn sound for each coin
+            if (AudioManager.Instance != null && coinSpawnSound != null)
+            {
+                AudioManager.Instance.PlaySFX(coinSpawnSound);
+            }
             activeCoinsInScene++;
             ThrowItem(newCoin, coinThrowAngle);
             
@@ -150,7 +173,7 @@ public class TreasurePackerController : BaseLevelController
         else if (amount == 1) 
         {
             activeCoinsInScene--;
-            if (activeCoinsInScene <= 0 && !isSpawningCoins) StartCoroutine(SpawnCoinsRoutine());
+            if (activeCoinsInScene <= 1 && !isSpawningCoins) StartCoroutine(SpawnCoinsRoutine());
         }
 
         // 2. Just do the math and update the UI. No automatic checking!
@@ -163,6 +186,8 @@ public class TreasurePackerController : BaseLevelController
     {
         isRoundTransitioning = false;
         currentChestValue = 0;
+
+        OpenChest(); // Make sure the chest is open for the next round
 
         // Safety check: If we run out of questions before the level ends, refill the deck!
         if (availableRounds.Count == 0)
@@ -190,6 +215,11 @@ public class TreasurePackerController : BaseLevelController
     {
         if (!isGameActive || isRoundTransitioning) return;
 
+        if (chestVisual != null && chestClosedSprite != null)
+        {
+            chestVisual.sprite = chestClosedSprite;
+        }
+
         // Check if they packed the exact right amount
         if (currentChestValue == currentRoundTargetValue)
         {
@@ -197,6 +227,10 @@ public class TreasurePackerController : BaseLevelController
             isRoundTransitioning = true;
             HandleCorrectAnswer(); 
             CheckWinCondition();   
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySuccess();
+            }
             
             if (isGameActive) Invoke(nameof(LoadNextRound), 1.5f); 
         }
@@ -205,20 +239,37 @@ public class TreasurePackerController : BaseLevelController
             // If it's wrong (either too heavy OR too light)
             Debug.Log($"Wrong amount! You packed {currentChestValue}, but needed {currentRoundTargetValue}.");
             HandleWrongAnswer(); 
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayError();
+            }
             
             // Empty the chest so they can try again
             currentChestValue = 0; 
             UpdateCounterUI();
+
+            //Open the chest again
+            Invoke(nameof(OpenChest), 0.5f);
         }
     }
 
-    
+    private void OpenChest()
+    {
+        if (chestVisual != null && chestOpenSprite != null)
+        {
+            chestVisual.sprite = chestOpenSprite;
+        }
+    }
 
     private void UpdateCounterUI()
     {
-        if (counterText != null)
+        if (tensCounter != null)
         {
-            counterText.text = $"{currentChestValue} / {currentRoundTargetValue}";
+            tensCounter.text = $"{currentChestValue / 10}";
+        }
+        if (onesCounter != null)
+        {
+            onesCounter.text = $"{currentChestValue % 10}";
         }
     }
 }
