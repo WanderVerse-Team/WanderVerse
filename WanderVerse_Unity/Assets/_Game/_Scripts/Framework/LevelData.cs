@@ -85,8 +85,23 @@ public class LevelData : ScriptableObject
 
     public List<QuestionItem> questions; // For Number Recognition (Numbers 1)
 
-    //[Header("--- MODE: ADDITION 1 ---")]
-    // Add variables needed for Addition 1 lesson
+    [Header("--- MODE: ADDITION 1 (Power Station) ---")]
+    // For: Power Station (Vertical Addition)
+
+    [Tooltip("Number of turns (rounds) the player must complete to finish the level")]
+    public int totalTurns = 3;
+
+    [Tooltip("Number of addend rows in the vertical addition grid")]
+    public int batteryRows = 2;
+
+    [Tooltip("Minimum target power value generated per turn")]
+    public int minTargetPower = 20;
+
+    [Tooltip("Maximum target power value generated per turn")]
+    public int maxTargetPower = 99;
+
+    [Tooltip("How many extra distractor batteries to add to the tray beyond the correct ones")]
+    public int extraDistractorBatteries = 3;
 
     //[Header("--- MODE: MEASURING LENGTH 1 ---")]
     // Add variables needed for Measuring Length 1 lesson
