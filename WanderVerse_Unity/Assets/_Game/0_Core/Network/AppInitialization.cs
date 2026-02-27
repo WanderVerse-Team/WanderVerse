@@ -2,9 +2,12 @@ using UnityEngine;
 using Firebase;
 using Firebase.Extensions;
 using System.Threading.Tasks;
+using System;
 
 public class AppInitialization : MonoBehaviour
 {
+    public static event Action OnInitializationComplete;
+
     void Start()
     {
         Debug.Log("Starting Firebase Initialization...");
@@ -16,6 +19,8 @@ public class AppInitialization : MonoBehaviour
             {
                 // Firebase is ready!
                 Debug.Log("Firebase is ready! Proceeding to game...");
+
+                OnInitializationComplete?.Invoke();
             }
             else
             {
