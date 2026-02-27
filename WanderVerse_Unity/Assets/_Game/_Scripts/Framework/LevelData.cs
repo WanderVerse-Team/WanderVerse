@@ -154,15 +154,6 @@ public class QuestionItem
     [Tooltip("Wrong answers to confuse the player, e.g. '41', '4'")]
     public List<string> wrongAnswers;   
 
-    [Header("--- MODE: PLACE VALUE ---")]
-    [Tooltip("Prefab for the item worth 10 (Gold Bar)")]
-    public GameObject tensObjectPrefab; 
-    
-    [Tooltip("Prefab for the item worth 1 (Single Coin)")]
-    public GameObject onesObjectPrefab; 
-
-    [Tooltip("Maximum number of single ones allowed? (Optional constraint)")]
-    public int maxOnesAllowed = 9;
 }
 [System.Serializable]
 public class TreasureRound

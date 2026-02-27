@@ -141,46 +141,21 @@ public class TreasurePackerController : BaseLevelController
     {
         if (!isGameActive || isRoundTransitioning) return;
 
-        // 1. Keep track of what we just ate
+        // 1. Keep track of what we just ate (Spawning logic)
         if (amount == 10) 
         {
             activeBarsInScene--;
-            // Only start shooting if we hit 0 AND we aren't already shooting
-            if (activeBarsInScene <= 0 && !isSpawningBars) 
-            {
-                StartCoroutine(SpawnBarsRoutine());
-            }
+            if (activeBarsInScene <= 0 && !isSpawningBars) StartCoroutine(SpawnBarsRoutine());
         }
-        if (amount == 1) 
+        else if (amount == 1) 
         {
             activeCoinsInScene--;
-            // Only start shooting if we hit 0 AND we aren't already shooting
-            if (activeCoinsInScene <= 0 && !isSpawningCoins) 
-            {
-                StartCoroutine(SpawnCoinsRoutine());
-            }
+            if (activeCoinsInScene <= 0 && !isSpawningCoins) StartCoroutine(SpawnCoinsRoutine());
         }
 
-        // 2. Do the math
+        // 2. Just do the math and update the UI. No automatic checking!
         currentChestValue += amount;
         UpdateCounterUI();
-
-        // 3. Check Win/Loss logic
-        if (currentChestValue == currentRoundTargetValue)
-        {
-            isRoundTransitioning = true;
-            HandleCorrectAnswer(); 
-            CheckWinCondition();   
-            
-            if (isGameActive) Invoke(nameof(LoadNextRound), 1.5f); 
-        }
-        else if (currentChestValue > currentRoundTargetValue)
-        {
-            Debug.Log("Too heavy! Try again.");
-            HandleWrongAnswer(); 
-            currentChestValue = 0; 
-            UpdateCounterUI();
-        }
     }
     
 
@@ -210,48 +185,34 @@ public class TreasurePackerController : BaseLevelController
         
         UpdateCounterUI();
     }
+    // --- NEW: CONFIRMATION LOGIC ---
+    public void ConfirmChest()
+    {
+        if (!isGameActive || isRoundTransitioning) return;
 
-    // 4. Called by your ChestDropZone script when a coin/bar is dropped
-    // public void AddGold(int amount)
-    // {
-    //     // Don't accept gold if the game is over or we are waiting for the next round
-    //     if (!isGameActive || isRoundTransitioning) return;
+        // Check if they packed the exact right amount
+        if (currentChestValue == currentRoundTargetValue)
+        {
+            Debug.Log("Perfect Match! You locked in the right amount.");
+            isRoundTransitioning = true;
+            HandleCorrectAnswer(); 
+            CheckWinCondition();   
+            
+            if (isGameActive) Invoke(nameof(LoadNextRound), 1.5f); 
+        }
+        else 
+        {
+            // If it's wrong (either too heavy OR too light)
+            Debug.Log($"Wrong amount! You packed {currentChestValue}, but needed {currentRoundTargetValue}.");
+            HandleWrongAnswer(); 
+            
+            // Empty the chest so they can try again
+            currentChestValue = 0; 
+            UpdateCounterUI();
+        }
+    }
 
-    //     currentChestValue += amount;
-    //     UpdateCounterUI();
-
-    //     // Check the chest weight
-    //     if (currentChestValue == currentRoundTargetValue)
-    //     {
-    //         // PERFECT MATCH!
-    //         isRoundTransitioning = true;
-            
-    //         // Call the base controller to add points (pointsForCorrect)
-    //         HandleCorrectAnswer(); 
-            
-    //         // Call the base controller to check if currentScore >= targetScore
-    //         CheckWinCondition();   
-            
-    //         // If CheckWinCondition didn't end the level, move to the next round
-    //         if (isGameActive) 
-    //         {
-    //             Debug.Log("Packing successful! Loading next chest...");
-    //             Invoke(nameof(LoadNextRound), 1.5f); // Wait 1.5 seconds so player can see it full
-    //         }
-    //     }
-    //     else if (currentChestValue > currentRoundTargetValue)
-    //     {
-    //         // TOO HEAVY!
-    //         Debug.Log("Too much gold! Chest reset.");
-            
-    //         // Call base controller to log a mistake (and deduct points if applicable)
-    //         HandleWrongAnswer(); 
-            
-    //         // Empty the chest so they can try again
-    //         currentChestValue = 0; 
-    //         UpdateCounterUI();
-    //     }
-    // }
+    
 
     private void UpdateCounterUI()
     {
