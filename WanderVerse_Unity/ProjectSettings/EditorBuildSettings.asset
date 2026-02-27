@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Forest_Minimap.unity
     guid: cc8e314648f33a944865a0ebedda708b
   - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Golem_Game_Map.unity
+    guid: c8e03513295a243439401ab2e8611f53
+  - enabled: 1
     path: Assets/_Game/Scenes/Levels/Hungry Golem/HungryGolem1_1s.unity
     guid: 2438b70a3bb959f42b7bcfd94a3b427d
   - enabled: 1
