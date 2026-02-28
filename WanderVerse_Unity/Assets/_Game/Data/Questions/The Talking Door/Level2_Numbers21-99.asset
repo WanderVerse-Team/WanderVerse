@@ -1,0 +1,677 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac25f2abb44d67048b01407e824ebb84, type: 3}
+  m_Name: Level2_Numbers21-99
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  lessonID: 
+  lessonTitle: 
+  levelID: 
+  levelTitle: 
+  description: 
+  gameType: 0
+  targetScore: 10
+  possibleTargets: 
+  pointsForCorrect: 1
+  pointsForWrong: 1
+  maxMistakes: 0
+  useTimer: 0
+  levelTimeLimit: 0
+  maxXpReward: 100
+  baseXpReward: 20
+  xpDeductionPerMistake: 5
+  perfectRunBonus: 5
+  maxMistakesFor3Stars: 0
+  maxMistakesFor2Stars: 2
+  backgroundMusic: {fileID: 0}
+  spawnItems: []
+  distractors: []
+  validValue: 1
+  spawnRate: 2
+  itemFallSpeed: 3
+  questions:
+  - promptText: "\xFAis tl"
+    promptAudio: {fileID: 8300000, guid: d7204a84a31fe634e9d74e578f8f1671, type: 3}
+    correctString: 21
+    wrongAnswers:
+    - 23
+    - 12
+    - 56
+    - 43
+  - promptText: "\xFAis fol"
+    promptAudio: {fileID: 8300000, guid: 5b1dbc46b733afe409504abf9fd5638d, type: 3}
+    correctString: 22
+    wrongAnswers:
+    - 21
+    - 33
+    - 42
+    - 26
+  - promptText: "\xFAis ;=k"
+    promptAudio: {fileID: 8300000, guid: ce82ac5f76a74fe4fbae3c4b4704991d, type: 3}
+    correctString: 23
+    wrongAnswers:
+    - 32
+    - 65
+    - 12
+    - 13
+  - promptText: "\xFAis y;r"
+    promptAudio: {fileID: 8300000, guid: 5e32e200e72d051428d64918944d9206, type: 3}
+    correctString: 24
+    wrongAnswers:
+    - 42
+    - 12
+    - 14
+    - 34
+  - promptText: "\xFAis my"
+    promptAudio: {fileID: 8300000, guid: a38e389266709a14c9461fcb4484e3a1, type: 3}
+    correctString: 25
+    wrongAnswers:
+    - 56
+    - 15
+    - 35
+    - 65
+  - promptText: "\xFAis yh"
+    promptAudio: {fileID: 8300000, guid: c403345fdd173f74daf8094f6d997422, type: 3}
+    correctString: 26
+    wrongAnswers:
+    - 16
+    - 24
+    - 64
+    - 83
+  - promptText: "\xFAis y;"
+    promptAudio: {fileID: 8300000, guid: 87299639b5de7bc49873ccb40b222538, type: 3}
+    correctString: 27
+    wrongAnswers:
+    - 17
+    - 52
+    - 47
+    - 25
+  - promptText: "\xFAis wg"
+    promptAudio: {fileID: 8300000, guid: f99f498fe29a9544f894843f9aa4b9fc, type: 3}
+    correctString: 28
+    wrongAnswers:
+    - 26
+    - 18
+    - 82
+    - 48
+  - promptText: "\xFAis kjh"
+    promptAudio: {fileID: 8300000, guid: ab85b8cbde4b86042a2a53f5352553ab, type: 3}
+    correctString: 29
+    wrongAnswers:
+    - 19
+    - 28
+    - 27
+    - 17
+  - promptText: ;sy
+    promptAudio: {fileID: 8300000, guid: 53ccf7cd6a8560d40926a9daa7372710, type: 3}
+    correctString: 30
+    wrongAnswers:
+    - 20
+    - 23
+    - 55
+    - 32
+  - promptText: ;sia tl
+    promptAudio: {fileID: 8300000, guid: 2ac47bd879f723147abcaa7ede4586fd, type: 3}
+    correctString: 31
+    wrongAnswers:
+    - 13
+    - 42
+    - 51
+    - 52
+  - promptText: ;sia fol
+    promptAudio: {fileID: 8300000, guid: 0a7dec1c907257745bf5c426a94fcb4e, type: 3}
+    correctString: 32
+    wrongAnswers:
+    - 53
+    - 25
+    - 63
+    - 21
+  - promptText: ;sia ;=k
+    promptAudio: {fileID: 8300000, guid: 73248d1bad81eda4c89198f72dbddcf8, type: 3}
+    correctString: 33
+    wrongAnswers:
+    - 13
+    - 63
+    - 24
+    - 37
+  - promptText: ;sia y;r
+    promptAudio: {fileID: 8300000, guid: d4a087a0f572eaf42a2a8ad93e834e18, type: 3}
+    correctString: 34
+    wrongAnswers:
+    - 54
+    - 24
+    - 36
+    - 12
+  - promptText: ;sia my
+    promptAudio: {fileID: 8300000, guid: eb146161128191645a8c67389d9e843d, type: 3}
+    correctString: 35
+    wrongAnswers:
+    - 65
+    - 14
+    - 44
+    - 37
+  - promptText: ;sia yh
+    promptAudio: {fileID: 8300000, guid: 6136e0cdc3fc50540b537b00f6d9f729, type: 3}
+    correctString: 36
+    wrongAnswers:
+    - 33
+    - 38
+    - 58
+    - 37
+  - promptText: ;sia y;
+    promptAudio: {fileID: 8300000, guid: 892a0c347867f774089c02666fe5727c, type: 3}
+    correctString: 37
+    wrongAnswers:
+    - 15
+    - 36
+    - 83
+    - 25
+  - promptText: ;sia wg
+    promptAudio: {fileID: 8300000, guid: 9ed9946a4af75ab42b03eedc8d9b50d8, type: 3}
+    correctString: 38
+    wrongAnswers:
+    - 82
+    - 16
+    - 25
+    - 36
+  - promptText: ;sia kjh
+    promptAudio: {fileID: 8300000, guid: c0efa8c63cfdbad468e611c9b82a0616, type: 3}
+    correctString: 39
+    wrongAnswers:
+    - 16
+    - 47
+    - 36
+    - 31
+  - promptText: y;,sy
+    promptAudio: {fileID: 8300000, guid: fa13d42df29b51b458f2de6c9ebf959d, type: 3}
+    correctString: 40
+    wrongAnswers:
+    - 30
+    - 15
+    - 36
+    - 58
+  - promptText: y;,sia tl
+    promptAudio: {fileID: 8300000, guid: df99d4070349d8347a01a5c1f1c28813, type: 3}
+    correctString: 41
+    wrongAnswers:
+    - 43
+    - 46
+    - 74
+    - 14
+  - promptText: y;,sia fol
+    promptAudio: {fileID: 8300000, guid: 1099c8ca3238cfc44abf6247d317e01c, type: 3}
+    correctString: 42
+    wrongAnswers:
+    - 64
+    - 35
+    - 61
+    - 25
+  - promptText: y;,sia ;=k
+    promptAudio: {fileID: 8300000, guid: 86faa74aa1651ed41b79766edeee12ce, type: 3}
+    correctString: 43
+    wrongAnswers:
+    - 35
+    - 46
+    - 57
+    - 42
+  - promptText: y;,sia y;r
+    promptAudio: {fileID: 8300000, guid: bb9740d42e7acc3438321e7c59c7316c, type: 3}
+    correctString: 44
+    wrongAnswers:
+    - 35
+    - 43
+    - 47
+    - 74
+  - promptText: y;,sia my
+    promptAudio: {fileID: 8300000, guid: aeac24bf790bc3a49afab30785e8b106, type: 3}
+    correctString: 45
+    wrongAnswers:
+    - 47
+    - 43
+    - 23
+    - 49
+  - promptText: y;,sia yh
+    promptAudio: {fileID: 8300000, guid: aa7e2637ea87fcd449fee45169e86673, type: 3}
+    correctString: 46
+    wrongAnswers:
+    - 25
+    - 54
+    - 64
+    - 36
+  - promptText: y;,sia y;
+    promptAudio: {fileID: 8300000, guid: 60233b84198ecff49aff73757f077d4b, type: 3}
+    correctString: 47
+    wrongAnswers:
+    - 15
+    - 46
+    - 76
+    - 48
+  - promptText: wiQ y;
+    promptAudio: {fileID: 8300000, guid: 5847b1e7956c2bb41b9cc36cd6779143, type: 3}
+    correctString: 87
+    wrongAnswers:
+    - 86
+    - 82
+    - 47
+    - 74
+  - promptText: ' y;,sia wg'
+    promptAudio: {fileID: 8300000, guid: 1e4b36da8996f424f89ca830781545ab, type: 3}
+    correctString: 48
+    wrongAnswers:
+    - 46
+    - 64
+    - 47
+    - 27
+  - promptText: y;,sia kjh
+    promptAudio: {fileID: 8300000, guid: d012d597ac75bd54bae8af3ebaeb23fd, type: 3}
+    correctString: 49
+    wrongAnswers:
+    - 40
+    - 52
+    - 16
+    - 47
+  - promptText: mky
+    promptAudio: {fileID: 8300000, guid: 728076853ac7af4408b5f7ed4c677364, type: 3}
+    correctString: 50
+    wrongAnswers:
+    - 53
+    - 26
+    - 64
+    - 57
+  - promptText: mkia tl
+    promptAudio: {fileID: 8300000, guid: 430ecc6d44b7218438095d0e32a5de83, type: 3}
+    correctString: 51
+    wrongAnswers:
+    - 53
+    - 57
+    - 24
+    - 36
+  - promptText: mkia fol
+    promptAudio: {fileID: 8300000, guid: 2d0350dba38fd3f46b567a99e987d4fb, type: 3}
+    correctString: 52
+    wrongAnswers:
+    - 57
+    - 43
+    - 36
+    - 53
+  - promptText: mkia ;=k
+    promptAudio: {fileID: 8300000, guid: 2ef7a7c2cdc1ae54c9c1cf6ba43656bb, type: 3}
+    correctString: 53
+    wrongAnswers:
+    - 55
+    - 52
+    - 15
+    - 14
+  - promptText: mkia y;r
+    promptAudio: {fileID: 8300000, guid: 4b3d450376622234884aac76869a1990, type: 3}
+    correctString: 54
+    wrongAnswers:
+    - 56
+    - 58
+    - 35
+    - 26
+  - promptText: mkia my
+    promptAudio: {fileID: 8300000, guid: 1a9188046c4f6704db4f3bfd950c623c, type: 3}
+    correctString: 55
+    wrongAnswers:
+    - 35
+    - 57
+    - 35
+    - 52
+  - promptText: mkia yh
+    promptAudio: {fileID: 8300000, guid: c4f7fd2dd75f48d4fa16a93797820c58, type: 3}
+    correctString: 56
+    wrongAnswers:
+    - 58
+    - 35
+    - 51
+    - 17
+  - promptText: mkia y;
+    promptAudio: {fileID: 8300000, guid: 6875b584b088a614282879ccde9a87c5, type: 3}
+    correctString: 57
+    wrongAnswers:
+    - 59
+    - 38
+    - 26
+    - 46
+  - promptText: mkia wg
+    promptAudio: {fileID: 8300000, guid: ee889f38f664833438135bd18f1efc42, type: 3}
+    correctString: 58
+    wrongAnswers:
+    - 56
+    - 18
+    - 57
+    - 95
+  - promptText: ' mkia kjh'
+    promptAudio: {fileID: 8300000, guid: 766e3d3a26f8c60419454611b553ce16, type: 3}
+    correctString: 59
+    wrongAnswers:
+    - 80
+    - 27
+    - 46
+    - 63
+  - promptText: yeg
+    promptAudio: {fileID: 8300000, guid: 441ab1484468fbe468027a9df568e765, type: 3}
+    correctString: 60
+    wrongAnswers:
+    - 62
+    - 65
+    - 16
+    - 46
+  - promptText: yeg tl
+    promptAudio: {fileID: 8300000, guid: b65de6c462f0fa9489dfb7554d03a2aa, type: 3}
+    correctString: 61
+    wrongAnswers:
+    - 64
+    - 67
+    - 16
+    - 46
+  - promptText: 62
+    promptAudio: {fileID: 8300000, guid: b0db982814ec7f64b9dfb2f6dccbabae, type: 3}
+    correctString: yeg fol
+    wrongAnswers:
+    - 62
+    - 44
+    - 47
+    - 52
+  - promptText: yeg ;=k
+    promptAudio: {fileID: 8300000, guid: f8d845e194f04c743a6013e3981f27f0, type: 3}
+    correctString: 63
+    wrongAnswers:
+    - 46
+    - 26
+    - 75
+    - 35
+  - promptText: yeg y;r
+    promptAudio: {fileID: 8300000, guid: e0e4ef39b44b4ab499151d8311cb3b71, type: 3}
+    correctString: 64
+    wrongAnswers:
+    - 24
+    - 76
+    - 45
+    - 16
+  - promptText: yeg my
+    promptAudio: {fileID: 8300000, guid: ff8500870c415dd45b5dd6ad0119f499, type: 3}
+    correctString: 65
+    wrongAnswers:
+    - 63
+    - 32
+    - 16
+    - 75
+  - promptText: ' yeg yh'
+    promptAudio: {fileID: 8300000, guid: e6a80ba5eaaa85e4a9682ebf264b1102, type: 3}
+    correctString: 66
+    wrongAnswers:
+    - 75
+    - 36
+    - 38
+    - 28
+  - promptText: yeg y;
+    promptAudio: {fileID: 8300000, guid: 279b512e53abcb241bc69e64ef5fd74a, type: 3}
+    correctString: 67
+    wrongAnswers:
+    - 69
+    - 37
+    - 85
+    - 73
+  - promptText: yeg wg
+    promptAudio: {fileID: 8300000, guid: 4bda11aa99b73ac4dbce56f36f099249, type: 3}
+    correctString: 68
+    wrongAnswers:
+    - 65
+    - 16
+    - 36
+    - 64
+  - promptText: yeg kjh
+    promptAudio: {fileID: 8300000, guid: f020a8bae424e5a4580a018544dc6180, type: 3}
+    correctString: 69
+    wrongAnswers:
+    - 94
+    - 28
+    - 75
+    - 72
+  - promptText: ye;a;Ej
+    promptAudio: {fileID: 8300000, guid: 249f17714af8f1f47aead3c4bf2a7677, type: 3}
+    correctString: 70
+    wrongAnswers:
+    - 72
+    - 85
+    - 75
+    - 17
+  - promptText: ye;a;E tl
+    promptAudio: {fileID: 8300000, guid: 19fa68b4c283c3942afddeb8faf0c506, type: 3}
+    correctString: 71
+    wrongAnswers:
+    - 75
+    - 37
+    - 27
+    - 76
+  - promptText: ye;a;E fol
+    promptAudio: {fileID: 8300000, guid: 05396740e5c216b4ca8120c18fb1055d, type: 3}
+    correctString: 72
+    wrongAnswers:
+    - 57
+    - 74
+    - 71
+    - 26
+  - promptText: ye;a;E ;=k
+    promptAudio: {fileID: 8300000, guid: 6a520caf38657864db926f71e392c47f, type: 3}
+    correctString: 73
+    wrongAnswers:
+    - 75
+    - 16
+    - 26
+    - 78
+  - promptText: ye;a;E y;r
+    promptAudio: {fileID: 8300000, guid: 49a4adbf81169b14a89a75be1f979816, type: 3}
+    correctString: 74
+    wrongAnswers:
+    - 37
+    - 76
+    - 16
+    - 47
+  - promptText: ye;a;E my
+    promptAudio: {fileID: 8300000, guid: e561e0aa9d73c0e46a13ac0798de54d7, type: 3}
+    correctString: 75
+    wrongAnswers:
+    - 74
+    - 37
+    - 34
+    - 16
+  - promptText: ye;a;E yh
+    promptAudio: {fileID: 8300000, guid: b3b89acb146f0e8418b3667214dc9357, type: 3}
+    correctString: 76
+    wrongAnswers:
+    - 75
+    - 78
+    - 84
+    - 26
+  - promptText: ye;a;E y;
+    promptAudio: {fileID: 8300000, guid: 6c3cdfa88ab27aa478b764e63de72e3d, type: 3}
+    correctString: 77
+    wrongAnswers:
+    - 75
+    - 37
+    - 58
+    - 64
+  - promptText: ye;a;E wg
+    promptAudio: {fileID: 8300000, guid: 075d6704053c31c4d83d65362b153cba, type: 3}
+    correctString: 78
+    wrongAnswers:
+    - 75
+    - 48
+    - 89
+    - 58
+  - promptText: ye;a;E kjh
+    promptAudio: {fileID: 8300000, guid: 7704fdaf2d36c35489bee8f1a16307da, type: 3}
+    correctString: 79
+    wrongAnswers:
+    - 85
+    - 38
+    - 30
+    - 70
+  - promptText: wiQj
+    promptAudio: {fileID: 8300000, guid: 4e12eb0dea0c0d94fbf837b8783b4de7, type: 3}
+    correctString: 80
+    wrongAnswers:
+    - 84
+    - 82
+    - 67
+    - 85
+  - promptText: wiQ tl
+    promptAudio: {fileID: 8300000, guid: 8329cc23fe7e60c4e966065f129ee112, type: 3}
+    correctString: 81
+    wrongAnswers:
+    - 85
+    - 37
+    - 85
+    - 38
+  - promptText: wiQ fol
+    promptAudio: {fileID: 8300000, guid: b001133857622864ab1263345a39eeb6, type: 3}
+    correctString: 82
+    wrongAnswers:
+    - 86
+    - 48
+    - 26
+    - 17
+  - promptText: wiQ ;=k
+    promptAudio: {fileID: 8300000, guid: e99f1eaa5f5376446b8e95584cff459c, type: 3}
+    correctString: 83
+    wrongAnswers:
+    - 64
+    - 86
+    - 82
+    - 48
+  - promptText: 'wiQ y;r '
+    promptAudio: {fileID: 8300000, guid: f5338f1ba2edb444299dfb4073259611, type: 3}
+    correctString: 84
+    wrongAnswers:
+    - 38
+    - 87
+    - 83
+    - 81
+  - promptText: wiQ my
+    promptAudio: {fileID: 8300000, guid: 00f928e09139eb54d8343ed7fe3f3017, type: 3}
+    correctString: 85
+    wrongAnswers:
+    - 84
+    - 83
+    - 69
+    - 68
+  - promptText: wiQ yh
+    promptAudio: {fileID: 8300000, guid: a208acbef59f2374aa712a1beaee74e3, type: 3}
+    correctString: 86
+    wrongAnswers:
+    - 85
+    - 48
+    - 89
+    - 92
+  - promptText: wiQ wg
+    promptAudio: {fileID: 8300000, guid: 36d19661635bc1646b7ccf61efb8c347, type: 3}
+    correctString: 88
+    wrongAnswers:
+    - 85
+    - 78
+    - 69
+    - 96
+    - 79
+  - promptText: wiQ kjh
+    promptAudio: {fileID: 8300000, guid: 9df79f2c8a2b4ff408419f9ee54c209a, type: 3}
+    correctString: 89
+    wrongAnswers:
+    - 96
+    - 84
+    - 86
+    - 20
+  - promptText: wkQj
+    promptAudio: {fileID: 8300000, guid: 56d563582281ed445b62a9a1cf67236d, type: 3}
+    correctString: 90
+    wrongAnswers:
+    - 93
+    - 60
+    - 47
+    - 80
+  - promptText: wkQ tl
+    promptAudio: {fileID: 8300000, guid: c518d7968fdd02845985b559804c8d13, type: 3}
+    correctString: 91
+    wrongAnswers:
+    - 97
+    - 95
+    - 29
+    - 69
+  - promptText: wkQ fol
+    promptAudio: {fileID: 8300000, guid: d68d9a80b370d6c429b5c1fba21b5057, type: 3}
+    correctString: 92
+    wrongAnswers:
+    - 98
+    - 48
+    - 70
+    - 39
+  - promptText: wkQ ;=k
+    promptAudio: {fileID: 8300000, guid: 3418f224a71143649bad4b08ab7089d1, type: 3}
+    correctString: 93
+    wrongAnswers:
+    - 97
+    - 59
+    - 95
+    - 39
+  - promptText: wkQ y;r
+    promptAudio: {fileID: 8300000, guid: 74521dd8884914449b0a0e767494e0fd, type: 3}
+    correctString: 94
+    wrongAnswers:
+    - 65
+    - 26
+    - 96
+    - 97
+  - promptText: wkQ my
+    promptAudio: {fileID: 8300000, guid: 28f6c58b61af06d41810585f63e5acd1, type: 3}
+    correctString: 95
+    wrongAnswers:
+    - 97
+    - 93
+    - 28
+    - 85
+  - promptText: wkQ yh
+    promptAudio: {fileID: 8300000, guid: eb0e327b73e3b0b4888dc7b116a34714, type: 3}
+    correctString: 96
+    wrongAnswers:
+    - 98
+    - 79
+    - 90
+    - 59
+  - promptText: wkQ y;
+    promptAudio: {fileID: 8300000, guid: 954537d870638e8488cbc35ed7865e1c, type: 3}
+    correctString: 97
+    wrongAnswers:
+    - 98
+    - 70
+    - 79
+    - 93
+  - promptText: ' wkQ wg'
+    promptAudio: {fileID: 8300000, guid: bae649518fac29a4d85808a64603d833, type: 3}
+    correctString: 98
+    wrongAnswers:
+    - 89
+    - 96
+    - 95
+    - 93
+  - promptText: wkQ kjh
+    promptAudio: {fileID: 8300000, guid: b2cbf10bafcc7af49bed07426aeb6727, type: 3}
+    correctString: 99
+    wrongAnswers:
+    - 69
+    - 78
+    - 83
+    - 29
+  treasureRounds:
+  - targetValue: 0
+    signPromptText: 
+    voicePrompt: {fileID: 0}
