@@ -108,6 +108,9 @@ namespace WanderVerse.Backend.Services
             string randomNoun = nouns[UnityEngine.Random.Range(0, nouns.Length)];
 
             signUpUsernameInput.text = $"{randomAdj}{randomNoun}";
+
+            signUpUsernameInput.ForceLabelUpdate(); 
+            UpdateFeedback("Username generated!");
         }
         
         public void OnSignUpButton() 

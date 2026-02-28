@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_text: Sign In
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1292,15 +1292,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2add7999453fa994ba385469d7f1bd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AuthManager
-  loginEmailInput: {fileID: 0}
-  loginPasswordInput: {fileID: 0}
-  signUpUsernameInput: {fileID: 0}
-  signUpEmailInput: {fileID: 0}
-  signUpPasswordInput: {fileID: 0}
-  signUpConfirmPasswordInput: {fileID: 0}
+  loginEmailInput: {fileID: 1625188646}
+  loginPasswordInput: {fileID: 512934484}
+  signUpUsernameInput: {fileID: 1369832291}
+  signUpEmailInput: {fileID: 745399463}
+  signUpPasswordInput: {fileID: 108585746}
+  signUpConfirmPasswordInput: {fileID: 1106613664}
   feedbackText: {fileID: 0}
-  panelSignIn: {fileID: 0}
-  panelSignUp: {fileID: 0}
+  panelSignIn: {fileID: 865422493}
+  panelSignUp: {fileID: 215015721}
 --- !u!4 &399160811
 Transform:
   m_ObjectHideFlags: 0
@@ -4599,7 +4599,7 @@ MonoBehaviour:
   m_Text: 
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
-  m_ReadOnly: 0
+  m_ReadOnly: 1
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 0}
   m_OnFocusSelectAll: 1
