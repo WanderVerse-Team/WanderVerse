@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2207021418096961443}
   - component: {fileID: 5188897280003982005}
   - component: {fileID: 1714608714208762607}
-  - component: {fileID: 6248919437907675670}
   - component: {fileID: 1520340492765102449}
   - component: {fileID: 1313430539467428790}
+  - component: {fileID: 8207142937584877993}
   m_Layer: 7
   m_Name: Strawberry_1-removebg-preview_0
   m_TagString: Untagged
@@ -122,8 +122,35 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &6248919437907675670
-CircleCollider2D:
+--- !u!114 &1520340492765102449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397541237196930485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c09727fae38fa46a0e34a69ce72c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DragDropItem
+--- !u!114 &1313430539467428790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397541237196930485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58906cbba3f65447b0d7274ab00296b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FruitIdentity
+  fruitType: Strawberry
+  fruitValue: 1
+  controller: {fileID: 0}
+--- !u!60 &8207142937584877993
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -157,30 +184,56 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
---- !u!114 &1520340492765102449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6397541237196930485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83c09727fae38fa46a0e34a69ce72c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DragDropItem
---- !u!114 &1313430539467428790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6397541237196930485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b58906cbba3f65447b0d7274ab00296b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FruitIdentity
-  fruitType: Strawberry
-  fruitValue: 1
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.965, y: 1.24}
+    newSize: {x: 1.93, y: 2.48}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.3725, y: -0.32}
+      - {x: 0.4325, y: -0.21499999}
+      - {x: 0.4675, y: -0.114999995}
+      - {x: 0.4775, y: -0.03}
+      - {x: 0.4775, y: 0.074999996}
+      - {x: 0.45749998, y: 0.16499999}
+      - {x: 0.42249998, y: 0.225}
+      - {x: 0.3425, y: 0.315}
+      - {x: 0.2625, y: 0.35999998}
+      - {x: 0.3175, y: 0.39999998}
+      - {x: 0.3475, y: 0.44}
+      - {x: 0.3275, y: 0.49499997}
+      - {x: 0.2375, y: 0.515}
+      - {x: 0.1425, y: 0.51}
+      - {x: 0.0625, y: 0.49499997}
+      - {x: 0.0925, y: 0.58}
+      - {x: 0.057499997, y: 0.615}
+      - {x: 0.0275, y: 0.62}
+      - {x: -0.012499999, y: 0.62}
+      - {x: -0.037499998, y: 0.59999996}
+      - {x: -0.0925, y: 0.48999998}
+      - {x: -0.122499995, y: 0.51}
+      - {x: -0.24249999, y: 0.515}
+      - {x: -0.3125, y: 0.5}
+      - {x: -0.3425, y: 0.475}
+      - {x: -0.3525, y: 0.44}
+      - {x: -0.3375, y: 0.32999998}
+      - {x: -0.4175, y: 0.24499999}
+      - {x: -0.4775, y: 0.13499999}
+      - {x: -0.4825, y: 0.08}
+      - {x: -0.4825, y: -0.04}
+      - {x: -0.4675, y: -0.13499999}
+      - {x: -0.3875, y: -0.31}
+      - {x: -0.3125, y: -0.415}
+      - {x: -0.2075, y: -0.52}
+      - {x: -0.1125, y: -0.59}
+      - {x: -0.0525, y: -0.615}
+      - {x: 0.057499997, y: -0.615}
+      - {x: 0.107499994, y: -0.59499997}
+      - {x: 0.2025, y: -0.525}
+      - {x: 0.29749998, y: -0.42499998}
+  m_UseDelaunayMesh: 1

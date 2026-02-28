@@ -50,5 +50,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ocean
+    uniqueID: 4070949303
+    locked: 0
+  - name: Islands
+    uniqueID: 2190105751
+    locked: 0
+  - name: Isle_Names
+    uniqueID: 2401906789
+    locked: 0
   m_RenderingLayers:
   - Default
