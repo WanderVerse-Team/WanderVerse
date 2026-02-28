@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
@@ -14,6 +15,26 @@ public class TreasurePackerController : BaseLevelController
     public SpriteRenderer chestVisual; 
     public Sprite chestOpenSprite;
     public Sprite chestClosedSprite;
+
+    [Header("--- MASCOT TUTORIAL ---")]
+    public GameObject tutorialPanel; // The full-screen UI panel
+    public TMP_Text dialogueText;    // The text box where the mascot speaks
+
+    [Header("--- MASCOT VISUALS ---")]
+    [Tooltip("Drag the UI Image object of your Mascot here")]
+    public Image mascotImage; 
+    
+    [Tooltip("Drag the sprite you want for each line of dialogue here!")]
+    public Sprite[] mascotPoses;
+    
+    [TextArea(2, 4)]
+    [Tooltip("Type each screen of instructions here. Press + to add a new screen!")]
+    public string[] mascotMessages;  
+    
+    [Tooltip("Optional: Drag audio clips here that match the text messages!")]
+    public AudioClip[] mascotVoices; 
+
+    private int currentMessageIndex = 0;
 
     [Header("--- PLACE VALUE UI ---")]
     public TMP_Text signPromptText;  // The instruction sign
@@ -76,13 +97,87 @@ public class TreasurePackerController : BaseLevelController
     }
 
     // 3. Override StartGame to reset our specific UI after the base controller sets up
-    protected override void StartGame()
+   protected override void StartGame()
     {
-        base.StartGame(); // This resets currentScore, mistakeCount, and starts timer
-       // Start the Coroutines to shoot the first batch!
+        base.StartGame(); 
+        isGameActive = false; 
+        
+        // 1. Check if we have a tutorial set up
+        if (tutorialPanel != null && mascotMessages != null && mascotMessages.Length > 0)
+        {
+            currentMessageIndex = 0;
+            tutorialPanel.SetActive(true);
+            
+            // Show the first message and play the first voiceover!
+            ShowCurrentTutorialMessage();
+        }
+        else
+        {
+            // If there is no tutorial, just start the game immediately
+            BeginLevel();
+        }
+    }
+
+    // --- NEW: Shows the current text and plays the voice ---
+    private void ShowCurrentTutorialMessage()
+    {
+        // Set the text
+        if (dialogueText != null) 
+        {
+            dialogueText.text = mascotMessages[currentMessageIndex];
+        }
+
+        // Play the voiceover if we have one for this specific message
+        if (AudioManager.Instance != null && mascotVoices.Length > currentMessageIndex)
+        {
+            AudioClip voiceClip = mascotVoices[currentMessageIndex];
+            if (voiceClip != null)
+            {
+                AudioManager.Instance.PlayVoiceover(voiceClip);
+            }
+        }
+
+        // Change the mascot's pose if we have a sprite for this specific message
+        if (mascotImage != null && mascotPoses != null && mascotPoses.Length > 0)
+        {
+            // The '%' operator automatically wraps the index back to 0!
+            // Example: If index is 2, and length is 2... 2 % 2 = 0.
+            int loopedIndex = currentMessageIndex % mascotPoses.Length;
+            
+            Sprite newPose = mascotPoses[loopedIndex];
+            if (newPose != null)
+            {
+                mascotImage.sprite = newPose;
+            }
+        }
+    }
+
+    // --- NEW: Called by clicking anywhere on the screen during the tutorial ---
+    public void AdvanceTutorial()
+    {
+        // Play a standard UI click sound
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
+
+        currentMessageIndex++; // Move to the next message in the list
+
+        // Check if we still have messages left to show
+        if (currentMessageIndex < mascotMessages.Length)
+        {
+            ShowCurrentTutorialMessage();
+        }
+        else
+        {
+            // We ran out of messages! Hide the UI and start the game.
+            if (tutorialPanel != null) tutorialPanel.SetActive(false);
+            BeginLevel();
+        }
+    }
+
+    public void BeginLevel()
+    {
+        isGameActive = true;
         StartCoroutine(SpawnBarsRoutine());
         StartCoroutine(SpawnCoinsRoutine());
-        
         LoadNextRound();
     }
 // --- NEW: ASYNC SPAWNING COROUTINES ---
