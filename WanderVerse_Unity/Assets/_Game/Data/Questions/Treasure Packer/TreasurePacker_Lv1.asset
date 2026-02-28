@@ -1,0 +1,251 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac25f2abb44d67048b01407e824ebb84, type: 3}
+  m_Name: TreasurePacker_Lv1
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  lessonID: 
+  lessonTitle: 
+  levelID: 
+  levelTitle: 
+  description: 
+  gameType: 11
+  targetScore: 10
+  possibleTargets: 
+  pointsForCorrect: 1
+  pointsForWrong: 1
+  maxMistakes: 3
+  useTimer: 0
+  levelTimeLimit: 0
+  maxXpReward: 100
+  baseXpReward: 20
+  xpDeductionPerMistake: 5
+  perfectRunBonus: 5
+  maxMistakesFor3Stars: 0
+  maxMistakesFor2Stars: 2
+  backgroundMusic: {fileID: 0}
+  spawnItems: []
+  distractors: []
+  validValue: 1
+  spawnRate: 2
+  itemFallSpeed: 3
+  questions: []
+  treasureRounds:
+  - targetValue: 13
+    signPromptText: 13
+    voicePrompt: {fileID: 0}
+  - targetValue: 14
+    signPromptText: 14
+    voicePrompt: {fileID: 0}
+  - targetValue: 15
+    signPromptText: 15
+    voicePrompt: {fileID: 0}
+  - targetValue: 16
+    signPromptText: 16
+    voicePrompt: {fileID: 0}
+  - targetValue: 17
+    signPromptText: 17
+    voicePrompt: {fileID: 0}
+  - targetValue: 18
+    signPromptText: 18
+    voicePrompt: {fileID: 0}
+  - targetValue: 22
+    signPromptText: 22
+    voicePrompt: {fileID: 0}
+  - targetValue: 23
+    signPromptText: 23
+    voicePrompt: {fileID: 0}
+  - targetValue: 25
+    signPromptText: 35
+    voicePrompt: {fileID: 0}
+  - targetValue: 26
+    signPromptText: 36
+    voicePrompt: {fileID: 0}
+  - targetValue: 27
+    signPromptText: 37
+    voicePrompt: {fileID: 0}
+  - targetValue: 28
+    signPromptText: 38
+    voicePrompt: {fileID: 0}
+  - targetValue: 29
+    signPromptText: 39
+    voicePrompt: {fileID: 0}
+  - targetValue: 31
+    signPromptText: 31
+    voicePrompt: {fileID: 0}
+  - targetValue: 32
+    signPromptText: 32
+    voicePrompt: {fileID: 0}
+  - targetValue: 33
+    signPromptText: 33
+    voicePrompt: {fileID: 0}
+  - targetValue: 34
+    signPromptText: 34
+    voicePrompt: {fileID: 0}
+  - targetValue: 35
+    signPromptText: 35
+    voicePrompt: {fileID: 0}
+  - targetValue: 36
+    signPromptText: 36
+    voicePrompt: {fileID: 0}
+  - targetValue: 37
+    signPromptText: 37
+    voicePrompt: {fileID: 0}
+  - targetValue: 42
+    signPromptText: 42
+    voicePrompt: {fileID: 0}
+  - targetValue: 43
+    signPromptText: 43
+    voicePrompt: {fileID: 0}
+  - targetValue: 44
+    signPromptText: 44
+    voicePrompt: {fileID: 0}
+  - targetValue: 45
+    signPromptText: 45
+    voicePrompt: {fileID: 0}
+  - targetValue: 46
+    signPromptText: 46
+    voicePrompt: {fileID: 0}
+  - targetValue: 47
+    signPromptText: 47
+    voicePrompt: {fileID: 0}
+  - targetValue: 48
+    signPromptText: 48
+    voicePrompt: {fileID: 0}
+  - targetValue: 51
+    signPromptText: 51
+    voicePrompt: {fileID: 0}
+  - targetValue: 52
+    signPromptText: 52
+    voicePrompt: {fileID: 0}
+  - targetValue: 53
+    signPromptText: 53
+    voicePrompt: {fileID: 0}
+  - targetValue: 54
+    signPromptText: 54
+    voicePrompt: {fileID: 0}
+  - targetValue: 55
+    signPromptText: 55
+    voicePrompt: {fileID: 0}
+  - targetValue: 56
+    signPromptText: 56
+    voicePrompt: {fileID: 0}
+  - targetValue: 57
+    signPromptText: 57
+    voicePrompt: {fileID: 0}
+  - targetValue: 58
+    signPromptText: 58
+    voicePrompt: {fileID: 0}
+  - targetValue: 59
+    signPromptText: 59
+    voicePrompt: {fileID: 0}
+  - targetValue: 61
+    signPromptText: 61
+    voicePrompt: {fileID: 0}
+  - targetValue: 62
+    signPromptText: 62
+    voicePrompt: {fileID: 0}
+  - targetValue: 63
+    signPromptText: 63
+    voicePrompt: {fileID: 0}
+  - targetValue: 64
+    signPromptText: 64
+    voicePrompt: {fileID: 0}
+  - targetValue: 65
+    signPromptText: 65
+    voicePrompt: {fileID: 0}
+  - targetValue: 67
+    signPromptText: 67
+    voicePrompt: {fileID: 0}
+  - targetValue: 68
+    signPromptText: 68
+    voicePrompt: {fileID: 0}
+  - targetValue: 69
+    signPromptText: 69
+    voicePrompt: {fileID: 0}
+  - targetValue: 71
+    signPromptText: 71
+    voicePrompt: {fileID: 0}
+  - targetValue: 72
+    signPromptText: 72
+    voicePrompt: {fileID: 0}
+  - targetValue: 73
+    signPromptText: 73
+    voicePrompt: {fileID: 0}
+  - targetValue: 74
+    signPromptText: 74
+    voicePrompt: {fileID: 0}
+  - targetValue: 75
+    signPromptText: 75
+    voicePrompt: {fileID: 0}
+  - targetValue: 76
+    signPromptText: 76
+    voicePrompt: {fileID: 0}
+  - targetValue: 77
+    signPromptText: 77
+    voicePrompt: {fileID: 0}
+  - targetValue: 78
+    signPromptText: 78
+    voicePrompt: {fileID: 0}
+  - targetValue: 79
+    signPromptText: 79
+    voicePrompt: {fileID: 0}
+  - targetValue: 81
+    signPromptText: 81
+    voicePrompt: {fileID: 0}
+  - targetValue: 82
+    signPromptText: 82
+    voicePrompt: {fileID: 0}
+  - targetValue: 83
+    signPromptText: 83
+    voicePrompt: {fileID: 0}
+  - targetValue: 84
+    signPromptText: 84
+    voicePrompt: {fileID: 0}
+  - targetValue: 85
+    signPromptText: 85
+    voicePrompt: {fileID: 0}
+  - targetValue: 86
+    signPromptText: 86
+    voicePrompt: {fileID: 0}
+  - targetValue: 87
+    signPromptText: 87
+    voicePrompt: {fileID: 0}
+  - targetValue: 88
+    signPromptText: 88
+    voicePrompt: {fileID: 0}
+  - targetValue: 89
+    signPromptText: 89
+    voicePrompt: {fileID: 0}
+  - targetValue: 91
+    signPromptText: 91
+    voicePrompt: {fileID: 0}
+  - targetValue: 92
+    signPromptText: 92
+    voicePrompt: {fileID: 0}
+  - targetValue: 93
+    signPromptText: 93
+    voicePrompt: {fileID: 0}
+  - targetValue: 94
+    signPromptText: 94
+    voicePrompt: {fileID: 0}
+  - targetValue: 95
+    signPromptText: 95
+    voicePrompt: {fileID: 0}
+  - targetValue: 96
+    signPromptText: 96
+    voicePrompt: {fileID: 0}
+  - targetValue: 97
+    signPromptText: 97
+    voicePrompt: {fileID: 0}
+  - targetValue: 98
+    signPromptText: 98
+    voicePrompt: {fileID: 0}
