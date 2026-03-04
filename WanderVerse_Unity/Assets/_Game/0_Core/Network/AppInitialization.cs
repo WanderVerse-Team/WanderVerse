@@ -19,14 +19,14 @@ public class AppInitialization : MonoBehaviour
             {
                 // Firebase is ready!
                 Debug.Log("Firebase is ready! Proceeding to game...");
-
-                OnInitializationComplete?.Invoke();
             }
             else
             {
                 Debug.LogError(System.String.Format(
-                  "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
+
+            OnInitializationComplete?.Invoke();
         });
     }
 }
