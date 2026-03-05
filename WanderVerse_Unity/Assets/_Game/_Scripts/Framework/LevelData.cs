@@ -127,6 +127,9 @@ public class LevelData : ScriptableObject
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
 
+    [Header("--- MODE: PLACE VALUE ---")]
+    public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
+
 }
 
 // ========================================================================
@@ -145,7 +148,9 @@ public enum GameType
     SolidObjectsAndShapes,
     Division1,
     Fractions,
-    Directions
+    Directions,
+
+    PlaceValue
 }
 
 [System.Serializable]
@@ -163,4 +168,21 @@ public class QuestionItem
     [Header("The Distractors")]
     [Tooltip("Wrong answers to confuse the player, e.g. '41', '4'")]
     public List<string> wrongAnswers;   
+
+}
+[System.Serializable]
+public class TreasureRound
+{
+    [Tooltip("The number the player needs to build, e.g., 45")]
+    public int targetValue; 
+
+    [Tooltip("The Legacy Sinhala text to show on the sign")]
+    public string signPromptText; 
+
+    [Tooltip("The voice audio saying the number")]
+    public AudioClip voicePrompt; 
+
+    // --- Helper Math properties (Read-Only) ---
+    public int RequiredTens => targetValue / 10;
+    public int RequiredOnes => targetValue % 10;
 }
