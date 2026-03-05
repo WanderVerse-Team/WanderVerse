@@ -106,10 +106,14 @@ public class LevelData : ScriptableObject
 
     //[Header("--- MODE: FRACTIONS ---")]
     // Add variables needed for Fractions lesson
+    [Header("--- MODE: FRACTIONS ---")]
+    public int totalItems = 10;
+    public int guidedItemCount = 5;
+    public float cutTolerance = 0.4f;
 
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
-
+    
 }
 
 // ========================================================================
