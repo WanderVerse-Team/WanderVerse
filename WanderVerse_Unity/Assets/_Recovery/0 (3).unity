@@ -796,7 +796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &215015722
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1047,8 +1047,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "WanderVerse \xA9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-  m_sharedMaterial: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_text: Sign In
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-  m_sharedMaterial: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3093,7 +3093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &865422494
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5530,8 +5530,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sign Up
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-  m_sharedMaterial: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6853,19 +6853,11 @@ PrefabInstance:
     - target: {fileID: 9103971572605515662, guid: 6b2cf840f5860fb44b99737619a28cc6, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-    - target: {fileID: 9103971572605515662, guid: 6b2cf840f5860fb44b99737619a28cc6, type: 3}
-      propertyPath: m_fontStyle
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 9103971572605515662, guid: 6b2cf840f5860fb44b99737619a28cc6, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
-    - target: {fileID: 9103971572605515662, guid: 6b2cf840f5860fb44b99737619a28cc6, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
