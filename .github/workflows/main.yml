@@ -17,7 +17,7 @@ jobs:
     name: Build for Android
     runs-on: ubuntu-latest
     steps:
-      # 1. Free up disk space so Unity 6 fits!
+      # Free up disk space so Unity 6 fits
       - name: Free Disk Space for Unity
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
@@ -29,24 +29,41 @@ jobs:
           docker-images: false
           swap-storage: false
 
-      # 2. Checkout Repository
+      # Checkout Repository (LFS false to prevent immediate bandwidth use)
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false 
 
-      # 3. Fix Permissions
+      # Create a unique ID for the LFS files to use as a cache key
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      # Cache the .git/lfs directory
+      - name: Cache Git LFS
+        uses: actions/cache@v3
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}-v1
+          restore-keys: |
+            lfs-
+
+      # Pull LFS files (Uses cache if available)
+      - name: Git LFS Pull
+        run: git lfs pull
+
+      # Fix Permissions
       - name: Fix File Permissions
         run: |
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
           sudo chmod -R 777 $GITHUB_WORKSPACE
 
-      # 4. Restore Firebase Config
+      # Restore Firebase Config
       - name: Restore google-services.json
         run: echo '${{ secrets.FIREBASE_CONFIG }}' > WanderVerse_Unity/Assets/google-services.json
         continue-on-error: true
 
-      # 5. Cache Library
+      # Cache Unity Library (Speeds up build time)
       - name: Cache Library
         uses: actions/cache@v3
         with:
@@ -55,7 +72,7 @@ jobs:
           restore-keys: |
             Library-Android-
 
-      # 6. Build Android APK
+      # Build Android APK
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         env:
@@ -65,13 +82,12 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: WanderVerse_Unity
-          # Keep this line! It is working.
           unityVersion: 6000.3.2f1
           buildName: WanderVerse_v1
           allowDirtyBuild: true
           versioning: None
 
-      # 7. Upload APK
+      # Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

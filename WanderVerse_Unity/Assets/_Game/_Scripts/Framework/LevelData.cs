@@ -29,7 +29,7 @@ public class LevelData : ScriptableObject
     public int pointsForWrong = 1;
 
     [Tooltip("Set to 0 to allow infinite mistakes. Enter ONLY POSITIVE values")]
-    public int maxMistakes = 3;
+    public int maxMistakes = 0;
 
     [Header("--- 4. TIMER ---")]
     public bool useTimer = false;
@@ -60,10 +60,10 @@ public class LevelData : ScriptableObject
     public int maxMistakesFor3Stars = 0;
     public int maxMistakesFor2Stars = 2;
 
-    //[Header("--- 7. AUDIO & VISUALS ---")]
+    [Header("--- 7. AUDIO & VISUALS ---")]
     //public Sprite backgroundImage;
     //public GameObject environmentPrefab; // Forest, Cave, Space
-    //public AudioClip backgroundMusic;
+    public AudioClip backgroundMusic;
     //public AudioClip instructionAudio;   // "Find the Cone" 
     //[TextArea] public string instructionText;
 
@@ -80,11 +80,28 @@ public class LevelData : ScriptableObject
     public float spawnRate = 2.0f;
     public float itemFallSpeed = 3.0f;
 
-    //[Header("--- MODE: NUMBERS 1 ---")]
+    [Header("--- MODE: NUMBERS 1 ---")]
     // Add variables needed for Numbers 1 lesson
 
-    //[Header("--- MODE: ADDITION 1 ---")]
-    // Add variables needed for Addition 1 lesson
+    public List<QuestionItem> questions; // For Number Recognition (Numbers 1)
+
+    [Header("--- MODE: ADDITION 1 (Power Station) ---")]
+    // For: Power Station (Vertical Addition)
+
+    [Tooltip("Number of turns (rounds) the player must complete to finish the level")]
+    public int totalTurns = 3;
+
+    [Tooltip("Number of addend rows in the vertical addition grid")]
+    public int batteryRows = 2;
+
+    [Tooltip("Minimum target power value generated per turn")]
+    public int minTargetPower = 20;
+
+    [Tooltip("Maximum target power value generated per turn")]
+    public int maxTargetPower = 99;
+
+    [Tooltip("How many extra distractor batteries to add to the tray beyond the correct ones")]
+    public int extraDistractorBatteries = 3;
 
     //[Header("--- MODE: MEASURING LENGTH 1 ---")]
     // Add variables needed for Measuring Length 1 lesson
@@ -114,6 +131,9 @@ public class LevelData : ScriptableObject
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
     
+    [Header("--- MODE: PLACE VALUE ---")]
+    public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
+
 }
 
 // ========================================================================
@@ -132,5 +152,41 @@ public enum GameType
     SolidObjectsAndShapes,
     Division1,
     Fractions,
-    Directions
+    Directions,
+
+    PlaceValue
+}
+
+[System.Serializable]
+public class QuestionItem 
+{
+    [Header("The Question")]
+    [Tooltip("What the Door says/displays, e.g. 'Fourteen'")]
+    public string promptText;           
+    public AudioClip promptAudio;       
+
+    [Header("The Answer")]
+    [Tooltip("The correct text on the button, e.g. '14'")]
+    public string correctString;        
+
+    [Header("The Distractors")]
+    [Tooltip("Wrong answers to confuse the player, e.g. '41', '4'")]
+    public List<string> wrongAnswers;   
+
+}
+[System.Serializable]
+public class TreasureRound
+{
+    [Tooltip("The number the player needs to build, e.g., 45")]
+    public int targetValue; 
+
+    [Tooltip("The Legacy Sinhala text to show on the sign")]
+    public string signPromptText; 
+
+    [Tooltip("The voice audio saying the number")]
+    public AudioClip voicePrompt; 
+
+    // --- Helper Math properties (Read-Only) ---
+    public int RequiredTens => targetValue / 10;
+    public int RequiredOnes => targetValue % 10;
 }
