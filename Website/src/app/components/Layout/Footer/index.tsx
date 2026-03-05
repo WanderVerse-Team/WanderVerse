@@ -1,102 +1,167 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
-import { footerlinks } from '@/app/types/footerlinks'
 import { FooterLinksData } from '@/app/data/siteData'
+import { motion } from 'framer-motion'
+
+const SOCIALS = [
+  { label: 'Facebook', href: 'https://facebook.com', icon: 'f' },
+  { label: 'Twitter', href: 'https://twitter.com', icon: '𝕏' },
+  { label: 'Instagram', href: 'https://instagram.com', icon: '◈' },
+]
 
 const footer = () => {
-  // use static data
   const footerlinks = FooterLinksData
 
   return (
-    <div className='bg-black' id='first-section'>
-      <div className='container mx-auto max-w-2xl pt-48 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
-        <div className='grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8'>
-          {/* COLUMN-1 */}
-          <div className='col-span-4'>
-            <h4 className='text-white text-3xl leading-9 mb-4 lg:mb-20'>
-              WanderVerse
-            </h4>
-            <div className='flex items-center gap-4'>
-              <div className='footer-icons'>
-                <Link href='https://facebook.com'>
-                  <Image
-                    src={'/images/footer/vec.svg'}
-                    alt='facebook'
-                    width={15}
-                    height={20}
-                  />
-                </Link>
+    <footer
+      className="relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(160deg, #0a0a1a 0%, #1a0a0a 50%, #0a0a1a 100%)',
+      }}
+      id="first-section"
+    >
+      {/* Background orbs */}
+      <div
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10 animate-morph"
+        style={{ background: 'radial-gradient(circle, #f35b03, transparent)', filter: 'blur(80px)' }}
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-10 animate-morph"
+        style={{
+          background: 'radial-gradient(circle, #7678ed, transparent)',
+          filter: 'blur(80px)',
+          animationDelay: '5s',
+        }}
+      />
+
+      {/* Grid pattern */}
+      <div
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
+
+      <div className="relative z-10 container mx-auto max-w-7xl px-6 pt-20 pb-10">
+        {/* Top section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
+          {/* Brand column */}
+          <div className="lg:col-span-5">
+            {/* Logo */}
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-lg"
+                style={{ background: 'linear-gradient(135deg, #f35b03, #7678ed)' }}
+              >
+                W
               </div>
-              <div className='footer-icons'>
-                <Link href='https://twitter.com'>
-                  <Image
-                    src={'/images/footer/twitter.svg'}
-                    alt='twitter'
-                    width={25}
-                    height={20}
-                  />
+              <span
+                className="text-2xl font-black"
+                style={{
+                  background: 'linear-gradient(135deg, #f35b03, #7678ed)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                WanderVerse
+              </span>
+            </div>
+
+            <p className="text-white/50 text-base leading-relaxed max-w-xs mb-8">
+              Gamifying the local school syllabus — bridging education, trends, and
+              technology for Grade 3 students across Sri Lanka.
+            </p>
+
+            {/* Social icons */}
+            <div className="flex gap-3">
+              {SOCIALS.map((s) => (
+                <Link key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">
+                  <motion.div
+                    whileHover={{ scale: 1.15, y: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold text-white transition-colors duration-300"
+                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    title={s.label}
+                  >
+                    {s.icon}
+                  </motion.div>
                 </Link>
-              </div>
-              <div className='footer-icons'>
-                <Link href='https://instagram.com'>
-                  <Image
-                    src={'/images/footer/instagram.svg'}
-                    alt='instagram'
-                    width={25}
-                    height={20}
-                  />
-                </Link>
-              </div>
+              ))}
             </div>
           </div>
-          {/* CLOUMN-2/3 */}
-          {footerlinks.map((item, i) => (
-            <div key={i} className='group relative col-span-2'>
-              <p className='text-white text-xl font-extrabold mb-9'>
-                {item.section}
+
+          {/* Links columns */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {footerlinks.map((section, i) => (
+              <div key={i}>
+                <p className="text-white font-black text-sm tracking-widest uppercase mb-5">
+                  {section.section}
+                </p>
+                <ul className="space-y-3">
+                  {section.links.map((link, j) => (
+                    <li key={j}>
+                      <Link
+                        href={link.href}
+                        className="text-white/50 text-sm hover:text-white transition-colors duration-200 hover:translate-x-1 inline-flex items-center gap-1 group"
+                      >
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary text-xs">→</span>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+            {/* Contact column */}
+            <div>
+              <p className="text-white font-black text-sm tracking-widest uppercase mb-5">
+                Contact
               </p>
-              <ul>
-                {item.links.map((item, i) => (
-                  <li key={i} className='mb-5'>
-                    <Link
-                      href={`${item.href}`}
-                      className='text-white text-lg font-normal mb-6 space-links hover:text-white/60 hover:underline'>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="mailto:team@wanderverse.com"
+                    className="text-white/50 text-sm hover:text-primary transition-colors duration-200"
+                  >
+                    team@wanderverse.com
+                  </a>
+                </li>
+                <li className="text-white/50 text-sm">
+                  Colombo, Sri Lanka 🇱🇰
+                </li>
+                <li className="text-white/50 text-sm">IIT / Univ. of Westminster</li>
               </ul>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-      {/* All Rights Reserved */}
-      <div className='mx-auto max-w-2xl lg:max-w-7xl'>
-        <div className='pt-5 pb-5 px-4 sm:px-6 lg:px-4 border-t border-white/30'>
-          <div className='mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8'>
-            <div>
-              <p className='text-center md:text-start text-white text-lg'>
-                @2026 - All Rights Reserved by WanderVerse-Team
-              </p>
-            </div>
-            <div className='flex justify-center md:justify-end'>
-              <Link href='/'>
-                <p className='text-base text-white pr-6 hover:text-white/60 hover:underline'>
-                  Privacy policy
-                </p>
-              </Link>
-              <Link href='/'>
-                <p className='text-base text-white pl-6 border-solid border-l border-footer hover:text-white/60 hover:underline'>
-                  Terms & conditions
-                </p>
-              </Link>
-            </div>
+
+        {/* Gradient divider */}
+        <div
+          className="h-px w-full mb-8 opacity-30"
+          style={{ background: 'linear-gradient(90deg, transparent, #f35b03, #7678ed, transparent)' }}
+        />
+
+        {/* Bottom row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-white/30 text-sm">
+            © 2026 WanderVerse Team. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link href="/" className="text-white/30 text-sm hover:text-white/60 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/" className="text-white/30 text-sm hover:text-white/60 transition-colors">
+              Terms & Conditions
+            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   )
 }
 
