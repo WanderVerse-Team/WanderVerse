@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using WanderVerse.Framework.Utilities;
 
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
@@ -12,7 +13,10 @@ public class LevelData : ScriptableObject
     public string lessonTitle;
 
     [Header("--- 2. LEVEL INFO ---")]
+
+    [LevelID]
     public string levelID;
+
     public string levelTitle;
     // Island?Map? -> enum
     [TextArea] public string description;
