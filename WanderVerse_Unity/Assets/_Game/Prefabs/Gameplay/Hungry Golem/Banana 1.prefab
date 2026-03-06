@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2771070097144088172}
   - component: {fileID: 4898352364876522621}
   - component: {fileID: 8489359014240711611}
-  - component: {fileID: 7995529491504748826}
+  - component: {fileID: -8088499643419171190}
   m_Layer: 0
   m_Name: Banana 1
   m_TagString: Untagged
@@ -181,8 +181,8 @@ MonoBehaviour:
   fruitType: Banana
   fruitValue: 1
   controller: {fileID: 0}
---- !u!70 &7995529491504748826
-CapsuleCollider2D:
+--- !u!60 &-8088499643419171190
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -216,5 +216,27 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.32643652, y: 0.54685974}
+      - {x: -0.2617159, y: 1.0348969}
+      - {x: -0.21217859, y: 0.7126732}
+      - {x: -0.032805562, y: 0.5824547}
+      - {x: -0.061222613, y: 0.18688181}
+      - {x: -0.29356396, y: -0.3652687}
+      - {x: -0.58778507, y: -0.86136234}
+      - {x: -0.06407499, y: -0.9245033}
+      - {x: 0.19762576, y: -0.6861954}
+      - {x: 0.41330808, y: -0.3204801}
+      - {x: 0.41997582, y: -0.30280685}
+      - {x: 0.39272922, y: 0.13453668}
+  m_UseDelaunayMesh: 1

@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 8674794271276791588}
   - component: {fileID: 1870814520172492888}
   - component: {fileID: 251738834577669822}
-  - component: {fileID: 6557149887263125975}
+  - component: {fileID: 503300505618379975}
   m_Layer: 7
   m_Name: Banana 2
   m_TagString: Untagged
@@ -181,8 +181,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &6557149887263125975
-CapsuleCollider2D:
+--- !u!60 &503300505618379975
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -216,5 +216,27 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.5, y: 2}
-  m_Direction: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.48793936, y: 0.78037643}
+      - {x: 0, y: 1}
+      - {x: -0.54433304, y: 0.71573997}
+      - {x: -0.2500801, y: 0.4136696}
+      - {x: -0.22810912, y: 0.044555664}
+      - {x: -0.18906069, y: -0.24735641}
+      - {x: -0.35573947, y: -0.5886612}
+      - {x: -0.4454319, y: -0.8293532}
+      - {x: -0.13022363, y: -0.8807564}
+      - {x: 0.303079, y: -0.7480085}
+      - {x: 0.71198434, y: -0.21067429}
+      - {x: 0.7883671, y: 0.28868097}
+  m_UseDelaunayMesh: 1
