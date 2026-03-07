@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Scene_SubjectSelection.unity
     guid: af7f0bfd962a10a49bd0f89290133233
   - enabled: 1
-    path: Assets/_Game/Scenes/Menus/Scene_LangSelection.unity
+    path: Assets/_Game/Scenes/Menus/Scene_LanguageSelection.unity
     guid: a0327fd718bed644eba60d426485846b
   - enabled: 1
     path: Assets/_Game/Scenes/Menus/Scene_WorldMap.unity
