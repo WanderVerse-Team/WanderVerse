@@ -50,7 +50,7 @@ public class HungryGolemController : BaseLevelController
     public ParticleSystem fireworks;
 
     // 1. Tell the framework we are a Spawner game
-    protected override GameType SupportedGameType => GameType.Spawner;
+    protected override GameType SupportedGameType => GameType.Counting;
 
     protected override void Start()
 {
