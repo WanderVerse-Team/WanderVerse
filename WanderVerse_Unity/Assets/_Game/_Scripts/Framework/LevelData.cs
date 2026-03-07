@@ -138,7 +138,7 @@ public class LevelData : ScriptableObject
 
 public enum GameType
 {
-    Spawner,
+    Counting,
     Numbers1,
     Addition1,
     MeasuringLength1,

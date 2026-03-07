@@ -2,9 +2,12 @@ using UnityEngine;
 using Firebase;
 using Firebase.Extensions;
 using System.Threading.Tasks;
+using System;
 
 public class AppInitialization : MonoBehaviour
 {
+    public static event Action OnInitializationComplete;
+
     void Start()
     {
         Debug.Log("Starting Firebase Initialization...");
@@ -20,8 +23,10 @@ public class AppInitialization : MonoBehaviour
             else
             {
                 Debug.LogError(System.String.Format(
-                  "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
+
+            OnInitializationComplete?.Invoke();
         });
     }
 }
