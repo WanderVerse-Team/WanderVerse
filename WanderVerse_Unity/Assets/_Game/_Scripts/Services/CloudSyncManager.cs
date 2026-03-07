@@ -320,21 +320,60 @@ namespace WanderVerse.Backend.Services
         }
 
         // To get the leaderboard (for senmith's leaderboardController)
+        // Caches the result on-device for 5 minutes to avoid hitting Firestore on every open.
+        private const string LeaderboardCacheKey = "leaderboard_cache";
+        private const string LeaderboardCacheTimeKey = "leaderboard_cache_time";
+        private const float LeaderboardCacheDuration = 5 * 60f; // 5 minutes in seconds
+
         public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
         {
+            // Check if a valid cache exists on this device
+            if (PlayerPrefs.HasKey(LeaderboardCacheKey) && PlayerPrefs.HasKey(LeaderboardCacheTimeKey))
+            {
+                // Use Unix timestamp (seconds since 1970) so it survives app restarts
+                double cachedAt = double.Parse(PlayerPrefs.GetString(LeaderboardCacheTimeKey));
+                double now = (System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
+                if (now - cachedAt < LeaderboardCacheDuration)
+                {
+                    string cached = PlayerPrefs.GetString(LeaderboardCacheKey);
+                    Debug.Log("[Leaderboard] Serving from device cache.");
+                    onSuccess?.Invoke(cached);
+                    yield break;
+                }
+            }
+
+            // Cache expired or missing — fetch fresh from server
             using (UnityWebRequest request = UnityWebRequest.Get(_leaderboardURL))
             {
                 yield return request.SendWebRequest();
 
                 if (request.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log("[Leaderboard] Success: " + request.downloadHandler.text);
-                    onSuccess?.Invoke(request.downloadHandler.text);
+                    string json = request.downloadHandler.text;
+                    Debug.Log("[Leaderboard] Success: " + json);
+
+                    // Save to device cache with Unix timestamp
+                    double now = (System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
+                    PlayerPrefs.SetString(LeaderboardCacheKey, json);
+                    PlayerPrefs.SetString(LeaderboardCacheTimeKey, now.ToString());
+                    PlayerPrefs.Save();
+
+                    onSuccess?.Invoke(json);
                 }
                 else
                 {
                     Debug.LogError("[Leaderboard] Failed: " + request.error);
-                    onFailure?.Invoke(request.error);
+
+                    // If fetch fails but we have a stale cache, use it rather than showing nothing
+                    if (PlayerPrefs.HasKey(LeaderboardCacheKey))
+                    {
+                        Debug.LogWarning("[Leaderboard] Using stale cache due to network failure.");
+                        onSuccess?.Invoke(PlayerPrefs.GetString(LeaderboardCacheKey));
+                    }
+                    else
+                    {
+                        onFailure?.Invoke(request.error);
+                    }
                 }
             }
         }
