@@ -33,6 +33,7 @@ namespace WanderVerse.Framework.Data
         
         public int selectedGrade = 3;
         public string selectedSubject = "Maths";
+        public string selectedLanguage = "Sinhala"; 
         public bool hasCompletedOnboarding = false;
 
         

@@ -246,13 +246,25 @@ namespace WanderVerse.Backend.Services
             if (CloudSyncManager.Instance != null)
             {
                 CloudSyncManager.Instance.InitializeAsGuest();
+
+                if (CloudSyncManager.Instance.CurrentData != null && 
+                    CloudSyncManager.Instance.CurrentData.hasCompletedOnboarding)
+                {
+                    Debug.Log("[Auth] Guest returning. Loading World Map.");
+                    SceneManager.LoadScene("Scene_WorldMap");
+                }
+                else
+                {
+                    Debug.Log("[Auth] New Guest. Loading Onboarding.");
+                    SceneManager.LoadScene("Scene_GradeSelection");
+                }
             }
             else
             {
                 Debug.LogWarning("[Auth] CloudSyncManager missing!");
-            }
+                SceneManager.LoadScene("Scene_GradeSelection");
 
-            SceneManager.LoadScene("Scene_WorldMap");
+            }
         }
 
 
@@ -432,9 +444,33 @@ namespace WanderVerse.Backend.Services
         private void LoadWorldMap()
         {
             if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
+            {
+                // 1. Tell CloudSyncManager to fetch the user data
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
-            
-            SceneManager.LoadScene("Scene_WorldMap");
+                
+                // 2. Start a Coroutine to wait for the data to arrive before switching scenes
+                StartCoroutine(WaitForDataAndRedirect());
+            }
+        }
+
+        private IEnumerator WaitForDataAndRedirect()
+        {
+            // Wait until CloudSyncManager has finished fetching the profile
+            yield return new WaitUntil(() => CloudSyncManager.Instance.CurrentData != null);
+
+            PlayerData data = CloudSyncManager.Instance.CurrentData;
+
+            // Check the flag defined in PlayerData.cs
+            if (data.hasCompletedOnboarding)
+            {
+                Debug.Log("[Auth] User has completed onboarding. Loading World Map...");
+                SceneManager.LoadScene("Scene_WorldMap");
+            }
+            else
+            {
+                Debug.Log("[Auth] New User detected. Loading Grade Selection...");
+                SceneManager.LoadScene("Scene_GradeSelection");
+            }
         }
 
         private void UpdateFeedback(string msg) { if (feedbackText) feedbackText.text = msg; }
