@@ -404,7 +404,7 @@ namespace WanderVerse.Backend.Services
 
         [Header("Progress Bars")]
         public Slider subjectProgressBar; // Overall Maths progress
-        public TextMeshProUGUI map1PercentageText; // e.g., "Island 1: 80%"
+        public TextMeshProUGUI map1PercentageText; 
         
         [Header("Badges")]
         public GameObject[] badgeIcons; // Seshani drags badge images here
@@ -419,33 +419,33 @@ namespace WanderVerse.Backend.Services
             var data = CloudSyncManager.Instance.CurrentData;
             if (data == null) return;
 
-            // 1. Basic Info
+            // Basic Info
             usernameText.text = data.userName;
             streakText.text = "Login Streak: " + CalculateStreak(data) + " Days";
             rankText.text = GetRankName(data.xp);
 
-            // 2. Map & Subject Progress
+            // Map & Subject Progress
             float totalProgress = CalculateSubjectProgress(data);
             subjectProgressBar.value = totalProgress;
             
             map1PercentageText.text = $"Island 1: {(totalProgress * 100):F0}%";
 
-            // 3. Badges (Simple Logic: If XP > 500, show Badge 0)
+            // Badges (Simple Logic: If XP > 500, show Badge 0)
             badgeIcons[0].SetActive(data.xp > 500);
             badgeIcons[1].SetActive(data.currentLevel > 5);
         }
 
         private float CalculateSubjectProgress(PlayerData data)
         {
-            if (data.levelProgress.Count == 0) return 0;
+            if (data.levelProgress == null || data.levelProgress.Count == 0) return 0f;
             
             int completed = 0;
             foreach (var level in data.levelProgress)
             {
                 if (level.starsEarned > 0) completed++;
             }
-            // Assuming there are 12 levels total for the subject
-            return (float)completed / 12f; 
+
+            return (float)completed / data.levelProgress.Count; 
         }
 
         private string GetRankName(int xp)
@@ -457,7 +457,7 @@ namespace WanderVerse.Backend.Services
 
         private int CalculateStreak(PlayerData data)
         {
-            // Placeholder: You'll need to compare lastDailyResetTimestamp with current time
+            // Placeholder: You'll need to compare lastDailyResetTimestamp with current time (to be updated after EnergyManager is created)
             return 1; 
         }
     }
