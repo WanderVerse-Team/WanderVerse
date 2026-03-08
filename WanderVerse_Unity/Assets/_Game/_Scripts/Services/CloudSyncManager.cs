@@ -394,4 +394,29 @@ namespace WanderVerse.Backend.Services
             Debug.Log($"[WorldMap] Unlocked Level: {levelID}");
         }
     }
+
+    public class DashboardUIController : MonoBehaviour
+    {
+        public TextMeshProUGUI usernameText;
+        public TextMeshProUGUI xpText;
+        public TextMeshProUGUI levelText;
+        public Slider energySlider;
+
+        void OnEnable() // Runs every time the Dashboard panel is opened
+        {
+            UpdateDashboard();
+        }
+
+        public void UpdateDashboard()
+        {
+            var data = CloudSyncManager.Instance.CurrentData;
+            if (data != null)
+            {
+                usernameText.text = data.userName;
+                xpText.text = $"XP: {data.xp}";
+                levelText.text = $"Level: {data.currentLevel}";
+                energySlider.value = (float)data.energy / data.maxEnergy;
+            }
+        }
+    }
 }
