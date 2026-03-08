@@ -40,6 +40,9 @@ namespace WanderVerse.Backend.Services
         void Start()
         {
             StartCoroutine(InitializeFirebaseAndSetup());
+
+            loginEmailInput.onValueChanged.AddListener(delegate { ClearError(); });
+            loginPasswordInput.onValueChanged.AddListener(delegate { ClearError(); });
         }
 
         private IEnumerator InitializeFirebaseAndSetup()
@@ -267,6 +270,49 @@ namespace WanderVerse.Backend.Services
             }
         }
 
+        public void ResetPassword()
+        {
+            string input = loginEmailInput.text.Trim();
+
+            if (string.IsNullOrEmpty(input))
+            {
+                UpdateFeedback("Enter your email to reset password.", true);
+                return;
+            }
+
+            // Since usernames only have dummy emails, we block this immediately.
+            if (!input.Contains("@"))
+            {
+                UpdateFeedback("Password reset is only available via linked Email accounts.", true);
+                return;
+            }
+
+            if (input.EndsWith("@wanderverse.wuaze.com")) 
+            {
+                UpdateFeedback("This account does not have a recovery email linked.", true);
+                return;
+            }
+
+            StartCoroutine(PerformPasswordReset(input));
+        }
+
+        private IEnumerator PerformPasswordReset(string email)
+        {
+            UpdateFeedback("Sending reset link...", false);
+
+            var task = _auth.SendPasswordResetEmailAsync(email);
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (task.Exception != null)
+            {
+                UpdateFeedback("Account not found or invalid email.", true);
+            }
+            else
+            {
+                UpdateFeedback("Recovery email sent! Check your inbox.", false);
+            }
+        }
+
 
         private IEnumerator SignUpRoutine(string username, string email, string password)
         {
@@ -330,7 +376,7 @@ namespace WanderVerse.Backend.Services
         {
             if (_isWorking) yield break;
             _isWorking = true;
-            UpdateFeedback("Looking up account...");
+            UpdateFeedback("Veryfying username...", false);
 
             // Finds the email for this username
             var docTask = _db.Collection("usernames").Document(username).GetSnapshotAsync();
@@ -338,13 +384,14 @@ namespace WanderVerse.Backend.Services
 
             if (!docTask.Result.Exists)
             {
-                UpdateFeedback("Username not found.");
+                UpdateFeedback("Username not found", true);
                 _isWorking = false;
                 yield break;
             }
 
             // Get the real email (or shadow email)
             string realEmail = docTask.Result.GetValue<string>("email");
+            UpdateFeedback("Authenticating...", false);
 
             // Login with that email
             var authTask = _auth.SignInWithEmailAndPasswordAsync(realEmail, password);
@@ -352,12 +399,12 @@ namespace WanderVerse.Backend.Services
 
             if (authTask.Exception != null)
             {
-                UpdateFeedback("Login Failed. Check password.");
+                UpdateFeedback("Invalid password. Please try again.", true);                
                 _isWorking = false;
             }
             else
             {
-                UpdateFeedback("Success!");
+                UpdateFeedback("Welcome!", false);
                 LoadWorldMap();
             }
         }
@@ -366,19 +413,23 @@ namespace WanderVerse.Backend.Services
         {
             if (_isWorking) yield break;
             _isWorking = true;
-            UpdateFeedback("Logging in...");
+            UpdateFeedback("Logging in...", false);
 
             var authTask = _auth.SignInWithEmailAndPasswordAsync(email, password);
             yield return new WaitUntil(() => authTask.IsCompleted);
 
             if (authTask.Exception != null)
             {
-                UpdateFeedback($"Error: {authTask.Exception.InnerException?.Message}");
+                // Log the actual error for the developer
+                Debug.LogWarning($"[Auth] Login Failed: {authTask.Exception.InnerException?.Message}");
+                
+                // Display a user-friendly message to the player
+                UpdateFeedback("Incorrect email or password. Please try again.", true);
                 _isWorking = false;
             }
             else
             {
-                UpdateFeedback("Success!");
+                UpdateFeedback("Login Successful!", false);
                 LoadWorldMap();
             }
         }
@@ -473,6 +524,19 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        private void UpdateFeedback(string msg) { if (feedbackText) feedbackText.text = msg; }
+        private void UpdateFeedback(string msg, bool isError = false) 
+        { 
+            if (feedbackText != null) 
+            {
+                feedbackText.text = msg;
+                feedbackText.color = isError ? Color.red : Color.white; 
+            }
+        }
+
+        private void ClearError()
+        {
+            // This resets the text to empty and the color back to white
+            UpdateFeedback("", false); 
+        }
     }
 }
