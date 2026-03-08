@@ -422,11 +422,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4887621339946785630, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4887621339946785630, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4887621339946785630, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -450,15 +450,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.5960785
+      value: 0.19607843
       objectReference: {fileID: 0}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.9843138
+      value: 0.8235294
       objectReference: {fileID: 0}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_fontColor.r
-      value: 0.5960785
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_sharedMaterial
@@ -466,7 +466,7 @@ PrefabInstance:
       objectReference: {fileID: -8967202990559299774, guid: 2b2beb09ddb1b424cab9b182cf79e190, type: 2}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4288215960
+      value: 4281520895
       objectReference: {fileID: 0}
     - target: {fileID: 8101868587455462502, guid: a032612d006eabd4abb4b0e56f3671b0, type: 3}
       propertyPath: m_hasFontAssetChanged
@@ -1685,20 +1685,40 @@ PrefabInstance:
     m_TransformParent: {fileID: 930953963}
     m_Modifications:
     - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
+    - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.11549148
+      objectReference: {fileID: 0}
+    - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.6226415
+      objectReference: {fileID: 0}
+    - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -7054506329323419090, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
     - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
+      propertyPath: m_fontColor32.rgba
+      value: 4280090783
       objectReference: {fileID: 0}
     - target: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
+      propertyPath: m_HorizontalAlignment
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 643408435220747354, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_Pivot.x
@@ -1781,12 +1801,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1435231615889325340, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 279.33984
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435231615889325340, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 73.709
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435231615889325340, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -24.2
+      value: -9.988739
       objectReference: {fileID: 0}
     - target: {fileID: 1435231615889325340, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 57
+      value: 45.145515
       objectReference: {fileID: 0}
     - target: {fileID: 1744271348533217541, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1800,13 +1828,13 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: HungryGolemController, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 4404440508627086409, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -266322240660303365, guid: 69197d98b2ea238428c34135e91f84e0, type: 3}
     - target: {fileID: 5907178770259109344, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_Name
       value: TutorialPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 6880245502425665396, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
-      propertyPath: m_Name
-      value: DialogText
       objectReference: {fileID: 0}
     - target: {fileID: 6986089339257694043, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2420,6 +2448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1976340467}
   - component: {fileID: 1976340468}
+  - component: {fileID: 1976340469}
   m_Layer: 0
   m_Name: MoutheZone
   m_TagString: Mouth
@@ -2478,6 +2507,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &1976340469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976340466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8560770d49840ac43964d54144c44e30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GolemDropZone
+  controller: {fileID: 0}
 --- !u!114 &2030254659 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 259282599792702356, guid: 0542704152e25c441b8d72f3d5fc0a16, type: 3}
@@ -2871,12 +2913,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8615986451434293850, guid: 95ebe88335c103f4ca10bbdae30563a2, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
+      propertyPath: m_SpriteTilingProperty.newSize.x
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8615986451434293850, guid: 95ebe88335c103f4ca10bbdae30563a2, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
+      propertyPath: m_SpriteTilingProperty.newSize.y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615986451434293850, guid: 95ebe88335c103f4ca10bbdae30563a2, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 2.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615986451434293850, guid: 95ebe88335c103f4ca10bbdae30563a2, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2.98
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4150140086167952408, guid: 95ebe88335c103f4ca10bbdae30563a2, type: 3}
