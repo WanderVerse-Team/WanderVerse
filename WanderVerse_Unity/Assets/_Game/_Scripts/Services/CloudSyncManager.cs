@@ -397,12 +397,19 @@ namespace WanderVerse.Backend.Services
 
     public class DashboardUIController : MonoBehaviour
     {
+        [Header("Top Profile")]
         public TextMeshProUGUI usernameText;
-        public TextMeshProUGUI xpText;
-        public TextMeshProUGUI levelText;
-        public Slider energySlider;
+        public TextMeshProUGUI rankText; // Calculated based on XP
+        public TextMeshProUGUI streakText;
 
-        void OnEnable() // Runs every time the Dashboard panel is opened
+        [Header("Progress Bars")]
+        public Slider subjectProgressBar; // Overall Maths progress
+        public TextMeshProUGUI map1PercentageText; // e.g., "Island 1: 80%"
+        
+        [Header("Badges")]
+        public GameObject[] badgeIcons; // Seshani drags badge images here
+
+        void OnEnable() 
         {
             UpdateDashboard();
         }
@@ -410,13 +417,48 @@ namespace WanderVerse.Backend.Services
         public void UpdateDashboard()
         {
             var data = CloudSyncManager.Instance.CurrentData;
-            if (data != null)
+            if (data == null) return;
+
+            // 1. Basic Info
+            usernameText.text = data.userName;
+            streakText.text = "Login Streak: " + CalculateStreak(data) + " Days";
+            rankText.text = GetRankName(data.xp);
+
+            // 2. Map & Subject Progress
+            float totalProgress = CalculateSubjectProgress(data);
+            subjectProgressBar.value = totalProgress;
+            
+            map1PercentageText.text = $"Island 1: {(totalProgress * 100):F0}%";
+
+            // 3. Badges (Simple Logic: If XP > 500, show Badge 0)
+            badgeIcons[0].SetActive(data.xp > 500);
+            badgeIcons[1].SetActive(data.currentLevel > 5);
+        }
+
+        private float CalculateSubjectProgress(PlayerData data)
+        {
+            if (data.levelProgress.Count == 0) return 0;
+            
+            int completed = 0;
+            foreach (var level in data.levelProgress)
             {
-                usernameText.text = data.userName;
-                xpText.text = $"XP: {data.xp}";
-                levelText.text = $"Level: {data.currentLevel}";
-                energySlider.value = (float)data.energy / data.maxEnergy;
+                if (level.starsEarned > 0) completed++;
             }
+            // Assuming there are 12 levels total for the subject
+            return (float)completed / 12f; 
+        }
+
+        private string GetRankName(int xp)
+        {
+            if (xp < 100) return "Novice Explorer";
+            if (xp < 500) return "Junior Wanderer";
+            return "Master Pathfinder";
+        }
+
+        private int CalculateStreak(PlayerData data)
+        {
+            // Placeholder: You'll need to compare lastDailyResetTimestamp with current time
+            return 1; 
         }
     }
 }
