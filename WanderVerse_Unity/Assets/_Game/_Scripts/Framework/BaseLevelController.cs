@@ -47,6 +47,17 @@ public abstract class BaseLevelController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
+        if (GameManager.Instance != null) 
+        {
+            LevelData injectedData = GameManager.Instance.GetPendingLevelData();
+
+            if (injectedData != null) 
+            {
+                levelData = injectedData;
+                Debug.Log($"[BaseLevelController] LevelData injected from Menu: {levelData.levelTitle}");
+            }
+        }
+
         if (!ValidateLevelData()) return;
 
         LoadBaseData();
@@ -60,13 +71,11 @@ public abstract class BaseLevelController : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            Debug.Log($"[BaseLevelController] Waiting for GameManager to start the {gameObject.name}...");
+            Debug.Log($"[BaseLevelController] GameManager found! Starting the {gameObject.name}...");
         }
         else
         {
-            Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
-
-            //StartGame();
+            Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode (using Inspector data).");
         }
 
         StartGame();

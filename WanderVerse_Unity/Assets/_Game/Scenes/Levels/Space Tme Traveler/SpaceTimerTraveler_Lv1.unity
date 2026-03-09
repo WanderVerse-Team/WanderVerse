@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f577d03839af048b48c4e92506cd81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DaysSequenceController
-  levelData: {fileID: 0}
+  levelData: {fileID: 11400000, guid: d23f1b4f1ad532445b98047baa6b36af, type: 2}
   tutorialPanel: {fileID: 0}
   dialogueText: {fileID: 0}
   mascotImage: {fileID: 0}
@@ -554,8 +554,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5854d8aa898de984dab9cf63ed80193c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WordJumbleManager
-  targetWord: MONDAY
-  totalLettersRequired: 6
+  targetWord: saduda
+  totalLettersRequired: 3
   individualLettersContainer: {fileID: 0}
   completedDayTile: {fileID: 0}
 --- !u!4 &2029243731
