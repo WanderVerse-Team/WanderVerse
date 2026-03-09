@@ -42,3 +42,5 @@ firebase-admin-key.json
 
 # Environment files
 *.env
+.vercel
+.env*.local
