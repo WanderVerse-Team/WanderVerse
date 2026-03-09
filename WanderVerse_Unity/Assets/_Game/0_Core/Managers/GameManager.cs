@@ -5,7 +5,7 @@ using WanderVerse.Backend.Services;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
     public event Action<string, int, int, int, bool> OnLevelCompleted;
