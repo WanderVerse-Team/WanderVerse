@@ -1,10 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public abstract class BaseLevelController : MonoBehaviour
 {
     [Header("--- LEVEL DATA ---")]
     [Tooltip("Drag the LevelData ScriptableObject here")]
     [SerializeField] protected LevelData levelData;
+
+    [Header("--- MASCOT TUTORIAL---")]
+    public GameObject tutorialPanel;
+    public TMP_Text dialogueText;
+    public Image mascotImage;
+    [TextArea(2, 4)] public string[] mascotMessages;
+    public AudioClip[] mascotVoices;
+    public Sprite[] mascotPoses;
+
+    private int currentMessageIndex = 0;
 
     // Override this in the child class and add the GameType it supports
     protected abstract GameType SupportedGameType { get; }
@@ -124,15 +136,83 @@ public abstract class BaseLevelController : MonoBehaviour
 
     protected virtual void StartGame()
     {
+        isGameActive = false; // Make sure the game is paused!
+        
+        // If we have tutorial messages, show them
+        if (tutorialPanel != null && mascotMessages != null && mascotMessages.Length > 0)
+        {
+            currentMessageIndex = 0;
+            tutorialPanel.SetActive(true);
+            ShowCurrentTutorialMessage();
+        }
+        else
+        {
+            // If no tutorial is set up, skip straight to the game
+            BeginLevel();
+        }
+    }
+
+    private void ShowCurrentTutorialMessage()
+    {
+        // 1. Text
+        if (dialogueText != null && mascotMessages.Length > currentMessageIndex) 
+        {
+            // Get the raw text from the Inspector
+            string rawMessage = mascotMessages[currentMessageIndex];
+
+            // --- NEW: Replace our special placeholders with the actual numbers! ---
+            string formattedMessage = rawMessage.Replace("{TARGET}", targetScore.ToString());
+            formattedMessage = formattedMessage.Replace("{TIME}", levelTimeLimit.ToString());
+            formattedMessage = formattedMessage.Replace("{MISTAKES}", maxMistakes.ToString());
+
+            // Show the formatted text on the screen
+            dialogueText.text = formattedMessage;
+        }
+
+        // 2. Audio
+        if (AudioManager.Instance != null && mascotVoices != null && mascotVoices.Length > currentMessageIndex)
+        {
+            AudioClip voiceClip = mascotVoices[currentMessageIndex];
+            if (voiceClip != null) AudioManager.Instance.PlayVoiceover(voiceClip);
+        }
+
+        // 3. Looping Poses
+        if (mascotImage != null && mascotPoses != null && mascotPoses.Length > 0)
+        {
+            int loopedIndex = currentMessageIndex % mascotPoses.Length;
+            if (mascotPoses[loopedIndex] != null) mascotImage.sprite = mascotPoses[loopedIndex];
+        }
+    }
+
+    // Call this from a full-screen invisible Button on your Tutorial Panel!
+    public void AdvanceTutorial()
+    {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
+        
+        currentMessageIndex++;
+
+        if (currentMessageIndex < mascotMessages.Length)
+        {
+            ShowCurrentTutorialMessage();
+        }
+        else
+        {
+            // Tutorial is over!
+            if (tutorialPanel != null) tutorialPanel.SetActive(false);
+            BeginLevel(); 
+        }
+    }
+
+    // This runs AFTER the tutorial is finished.
+    // Child classes (like TreasurePacker) can override this to spawn their specific items!
+    protected virtual void BeginLevel()
+    {
         isGameActive = true;
         currentScore = 0;
         mistakeCount = 0;
         timeRemaining = levelTimeLimit;
 
-        // Update the UI to display the current score
         OnScoreUpdated?.Invoke(currentScore);
-
-        // Update the timer to show the remaining time
         if (useTimer) OnTimerUpdated?.Invoke(timeRemaining);
     }
 

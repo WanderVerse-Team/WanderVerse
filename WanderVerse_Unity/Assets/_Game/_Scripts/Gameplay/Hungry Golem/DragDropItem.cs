@@ -8,7 +8,7 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Vector3 offset;
     private Camera mainCamera;
 
-    private bool isReleased = false;
+    public bool isReleased = false;
     
 
     private void Awake()

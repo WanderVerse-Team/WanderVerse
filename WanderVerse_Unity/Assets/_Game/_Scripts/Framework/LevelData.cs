@@ -130,6 +130,10 @@ public class LevelData : ScriptableObject
     [Header("--- MODE: PLACE VALUE ---")]
     public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
 
+    [Header("--- MODE: DAYS SEQUENCE ---")]
+    [Tooltip("The correct sequence of days. e.g. Monday, Tuesday...")]
+    public List<string> correctDaysSequence;
+
 }
 
 // ========================================================================
@@ -149,8 +153,8 @@ public enum GameType
     Division1,
     Fractions,
     Directions,
-
-    PlaceValue
+    PlaceValue,
+    DaysSequence
 }
 
 [System.Serializable]
