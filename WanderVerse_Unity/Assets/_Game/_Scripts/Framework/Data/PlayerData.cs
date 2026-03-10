@@ -29,6 +29,7 @@ namespace WanderVerse.Framework.Data
         public int maxEnergy = 6;
         public long lastRechargeTimestamp;   
         public long lastDailyResetTimestamp; 
+        public int loginStreak = 1;
 
         
         public int selectedGrade = 3;

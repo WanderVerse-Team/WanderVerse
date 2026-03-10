@@ -38,6 +38,11 @@ MonoBehaviour:
   spawnRate: 2
   itemFallSpeed: 3
   questions: []
+  totalTurns: 3
+  batteryRows: 2
+  minTargetPower: 20
+  maxTargetPower: 99
+  extraDistractorBatteries: 3
   treasureRounds:
   - targetValue: 13
     signPromptText: 13
@@ -64,19 +69,19 @@ MonoBehaviour:
     signPromptText: 23
     voicePrompt: {fileID: 0}
   - targetValue: 25
-    signPromptText: 35
+    signPromptText: 25
     voicePrompt: {fileID: 0}
   - targetValue: 26
-    signPromptText: 36
+    signPromptText: 26
     voicePrompt: {fileID: 0}
   - targetValue: 27
-    signPromptText: 37
+    signPromptText: 27
     voicePrompt: {fileID: 0}
   - targetValue: 28
-    signPromptText: 38
+    signPromptText: 28
     voicePrompt: {fileID: 0}
   - targetValue: 29
-    signPromptText: 39
+    signPromptText: 29
     voicePrompt: {fileID: 0}
   - targetValue: 31
     signPromptText: 31
@@ -249,3 +254,4 @@ MonoBehaviour:
   - targetValue: 98
     signPromptText: 98
     voicePrompt: {fileID: 0}
+  correctDaysSequence: []

@@ -51,7 +51,7 @@ MonoBehaviour:
   musicSource: {fileID: 3772301091986259998}
   sfxSource: {fileID: 8243401000157046122}
   voiceSource: {fileID: 4064962523186211523}
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 8422652102412ab4496b4f6e49403b96, type: 3}
   successSound: {fileID: 8300000, guid: 649fd9f46cb5a5c4fbb764f77ba85d65, type: 3}
   errorSound: {fileID: 8300000, guid: 229ee1656eaa0af41a40ac874ce2e8a5, type: 3}
   levelCompleteSound: {fileID: 8300000, guid: 35eca5df384e26f43b737f531e8a9166, type: 3}
