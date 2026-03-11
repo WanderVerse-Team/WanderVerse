@@ -23,7 +23,6 @@ namespace WanderVerse.Backend.Services
 
         private void Start()
         {
-            // Check if we passed midnight as soon as the game loads
             CheckDailyReset();
         }
 
@@ -40,7 +39,6 @@ namespace WanderVerse.Backend.Services
             DateTime lastResetDate = DateTimeOffset.FromUnixTimeSeconds(data.lastDailyResetTimestamp).LocalDateTime.Date;
             DateTime currentDate = DateTimeOffset.Now.Date;
 
-            // If the current date is strictly greater than the last saved date, midnight has passed!
             if (currentDate > lastResetDate)
             {
                 Debug.Log("[EnergyManager] A new day has started! Resetting energy to 6.");
@@ -49,8 +47,6 @@ namespace WanderVerse.Backend.Services
 
                 CloudSyncManager.Instance.SyncProgress(data);
             }
-            // If they set their clock backwards, do NOT update the timestamp!
-            // Leave it in the future. They will not get any energy until real time catches up to tomorrow.
             else if (currentDate < lastResetDate)
             {
                 Debug.LogWarning("[EnergyManager] Device clock was moved backwards. Updating timestamp.");
@@ -64,7 +60,6 @@ namespace WanderVerse.Backend.Services
         /// </summary>
         public bool TryConsumeEnergy()
         {
-            // Always run the reset check first, just in case they left the app open over midnight
             CheckDailyReset();
 
             PlayerData data = CloudSyncManager.Instance.CurrentData;
@@ -108,7 +103,6 @@ namespace WanderVerse.Backend.Services
 
             DateTime lastResetDate = DateTimeOffset.FromUnixTimeSeconds(data.lastDailyResetTimestamp).LocalDateTime.Date;
 
-            // SCENARIO 1: A legitimate new day has passed!
             if (trueServerTime.Date > lastResetDate)
             {
                 Debug.Log("[EnergyManager] Server verified a new day! Resetting energy.");
@@ -117,16 +111,13 @@ namespace WanderVerse.Backend.Services
 
                 CloudSyncManager.Instance.SyncProgress(data);
             }
-            // SCENARIO 2: The Server caught them returning from a fake future! (Your brilliant catch)
             else if (trueServerTime.Date < lastResetDate)
             {
                 Debug.LogWarning("[EnergyManager] Server detected future-tampering! Reverting timestamp to reality.");
-                // We do NOT give them energy here. We just fix their broken save file.
                 data.lastDailyResetTimestamp = new DateTimeOffset(trueServerTime).ToUnixTimeSeconds();
 
                 CloudSyncManager.Instance.SyncProgress(data);
             }
-            // SCENARIO 3: Same day. Nothing to do.
             else
             {
                 Debug.Log("[EnergyManager] Server time synced. No reset needed yet.");
