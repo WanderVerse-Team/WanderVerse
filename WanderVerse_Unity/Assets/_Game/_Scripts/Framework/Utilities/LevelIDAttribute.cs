@@ -2,6 +2,6 @@ using UnityEngine;
 
 namespace WanderVerse.Framework.Utilities
 {
-    // This creates the [LevelID] tag we will use in other scripts
+    // This creates the [LevelID] tag
     public class LevelIDAttribute : PropertyAttribute { }
 }

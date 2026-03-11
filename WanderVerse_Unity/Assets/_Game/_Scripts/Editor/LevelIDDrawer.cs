@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEditor; // Required for Editor scripts
+using UnityEditor;
 using System;
 using WanderVerse.Framework.Utilities;
 using WanderVerse.Framework.Data;
@@ -12,20 +12,19 @@ namespace WanderVerse.EditorScripts
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            // Make sure the team is using it on a string
             if (property.propertyType == SerializedPropertyType.String)
             {
-                // 1. Get our 11 lessons from the catalog
+                // Get levelIDs from the catalog
                 string[] options = CourseCatalog.AllLevels;
 
-                // 2. Find which one is currently selected
+                // Find which one is currently selected
                 int currentIndex = Array.IndexOf(options, property.stringValue);
                 if (currentIndex < 0) currentIndex = 0; // Default to the first lesson if empty
 
-                // 3. Draw the dropdown in the Unity Inspector!
+                // Draw the dropdown in the Unity Inspector!
                 currentIndex = EditorGUI.Popup(position, label.text, currentIndex, options);
 
-                // 4. Save the exact string back to the variable
+                // Save the exact string back to the variable
                 property.stringValue = options[currentIndex];
             }
             else
