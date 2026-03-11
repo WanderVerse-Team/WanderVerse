@@ -271,15 +271,10 @@ namespace WanderVerse.Backend.Services
             {
                 Debug.Log("[Cloud] Sync Success!");
 
-                // TO DO: @Randiv - Uncomment this block when EnergyManager is ready
-                /*
-                // Note: Firestore does not return a Date header like HTTP. 
-                // You can use System time or fetch ServerTimestamp separately.
                 if (EnergyManager.Instance != null) 
                 {
-                    // EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
+                    EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
                 }
-                */
             }
 
             _isSaving = false;
