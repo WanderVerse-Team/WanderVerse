@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 87d3f67e154c990449dc689948aca2ec
+guid: 90edaf264e2560c438348fdbe67240e5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6364722131932485154
-    second: cake_right_0
+      213: 9144123285846064431
+    second: Orange_w_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cake_right_0
+      name: Orange_w_0
       rect:
         serializedVersion: 2
-        x: 45
-        y: 45
-        width: 233
-        height: 434
+        x: 214
+        y: 69
+        width: 241
+        height: 236
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 22617e7ae09045850800000000000000
-      internalID: 6364722131932485154
+      spriteID: f2d7b3b4ea376ee70800000000000000
+      internalID: 9144123285846064431
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cake_right_0: 6364722131932485154
+      Orange_w_0: 9144123285846064431
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 940a516344dd6164bac7727069b42291
+guid: 55cdece9f18604a4288d2c89baeca841
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9045588127235837070
-    second: Pizza_right_0
+      213: -4878703048531106535
+    second: Sandwich_w_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pizza_right_0
+      name: Sandwich_w_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 23
-        width: 127
-        height: 321
+        x: 181
+        y: 40
+        width: 307
+        height: 292
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8c0264e972688d70800000000000000
-      internalID: 9045588127235837070
+      spriteID: 91520b30d6d5b4cb0800000000000000
+      internalID: -4878703048531106535
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Pizza_right_0: 9045588127235837070
+      Sandwich_w_0: -4878703048531106535
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

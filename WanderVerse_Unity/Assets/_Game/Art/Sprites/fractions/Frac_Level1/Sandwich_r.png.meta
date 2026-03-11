@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a24c867a1b37861439f01997b8f03c5f
+guid: f2d74db82d2c982459a4343117b7221c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2121542577921242633
-    second: cake_whole_0
+      213: -3326769955949349799
+    second: Sandwich_r_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cake_whole_0
+      name: Sandwich_r_0
       rect:
         serializedVersion: 2
-        x: 188
-        y: 13
-        width: 291
-        height: 300
+        x: 0
+        y: 40
+        width: 154
+        height: 292
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7f9432b0444ce82e0800000000000000
-      internalID: -2121542577921242633
+      spriteID: 954723ed950f4d1d0800000000000000
+      internalID: -3326769955949349799
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cake_whole_0: -2121542577921242633
+      Sandwich_r_0: -3326769955949349799
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

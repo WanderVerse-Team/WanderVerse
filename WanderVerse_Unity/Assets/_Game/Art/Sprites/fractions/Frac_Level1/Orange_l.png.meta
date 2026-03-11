@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ccb6559632ce163459973d6ba292e29e
+guid: caad063703e7f32418840670a3626dcc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -368080239552240404
-    second: Cookie_left_0
+      213: 3212670587119387672
+    second: Orange_l_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cookie_left_0
+      name: Orange_l_0
       rect:
         serializedVersion: 2
-        x: 217
-        y: 78
-        width: 127
-        height: 220
+        x: 213
+        y: 69
+        width: 120
+        height: 236
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ce4e5a8e8f054eaf0800000000000000
-      internalID: -368080239552240404
+      spriteID: 814c895a0e2b59c20800000000000000
+      internalID: 3212670587119387672
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Cookie_left_0: -368080239552240404
+      Orange_l_0: 3212670587119387672
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
