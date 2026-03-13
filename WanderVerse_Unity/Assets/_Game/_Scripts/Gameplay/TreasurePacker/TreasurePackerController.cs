@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
@@ -75,14 +76,15 @@ public class TreasurePackerController : BaseLevelController
         }
     }
 
-    // 3. Override StartGame to reset our specific UI after the base controller sets up
-    protected override void StartGame()
+
+    
+    protected override void BeginLevel()
     {
-        base.StartGame(); // This resets currentScore, mistakeCount, and starts timer
-       // Start the Coroutines to shoot the first batch!
+        base.BeginLevel(); // This sets up the timer/score in the Base class
+        
+        // This shoots the coins for the Treasure Packer!
         StartCoroutine(SpawnBarsRoutine());
         StartCoroutine(SpawnCoinsRoutine());
-        
         LoadNextRound();
     }
 // --- NEW: ASYNC SPAWNING COROUTINES ---

@@ -123,12 +123,20 @@ public class LevelData : ScriptableObject
 
     //[Header("--- MODE: FRACTIONS ---")]
     // Add variables needed for Fractions lesson
+    [Header("--- MODE: FRACTIONS ---")]
+    public int totalItems = 10;
+    public int guidedItemCount = 5;
+    public float cutTolerance = 0.4f;
 
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
-
+    
     [Header("--- MODE: PLACE VALUE ---")]
     public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
+
+    [Header("--- MODE: DAYS SEQUENCE ---")]
+    [Tooltip("The correct sequence of days. e.g. Monday, Tuesday...")]
+    public List<string> correctDaysSequence;
 
 }
 
@@ -138,7 +146,7 @@ public class LevelData : ScriptableObject
 
 public enum GameType
 {
-    Spawner,
+    Counting,
     Numbers1,
     Addition1,
     MeasuringLength1,
@@ -149,8 +157,8 @@ public enum GameType
     Division1,
     Fractions,
     Directions,
-
-    PlaceValue
+    PlaceValue,
+    DaysSequence
 }
 
 [System.Serializable]

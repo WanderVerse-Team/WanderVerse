@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WanderVerse.Backend.Services;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
     public event Action<string, int, int, int, bool> OnLevelCompleted;
+
+    private LevelData pendingLevelData;
 
     private void Awake()
     {
@@ -22,8 +25,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Call this from level menu buttons
+    public void LoadLevel(LevelData dataToLoad, string sceneName) 
+    {
+        pendingLevelData = dataToLoad;
+
+        SceneManager.LoadScene(sceneName);
+    }
+
+    // Called by BaseLevelController on Start()
+    public LevelData GetPendingLevelData()
+    {
+        LevelData dataToReturn = pendingLevelData;
+
+        pendingLevelData = null;
+
+        return dataToReturn;
+    }
+
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)
     {
+        // Prevent empty IDs from corrupting the save file
+        if (string.IsNullOrEmpty(levelID)) 
+        {
+            Debug.LogError("[GameManager] CRITICAL ERROR: LevelID is empty! Progress will not be saved. Please check your LevelData scriptable object.");
+            return;
+        }
+
         // CALCULATE XP
 
         // Formula: MaxPossibleXP - (Mistakes * Penalty)

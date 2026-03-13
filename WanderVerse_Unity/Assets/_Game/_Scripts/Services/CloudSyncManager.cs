@@ -56,9 +56,8 @@ namespace WanderVerse.Backend.Services
         {
             if (CurrentData == null)
             {
-                Debug.LogWarning("[Sync-Editor] Started game directly from a Level Scene. Creating Temporary Dev Profile.");
-                IsGuest = true;
-                CurrentData = new PlayerData { userID = "dev_tester", userName = "Tester", xp = 0 };
+                Debug.LogWarning("[DEV Sync] Direct scene play detected! Auto-initializing as Guest to enable saving.");
+                InitializeAsGuest();
             }
         }
         

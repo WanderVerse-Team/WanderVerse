@@ -11,8 +11,10 @@ public class ChestDropZone : MonoBehaviour
         // 1. Check if the object that touched the chest has a TreasureValue script
         TreasureItem itemValue = collision.GetComponent<TreasureItem>();
 
-        if (itemValue != null)
+        if (itemValue != null && itemValue.hasBeenCounted == false)
         {
+            itemValue.hasBeenCounted = true;
+            collision.enabled = false; // Disable the collider to prevent multiple triggers
             // 2. Tell the controller to add the points
             controller.ConsumeItem(itemValue.goldValue);
 

@@ -29,10 +29,12 @@ namespace WanderVerse.Framework.Data
         public int maxEnergy = 6;
         public long lastRechargeTimestamp;   
         public long lastDailyResetTimestamp; 
+        public int loginStreak = 1;
 
         
         public int selectedGrade = 3;
         public string selectedSubject = "Maths";
+        public string selectedLanguage = "Sinhala"; 
         public bool hasCompletedOnboarding = false;
 
         
