@@ -25,7 +25,7 @@ const FAQS = [
   },
   {
     q: 'What devices does WanderVerse support?',
-    a: 'WanderVerse is a Unity-based mobile game available for both Android and iOS devices. Any modern smartphone or tablet can run the app smoothly.',
+    a: 'WanderVerse is a Unity-based mobile game available for all Android devices which are Android 7 or higher. Any modern smartphone or tablet can run the app smoothly.',
     emoji: '📱',
   },
 ]
@@ -205,7 +205,7 @@ const FAQ = () => {
           <p className="text-white/60 text-lg">
             Still have questions?{' '}
             <a
-              href="mailto:team@wanderverse.com"
+              href="mailto:wanderverse.team@gmail.com"
               className="text-yellow-400 font-bold hover:underline"
             >
               Contact our team →

@@ -8,7 +8,7 @@ const PANELS = [
         id: 'game',
         label: '01 / THE GAME',
         headline: ['Where', 'Learning', 'Meets Play.'],
-        sub: 'WanderVerse turns the Grade 3 Sri Lankan Mathematics syllabus into an immersive, gamified adventure with Willow the Fox.',
+        sub: 'WanderVerse turns the Grade 3 Sri Lankan Mathematics syllabus into an immersive, gamified adventure with Willow the Otter.',
         accent: '#f35b03',
         bg: '#0d0a04',
         emoji: '🎮',

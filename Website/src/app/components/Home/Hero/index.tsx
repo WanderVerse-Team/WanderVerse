@@ -237,6 +237,7 @@ const Hero = () => {
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
                 className="text-lg font-semibold py-4 px-10 rounded-full border-2 border-darkmode text-darkmode hover:bg-darkmode hover:text-white transition-colors duration-300"
               >
                 Learn More ↓
