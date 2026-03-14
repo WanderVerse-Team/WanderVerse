@@ -3295,7 +3295,7 @@ GameObject:
   - component: {fileID: 808965587}
   - component: {fileID: 808965586}
   m_Layer: 5
-  m_Name: SignUp_lead
+  m_Name: Reset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
