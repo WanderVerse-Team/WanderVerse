@@ -2245,13 +2245,14 @@ MonoBehaviour:
   dialogueText: {fileID: 331467479}
   mascotImage: {fileID: 1233383492}
   mascotMessages:
-  - "f\xEF f,j,a tfla Thd,g ;sfhkafk tlska tl .Kka lrkak'"
-  - "wyfika jefgk m,;=re tlska tl f.d,\xEFg ljkak'"
-  - "tlla \xFA\xC8hg ;sfhk m,;=re \xFA;rla ljkak fcdavq \xFA\xC8hg y\xDF Bg jvd y\xDF
-    ;sfhk tajd ljkak tmd'\r\n"
-  - "\xB4kjg jvd je\xE4fhka y\xDF wvqfjka y\xDF m,;=re \xFFkafkd;a f,j,a tl mr\xC8kjd'\r\n"
-  - "y\xDF m,;=re .dk \xFFkakg miafi .,a fodr Tnkak'\r\n"
-  - "tfyk\xEF oeka f.d,\xEFg tfla m,;=re {TARGET}  ljkak'"
+  - "fukak n,kak .=ydjg hk fodr f.d,\xEF jyf.k bkafka' fodr w\xDFkakk\xEF fuhdg \xB4k
+    m,;=re ljkak \xB4k'"
+  - "wyfika m,;=re jefgkfldg tajd weo, wrf.k f.d,\xEFg ljkak' yenehs yeu m,;=rlau
+    fuhd lkafka kE'\r\n"
+  - "oekg fuhdg tfla tajd \xFA\xC8hg ;sfhk m,;=re \xFA;rla ljkak'\r\n"
+  - "folla \xFA\xC8hg y\xCD Bg jvd y\xCD ;sfhk m,;=re ljkak tmd'\r\n"
+  - "y\xDF m,;=re .dk lEjg miafia fodr Wv Tnkak'\r\n"
+  - "tak\xEF oeka tfla m,;=re {TARGET} ljkak \r\n"
   mascotVoices: []
   mascotPoses:
   - {fileID: -7124887380464925333, guid: 079144e946c83424f80f1c2822304881, type: 3}
@@ -2267,7 +2268,7 @@ MonoBehaviour:
   spawnLineLeft: {fileID: 5631470}
   spawnLineRight: {fileID: 1391100518}
   mouthZone: {fileID: 1976340466}
-  maxFruitsOnScreen: 5
+  maxFruitsOnScreen: 6
   eatSound: {fileID: 8300000, guid: f54417af0e739f641a0f73ea52baa4d1, type: 3}
   spawnSound: {fileID: 8300000, guid: 96b9bcc017a775c48b3dd9b7ce4f325c, type: 3}
   wrongValuePanel: {fileID: 140401919}
