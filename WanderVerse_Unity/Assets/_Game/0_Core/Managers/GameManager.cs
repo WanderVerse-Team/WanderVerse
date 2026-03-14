@@ -2,10 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using WanderVerse.Backend.Services;
+using WanderVerse.Framework.Data;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
     public event Action<string, int, int, int, bool> OnLevelCompleted;
@@ -46,9 +47,9 @@ public class GameManager : MonoBehaviour
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)
     {
         // Prevent empty IDs from corrupting the save file
-        if (string.IsNullOrEmpty(levelID)) 
+        if (string.IsNullOrEmpty(levelID) || levelID == CourseCatalog.NONE) 
         {
-            Debug.LogError("[GameManager] CRITICAL ERROR: LevelID is empty! Progress will not be saved. Please check your LevelData scriptable object.");
+            Debug.LogError($"[GameManager] CRITICAL ERROR: Invalid LevelID '{levelID}'! Progress will not be saved. Please assign a valid LevelID in your LevelData scriptable object.");
             return;
         }
 
