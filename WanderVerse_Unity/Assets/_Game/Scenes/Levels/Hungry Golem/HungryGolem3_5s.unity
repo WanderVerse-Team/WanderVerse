@@ -2245,13 +2245,9 @@ MonoBehaviour:
   dialogueText: {fileID: 331467479}
   mascotImage: {fileID: 1233383492}
   mascotMessages:
-  - "f\xEF f,j,a tfla Thd,g ;sfhkafk mfyka my .Kka lrkak'"
-  - "wyfika jefgk m,;=re tlska tl f.d,\xEFg ljkak'"
-  - "tlla \xFA\xC8hg ;sfhk m,;=re \xFA;rla ljkak fcdavq \xFA\xC8hg y\xDF Bg jvd y\xDF
-    ;sfhk tajd ljkak tmd'\r\n"
-  - "\xB4kjg jvd je\xE4fhka y\xDF wvqfjka y\xDF m,;=re \xFFkafkd;a f,j,a tl mr\xC8kjd'\r\n"
-  - "y\xDF m,;=re .dk \xFFkakg miafi .,a fodr Tnkak'\r\n"
-  - "tfyk\xEF oeka f.d,\xEFg tfla m,;=re {TARGET}  ljkak'"
+  - "f.d,\xEFg oeka fmd\xE4 m,;=re ld, we;s fj,d' ta ksid oeka thdg myla \xFA\xC8hg
+    ;sfhk m,;=re ljkak'\r\n"
+  - "uq\xBF m,;=re .dk {TARGET} fjk \xFA\xC8hg mfya m,;=re f.d,\xEFg ljkak'"
   mascotVoices: []
   mascotPoses:
   - {fileID: -7124887380464925333, guid: 079144e946c83424f80f1c2822304881, type: 3}

@@ -2268,7 +2268,7 @@ MonoBehaviour:
   spawnLineLeft: {fileID: 5631470}
   spawnLineRight: {fileID: 1391100518}
   mouthZone: {fileID: 1976340466}
-  maxFruitsOnScreen: 6
+  maxFruitsOnScreen: 8
   eatSound: {fileID: 8300000, guid: f54417af0e739f641a0f73ea52baa4d1, type: 3}
   spawnSound: {fileID: 8300000, guid: 96b9bcc017a775c48b3dd9b7ce4f325c, type: 3}
   wrongValuePanel: {fileID: 140401919}

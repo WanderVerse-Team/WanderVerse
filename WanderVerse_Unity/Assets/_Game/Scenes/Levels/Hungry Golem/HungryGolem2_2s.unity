@@ -2245,13 +2245,9 @@ MonoBehaviour:
   dialogueText: {fileID: 331467479}
   mascotImage: {fileID: 1233383492}
   mascotMessages:
-  - "f\xEF f,j,a tfla Thd,g ;sfhkafk foflka fol .Kka lrkak'\r\n"
-  - "wyfika jefgk m,;=re tlska tl f.d,\xEFg ljkak'\r\n"
-  - "fofla tajd \xFA\xC8hg ;sfhk m,;=re \xFA;rla ljkak ;ks tajd y\xDF follg jvd y\xDF
-    ;sfhk tajd ljkak tmd'\r\n"
-  - "\xB4kjg jvd je\xE4fhka y\xDF wvqfjka y\xDF m,;=re \xFFkafkd;a f,j,a tl mr\xC8kjd'\r\n"
-  - "tfyk\xEF oeka f.d,\xEFg uq\xBF m,;=re .dk {TARGET} fjk \xFA\xC8hg fofla m,;=re
-    \xFA;rla ljkak'"
+  - "oeka f.d,\xEFg \xB4fka folla \xFA\xC8hg ;sfhk m,;=re lkak' ta ksid tlla \xFA\xC8hg
+    y\xDF folg jvd y\xDF ;sfhk m,;=re ljkak tmd'\r\n"
+  - "uq\xBF m,;=re .dk {TARGET} fjk \xFA\xC8hg fofla m,;=re f.d,\xEFg ljkak'"
   mascotVoices: []
   mascotPoses:
   - {fileID: -7124887380464925333, guid: 079144e946c83424f80f1c2822304881, type: 3}
@@ -2267,7 +2263,7 @@ MonoBehaviour:
   spawnLineLeft: {fileID: 5631470}
   spawnLineRight: {fileID: 1391100518}
   mouthZone: {fileID: 1976340466}
-  maxFruitsOnScreen: 5
+  maxFruitsOnScreen: 8
   eatSound: {fileID: 8300000, guid: f54417af0e739f641a0f73ea52baa4d1, type: 3}
   spawnSound: {fileID: 8300000, guid: 96b9bcc017a775c48b3dd9b7ce4f325c, type: 3}
   wrongValuePanel: {fileID: 140401919}
