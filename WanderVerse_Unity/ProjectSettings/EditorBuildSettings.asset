@@ -30,6 +30,12 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Scene_WorldMap.unity
     guid: 03d7bb7baf020f348af1bddcd7c087c1
   - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Scene_Dashboard.unity
+    guid: f636d67b48ba7aa42a9eede0cbfe14c1
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Scene_Leaderboard.unity
+    guid: b79287ed60eaa224ca543d85e7191c51
+  - enabled: 1
     path: Assets/_Game/Scenes/Menus/Forest_Minimap.unity
     guid: cc8e314648f33a944865a0ebedda708b
   - enabled: 1
