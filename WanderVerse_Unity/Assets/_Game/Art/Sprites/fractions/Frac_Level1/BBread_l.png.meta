@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: a24c867a1b37861439f01997b8f03c5f
+guid: 4a2449e907c8fc84baf0d8a2b886b912
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7801878167033157512
-    second: Cake_whole_0
-  - first:
-      213: -4213857573849585739
-    second: Cake_whole_1
+      213: 2942822298408514032
+    second: BBread_l_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cake_whole_0
+      name: BBread_l_0
       rect:
         serializedVersion: 2
-        x: 190
-        y: 12
-        width: 301
-        height: 317
+        x: 28
+        y: 157
+        width: 221
+        height: 193
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,30 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 878ec19a4292ab390800000000000000
-      internalID: -7801878167033157512
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cake_whole_1
-      rect:
-        serializedVersion: 2
-        x: 339
-        y: 329
-        width: 6
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5b72b90dcde5585c0800000000000000
-      internalID: -4213857573849585739
+      spriteID: 0f1fcb5e94107d820800000000000000
+      internalID: 2942822298408514032
       vertices: []
       indices: 
       edges: []
@@ -186,8 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Cake_whole_0: -7801878167033157512
-      Cake_whole_1: -4213857573849585739
+      BBread_l_0: 2942822298408514032
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
