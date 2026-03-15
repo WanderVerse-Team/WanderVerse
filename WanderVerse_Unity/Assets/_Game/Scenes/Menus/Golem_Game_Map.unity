@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectButton
   levelDataForThisButton: {fileID: 11400000, guid: 6ab96163515998e4c9975b837c7c49a2, type: 2}
-  sceneToLoad: HungryGolem1_1s
+  sceneToLoad: HungryGolem3_5s
+  outOfEnergyPopup: {fileID: 0}
 --- !u!1 &1153567381
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +685,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectButton
   levelDataForThisButton: {fileID: 11400000, guid: f614be54daf229248a5dc5fb08e9b99e, type: 2}
-  sceneToLoad: HungryGolem1_1s
+  sceneToLoad: HungryGolem2_2s
+  outOfEnergyPopup: {fileID: 0}
 --- !u!1 &1526530547
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,6 +997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectButton
   levelDataForThisButton: {fileID: 11400000, guid: 7cf837161bd7c8c489baf728619bacf7, type: 2}
   sceneToLoad: HungryGolem1_1s
+  outOfEnergyPopup: {fileID: 0}
 --- !u!1 &1736165905
 GameObject:
   m_ObjectHideFlags: 0
