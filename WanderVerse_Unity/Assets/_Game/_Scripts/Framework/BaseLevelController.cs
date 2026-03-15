@@ -42,6 +42,7 @@ public abstract class BaseLevelController : MonoBehaviour
     protected virtual void Awake()
     {
         // If you need to initialize any level specific internal variables, do it here
+        SpawnWinScreen();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -285,6 +286,25 @@ public abstract class BaseLevelController : MonoBehaviour
 
         // Tell UI to open the Win/Lose screen
         OnLevelEnded?.Invoke(isSuccess);
+    }
+
+    private void SpawnWinScreen()
+    {
+        if (FindAnyObjectByType<WinScreenController>() != null) return;
+
+        // Load the prefab directly from the Resources folder
+        GameObject winScreenPrefab = Resources.Load<GameObject>("WinScreen_Canvas");
+
+        // Spawn it into the hierarchy
+        if (winScreenPrefab != null)
+        {
+            Instantiate(winScreenPrefab);
+            Debug.Log("[BaseLevelController] Successfully spawned the Win Screen UI.");
+        }
+        else
+        {
+            Debug.LogError("[BaseLevelController] Could not find 'WinScreen_Canvas' in a Resources folder!");
+        }
     }
 
 }
