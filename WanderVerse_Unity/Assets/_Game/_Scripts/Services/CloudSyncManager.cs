@@ -56,9 +56,8 @@ namespace WanderVerse.Backend.Services
         {
             if (CurrentData == null)
             {
-                Debug.LogWarning("[Sync-Editor] Started game directly from a Level Scene. Creating Temporary Dev Profile.");
-                IsGuest = true;
-                CurrentData = new PlayerData { userID = "dev_tester", userName = "Tester", xp = 0 };
+                Debug.LogWarning("[DEV Sync] Direct scene play detected! Auto-initializing as Guest to enable saving.");
+                InitializeAsGuest();
             }
         }
         
@@ -272,15 +271,10 @@ namespace WanderVerse.Backend.Services
             {
                 Debug.Log("[Cloud] Sync Success!");
 
-                // TO DO: @Randiv - Uncomment this block when EnergyManager is ready
-                /*
-                // Note: Firestore does not return a Date header like HTTP. 
-                // You can use System time or fetch ServerTimestamp separately.
                 if (EnergyManager.Instance != null) 
                 {
-                    // EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
+                    EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
                 }
-                */
             }
 
             _isSaving = false;

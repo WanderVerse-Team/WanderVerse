@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using WanderVerse.Framework.Utilities;
 
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
@@ -12,7 +13,10 @@ public class LevelData : ScriptableObject
     public string lessonTitle;
 
     [Header("--- 2. LEVEL INFO ---")]
+
+    [LevelID]
     public string levelID;
+
     public string levelTitle;
     // Island?Map? -> enum
     [TextArea] public string description;
@@ -134,6 +138,10 @@ public class LevelData : ScriptableObject
     [Header("--- MODE: PLACE VALUE ---")]
     public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
 
+    [Header("--- MODE: DAYS SEQUENCE ---")]
+    [Tooltip("The correct sequence of days. e.g. Monday, Tuesday...")]
+    public List<string> correctDaysSequence;
+
 }
 
 // ========================================================================
@@ -142,7 +150,7 @@ public class LevelData : ScriptableObject
 
 public enum GameType
 {
-    Spawner,
+    Counting,
     Numbers1,
     Addition1,
     MeasuringLength1,
@@ -153,8 +161,8 @@ public enum GameType
     Division1,
     Fractions,
     Directions,
-
-    PlaceValue
+    PlaceValue,
+    DaysSequence
 }
 
 [System.Serializable]

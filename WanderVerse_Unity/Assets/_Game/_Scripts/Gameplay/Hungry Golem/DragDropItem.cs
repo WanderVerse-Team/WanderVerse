@@ -8,7 +8,7 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Vector3 offset;
     private Camera mainCamera;
 
-    private bool isReleased = false;
+    public bool isReleased = false;
     
 
     private void Awake()
@@ -53,8 +53,7 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 // touches another collider while it's falling.
 private void OnTriggerEnter2D(Collider2D other)
 {
-    // If we haven't released the fruit yet, don't "eat" it by accident
-    if (!isReleased) return;
+    
 
     if (other.CompareTag("Mouth"))
     {
