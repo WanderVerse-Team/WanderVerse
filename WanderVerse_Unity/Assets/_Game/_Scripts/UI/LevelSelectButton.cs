@@ -1,23 +1,50 @@
 using UnityEngine;
+using UnityEngine.UI;
+using WanderVerse.Backend.Services;
 
 public class LevelSelectButton : MonoBehaviour
 {
-    [Tooltip("Drag the specific LevelData file here")]
+    [Header("Level Data")]
+    [Tooltip("Drag the specific LevelData file (ScriptableObject) here")]
     public LevelData levelDataForThisButton;
 
     [Tooltip("Enter the exact name of the Unity Scene to load")]
     public string sceneToLoad = "";
 
+    [Header("UI Feedback")]
+    [Tooltip("Drag Seshani's 'Out of Energy' UI panel here")]
+    public GameObject outOfEnergyPopup;
+
     // Link this method to the Button's OnClick() event in the Inspector
-    public void OnClickPlayLevel() 
+    public void OnClickPlayLevel()
     {
-        if (GameManager.Instance != null) 
+        if (GameManager.Instance == null)
         {
+            Debug.LogError("[LevelSelectButton] No GameManager found! Is the prefab missing from the Resources folder?");
+            return;
+        }
+        if (EnergyManager.Instance == null)
+        {
+            Debug.LogError("[LevelSelectButton] No EnergyManager found! Is the prefab missing from the Resources folder?");
+            return;
+        }
+
+        bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+
+        if (canPlay)
+        {
+            Debug.Log($"[LevelSelectButton] Energy consumed! Telling GameManager to load: {sceneToLoad}");
+
             GameManager.Instance.LoadLevel(levelDataForThisButton, sceneToLoad);
         }
-        else 
+        else
         {
-            Debug.LogError("No GameManager found in the scene! Make sure you start from the Boot Scene.");
+            Debug.LogWarning("[LevelSelectButton] Not enough energy. Showing popup.");
+
+            if (outOfEnergyPopup != null)
+            {
+                outOfEnergyPopup.SetActive(true);
+            }
         }
     }
 }

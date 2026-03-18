@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using WanderVerse.Framework.Utilities;
 
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "WanderVerse/Level Data", order = 1)]
 public class LevelData : ScriptableObject
@@ -12,7 +13,10 @@ public class LevelData : ScriptableObject
     public string lessonTitle;
 
     [Header("--- 2. LEVEL INFO ---")]
+
+    [LevelID]
     public string levelID;
+
     public string levelTitle;
     // Island?Map? -> enum
     [TextArea] public string description;
@@ -123,10 +127,14 @@ public class LevelData : ScriptableObject
 
     //[Header("--- MODE: FRACTIONS ---")]
     // Add variables needed for Fractions lesson
+    [Header("--- MODE: FRACTIONS ---")]
+    public int totalItems = 10;
+    public int guidedItemCount = 5;
+    public float cutTolerance = 0.4f;
 
     //[Header("--- MODE: DIRECTIONS ---")]
     // Add variables needed for Directions lesson
-
+    
     [Header("--- MODE: PLACE VALUE ---")]
     public List<TreasureRound> treasureRounds; // The specific rounds for the Place Value game
 
