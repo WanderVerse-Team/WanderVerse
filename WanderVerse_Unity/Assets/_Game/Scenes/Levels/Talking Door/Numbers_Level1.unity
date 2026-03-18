@@ -1924,6 +1924,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1624333682}
     m_Modifications:
+    - target: {fileID: 5035133929365273953, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 13.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035133929365273953, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -15.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7308880143908827132, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
       propertyPath: m_Name
       value: TutorialPanel2-Portrait
