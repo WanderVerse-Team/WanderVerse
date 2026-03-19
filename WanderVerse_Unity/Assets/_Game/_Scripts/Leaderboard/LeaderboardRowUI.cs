@@ -1,50 +1,41 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine.UI;
 
 public class LeaderboardRowUI : MonoBehaviour
 {
-    [Header("Basic UI")]
     public TextMeshProUGUI rankText;
-    public TextMeshProUGUI usernameText;
-    public TextMeshProUGUI scoreText;
-    public Image avatarImage;
+    public TextMeshProUGUI userNameText;
+    public TextMeshProUGUI xpText;
+    public GameObject highlightObject;
 
-    [Header("Top 3 Visuals")]
-    public GameObject top1Badge;
-    public GameObject top2Badge;
-    public GameObject top3Badge;
-    public Image rowBackground;
+    public GameObject firstBadge;
+    public GameObject secondBadge;
+    public GameObject thirdBadge;
 
-    [Header("Optional Backgrounds")]
-    public Sprite normalBg;
-    public Sprite top1Bg;
-    public Sprite top2Bg;
-    public Sprite top3Bg;
-    public Sprite currentPlayerBg;
-
-    public void Setup(int rank, string username, int score, bool isCurrentPlayer = false)
+    public void Setup(int rank, string userName, int xp, bool isCurrentUser)
     {
-        rankText.text = rank.ToString();
-        usernameText.text = username;
-        scoreText.text = score.ToString();
+        if (userNameText != null) userNameText.text = userName;
+        if (xpText != null) xpText.text = xp.ToString();
 
-        if (top1Badge != null) top1Badge.SetActive(rank == 1);
-        if (top2Badge != null) top2Badge.SetActive(rank == 2);
-        if (top3Badge != null) top3Badge.SetActive(rank == 3);
+        if (highlightObject != null)
+            highlightObject.SetActive(isCurrentUser);
 
-        if (rowBackground != null)
+        if (firstBadge != null) firstBadge.SetActive(rank == 1);
+        if (secondBadge != null) secondBadge.SetActive(rank == 2);
+        if (thirdBadge != null) thirdBadge.SetActive(rank == 3);
+
+        if (rankText != null)
         {
-            if (isCurrentPlayer && currentPlayerBg != null)
-                rowBackground.sprite = currentPlayerBg;
-            else if (rank == 1 && top1Bg != null)
-                rowBackground.sprite = top1Bg;
-            else if (rank == 2 && top2Bg != null)
-                rowBackground.sprite = top2Bg;
-            else if (rank == 3 && top3Bg != null)
-                rowBackground.sprite = top3Bg;
-            else if (normalBg != null)
-                rowBackground.sprite = normalBg;
+            if (rank == 1 || rank == 2 || rank == 3)
+            {
+                rankText.gameObject.SetActive(false);
+            }
+            else
+            {
+                rankText.gameObject.SetActive(true);
+                rankText.text = rank.ToString();
+            }
         }
     }
 }

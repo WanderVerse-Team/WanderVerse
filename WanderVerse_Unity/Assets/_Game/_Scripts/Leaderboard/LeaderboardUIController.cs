@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using WanderVerse.Backend.Services;
 
 [Serializable]
 public class LeaderboardEntry
@@ -11,12 +9,6 @@ public class LeaderboardEntry
     public string userID;
     public string userName;
     public int xp;
-}
-
-[Serializable]
-public class LeaderboardResponse
-{
-    public List<LeaderboardEntry> leaderboard;
 }
 
 public class LeaderboardUIController : MonoBehaviour
@@ -35,101 +27,55 @@ public class LeaderboardUIController : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadLeaderboard();
+        Debug.Log("LeaderboardUIController OnEnable is running");
+        LoadTestLeaderboard();
     }
 
-    public void LoadLeaderboard()
+    public void LoadTestLeaderboard()
     {
         ClearLeaderboard();
 
         if (statusText != null)
-            statusText.text = "Loading leaderboard...";
+            statusText.text = "Loading test leaderboard...";
 
-        if (CloudSyncManager.Instance != null)
+        List<LeaderboardEntry> testEntries = new List<LeaderboardEntry>
         {
-            StartCoroutine(
-                CloudSyncManager.Instance.FetchLeaderboard(OnLeaderboardSuccess, OnLeaderboardFailed)
-            );
-        }
-        else
-        {
-            if (statusText != null)
-                statusText.text = "CloudSyncManager not found.";
-        }
-    }
+            new LeaderboardEntry { userID = "u1", userName = "Seshani", xp = 1500 },
+            new LeaderboardEntry { userID = "u2", userName = "Nimal", xp = 1300 },
+            new LeaderboardEntry { userID = "u3", userName = "Asha", xp = 1200 },
+            new LeaderboardEntry { userID = "u4", userName = "Kavi", xp = 1000 },
+            new LeaderboardEntry { userID = "u5", userName = "Mira", xp = 900 }
+        };
 
-    private void OnLeaderboardSuccess(string json)
-    {
-        Debug.Log("Leaderboard JSON: " + json);
-
-        LeaderboardResponse response = JsonUtility.FromJson<LeaderboardResponse>(json);
-
-        if (response == null || response.leaderboard == null || response.leaderboard.Count == 0)
-        {
-            if (statusText != null)
-                statusText.text = "No leaderboard data found.";
-            return;
-        }
-
-        string currentUserId = "";
-        if (CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null)
-        {
-            currentUserId = CloudSyncManager.Instance.CurrentData.userID;
-        }
-
-        int currentPlayerRank = -1;
-        LeaderboardEntry currentPlayerEntry = null;
-
-        for (int i = 0; i < response.leaderboard.Count; i++)
+        for (int i = 0; i < testEntries.Count; i++)
         {
             int rank = i + 1;
-            LeaderboardEntry entry = response.leaderboard[i];
+            LeaderboardEntry entry = testEntries[i];
 
             GameObject rowObj = Instantiate(leaderboardRowPrefab, contentParent);
             spawnedRows.Add(rowObj);
 
             LeaderboardRowUI rowUI = rowObj.GetComponent<LeaderboardRowUI>();
-            bool isCurrentPlayer = entry.userID == currentUserId;
+            bool isCurrentPlayer = entry.userID == "u4";
 
             rowUI.Setup(rank, entry.userName, entry.xp, isCurrentPlayer);
-
-            if (isCurrentPlayer)
-            {
-                currentPlayerRank = rank;
-                currentPlayerEntry = entry;
-            }
         }
 
         if (myRankRowUI != null)
         {
-            if (currentPlayerEntry != null)
-            {
-                myRankRowUI.Setup(currentPlayerRank, currentPlayerEntry.userName, currentPlayerEntry.xp, true);
-            }
-            else if (CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null)
-            {
-                var localData = CloudSyncManager.Instance.CurrentData;
-                myRankRowUI.Setup(-1, localData.userName, localData.xp, true);
-            }
+            myRankRowUI.Setup(4, "Kavi", 1000, true);
         }
 
         if (statusText != null)
             statusText.text = "";
     }
 
-    private void OnLeaderboardFailed(string error)
-    {
-        Debug.LogError("Leaderboard failed: " + error);
-
-        if (statusText != null)
-            statusText.text = "Failed to load leaderboard.";
-    }
-
     private void ClearLeaderboard()
     {
         for (int i = 0; i < spawnedRows.Count; i++)
         {
-            Destroy(spawnedRows[i]);
+            if (spawnedRows[i] != null)
+                Destroy(spawnedRows[i]);
         }
 
         spawnedRows.Clear();
