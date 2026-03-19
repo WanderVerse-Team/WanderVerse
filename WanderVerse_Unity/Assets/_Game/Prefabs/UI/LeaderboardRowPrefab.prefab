@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -4448784525212720176, guid: d858eee711e628b4fa3bf43d94ef7c7e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -161,8 +161,9 @@ GameObject:
   - component: {fileID: 4208340793365323743}
   - component: {fileID: 5844750618937753317}
   - component: {fileID: 1792160168772505934}
+  - component: {fileID: 4734200547194815800}
   m_Layer: 5
-  m_Name: LeaderboardRow
+  m_Name: LeaderboardRowPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 99.7, y: -76.5}
+  m_AnchoredPosition: {x: -303.59494, y: 639.28864}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5844750618937753317
@@ -232,6 +233,31 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4734200547194815800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3281953026456917363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4ec286e7d71c643be128a146fb3f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LeaderboardRowUI
+  rankText: {fileID: 6695757581982158518}
+  usernameText: {fileID: 15896960044576230}
+  scoreText: {fileID: 7358491968327666448}
+  avatarImage: {fileID: 6571958385543059149}
+  top1Badge: {fileID: 7723841825949690533}
+  top2Badge: {fileID: 1371813099153707209}
+  top3Badge: {fileID: 3342855149364813290}
+  rowBackground: {fileID: 0}
+  normalBg: {fileID: -5668518402485374812, guid: a679e693199b32f43ac45a185f03b7c5, type: 3}
+  top1Bg: {fileID: 0}
+  top2Bg: {fileID: 0}
+  top3Bg: {fileID: 0}
+  currentPlayerBg: {fileID: 0}
 --- !u!1 &3342855149364813290
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +323,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 6850140680637556443, guid: c687e322e14d2124fb7d1fcf2c76d6cf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -518,8 +544,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278207999
+  m_fontColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -783,7 +809,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 27209146852622279, guid: 45633f871d01c2a4eb6c2e3e12254fba, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
