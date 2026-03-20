@@ -51,7 +51,8 @@ public class QuarterCutter : MonoBehaviour
     public void SetCurrentItem(GameObject item, bool guided)
     {
         currentItem   = item;
-        itemCenter    = item.transform.position;
+        Collider2D col = item.GetComponent<Collider2D>();
+        itemCenter = col != null ? col.bounds.center : item.transform.position;
         isGuided      = guided;
         firstCutDone  = false;
         secondCutDone = false;
@@ -82,31 +83,34 @@ public class QuarterCutter : MonoBehaviour
         if (secondCutDone) return;
         if (currentItem == null) return;
 
-        Vector2 screenPos = Mouse.current.position.ReadValue();
+        var pointer = Pointer.current;
+        if (pointer == null) return;
+
+        Vector2 screenPos = pointer.position.ReadValue();
         Vector2 worldPos  = Camera.main.ScreenToWorldPoint(
             new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane));
 
         // Press
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (pointer.press.wasPressedThisFrame && !isDragging)
         {
             Collider2D hit = Physics2D.OverlapPoint(worldPos);
             if (hit != null && hit.transform == knifeTransform)
             {
-                isDragging = true;
+                isDragging       = true;
                 knifeEnteredItem = false;
                 Debug.Log("[QuarterCutter] Knife grabbed!");
             }
         }
 
         // Drag
-        if (Mouse.current.leftButton.isPressed && isDragging)
+        if (pointer.press.isPressed && isDragging)
         {
             knifeTransform.position = new Vector3(worldPos.x, worldPos.y, 0f);
             CheckIfInsideItem();
         }
 
         // Release
-        if (Mouse.current.leftButton.wasReleasedThisFrame && isDragging)
+        if (pointer.press.wasReleasedThisFrame && isDragging)
         {
             isDragging = false;
 
@@ -146,7 +150,8 @@ public class QuarterCutter : MonoBehaviour
     // -------------------------------------------------------
     private void ValidateCut()
     {
-        itemCenter = currentItem.transform.position;
+        Collider2D col = currentItem.GetComponent<Collider2D>();
+        itemCenter = col != null ? col.bounds.center : currentItem.transform.position;
         Vector2 tip = GetKnifeTip();
 
         if (!firstCutDone)
@@ -211,8 +216,8 @@ public class QuarterCutter : MonoBehaviour
         knifeTransform.position = knifeStartPosition;
         knifeEnteredItem = false;
 
-        // Rotate knife for horizontal cut
-        knifeTransform.rotation = Quaternion.Euler(0, 0, 90f);
+        // Rotate knife for horizontal cut — use localEulerAngles to avoid flip conflict
+        knifeTransform.localEulerAngles = new Vector3(0, 0, 90f);
 
         levelController.OnFirstCutDone();
     }
@@ -248,7 +253,7 @@ public class QuarterCutter : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
         knifeTransform.position = knifeStartPosition;
-        knifeTransform.rotation = Quaternion.Euler(0, 0, 0);
+        knifeTransform.localEulerAngles = new Vector3(0, 0, 0);
 
         levelController.OnBothCutsDone();
     }
@@ -306,8 +311,11 @@ public class QuarterCutter : MonoBehaviour
     {
         Vector3 leftStart  = left.position;
         Vector3 rightStart = right.position;
-        Vector3 leftEnd    = leftStart  + new Vector3(-0.4f, 0, 0);
-        Vector3 rightEnd   = rightStart + new Vector3( 0.4f, 0, 0);
+
+        // Use item center to determine proper separation direction
+        float centerX    = itemCenter.x;
+        Vector3 leftEnd  = new Vector3(centerX - 1.2f, leftStart.y,  leftStart.z);
+        Vector3 rightEnd = new Vector3(centerX + 1.2f, rightStart.y, rightStart.z);
 
         float t = 0;
         while (t < 1f)
