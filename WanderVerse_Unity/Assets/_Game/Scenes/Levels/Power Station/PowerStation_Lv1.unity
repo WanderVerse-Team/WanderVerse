@@ -874,7 +874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1128074897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1011,7 +1011,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1181261814
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1348,6 +1348,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerStationController
   levelData: {fileID: 0}
+  tutorialPanel: {fileID: 0}
+  dialogueText: {fileID: 0}
+  mascotImage: {fileID: 0}
+  mascotMessages: []
+  mascotVoices: []
+  mascotPoses: []
   pointsForWrong: 0
   maxMistakes: 0
   targetPowerText: {fileID: 882215250}
