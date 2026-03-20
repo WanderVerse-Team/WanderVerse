@@ -313,11 +313,29 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        // To get the leaderboard (for senmith's leaderboardController)
+        // To get the leaderboard (auth required)
         public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
         {
+            var user = FirebaseAuth.DefaultInstance.CurrentUser;
+            if (user == null)
+            {
+                onFailure?.Invoke("User not authenticated");
+                yield break;
+            }
+
+            Task<string> tokenTask = user.TokenAsync(true);
+            yield return new WaitUntil(() => tokenTask.IsCompleted);
+
+            if (tokenTask.Exception != null)
+            {
+                Debug.LogError("[Leaderboard] Failed to get Auth Token.");
+                onFailure?.Invoke("Token fetch failed");
+                yield break;
+            }
+
             using (UnityWebRequest request = UnityWebRequest.Get(_leaderboardURL))
             {
+                request.SetRequestHeader("Authorization", "Bearer " + tokenTask.Result);
                 yield return request.SendWebRequest();
 
                 if (request.result == UnityWebRequest.Result.Success)
