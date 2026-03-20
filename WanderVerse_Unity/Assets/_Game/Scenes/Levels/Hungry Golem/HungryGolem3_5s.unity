@@ -1767,6 +1767,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 930953963}
     m_Modifications:
+    - target: {fileID: 639000095828963433, guid: 7f170ee7fca741e4894b9e50e160275b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
+    - target: {fileID: 639000095828963433, guid: 7f170ee7fca741e4894b9e50e160275b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4762784361178176331, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
+    - target: {fileID: 639000095828963433, guid: 7f170ee7fca741e4894b9e50e160275b, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5550219106139025734, guid: 7f170ee7fca741e4894b9e50e160275b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
