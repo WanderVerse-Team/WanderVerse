@@ -116,7 +116,7 @@ public class HungryGolemController : BaseLevelController
     }
     else{
     // 1. Pick the prefab 
-    bool spawnCorrect = Random.value > 0.6f;
+    bool spawnCorrect = Random.value < 0.3f;
         prefabToSpawn = spawnCorrect ? 
         levelData.spawnItems[Random.Range(0, levelData.spawnItems.Count)] : 
         levelData.distractors[Random.Range(0, levelData.distractors.Count)];

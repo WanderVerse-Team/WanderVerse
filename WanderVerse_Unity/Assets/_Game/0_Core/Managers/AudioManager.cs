@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager Instance { get; private set; }
 
     // private Coroutine musicFadeRoutine; // Add a coroutine to fade music in and out
 

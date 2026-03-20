@@ -12,7 +12,8 @@ public static class CoreBootstrapper
             "GameManager",
             "AudioManager",
             "CloudSyncManager",
-            "LocalDataManager"
+            "LocalDataManager",
+            "EnergyManager"
         };
 
         // Create a list to track the prefabs that actually spawned for debugging

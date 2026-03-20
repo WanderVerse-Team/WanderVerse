@@ -271,15 +271,10 @@ namespace WanderVerse.Backend.Services
             {
                 Debug.Log("[Cloud] Sync Success!");
 
-                // TO DO: @Randiv - Uncomment this block when EnergyManager is ready
-                /*
-                // Note: Firestore does not return a Date header like HTTP. 
-                // You can use System time or fetch ServerTimestamp separately.
                 if (EnergyManager.Instance != null) 
                 {
-                    // EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
+                    EnergyManager.Instance.SyncTime(DateTime.UtcNow); 
                 }
-                */
             }
 
             _isSaving = false;
@@ -318,32 +313,29 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        // To get the leaderboard (for senmith's leaderboardController)
-        // Caches the result on-device for 5 minutes to avoid hitting Firestore on every open.
-        private const string LeaderboardCacheKey = "leaderboard_cache";
-        private const string LeaderboardCacheTimeKey = "leaderboard_cache_time";
-        private const float LeaderboardCacheDuration = 5 * 60f; // 5 minutes in seconds
-
+        // To get the leaderboard (auth required)
         public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
         {
-            // Check if a valid cache exists on this device
-            if (PlayerPrefs.HasKey(LeaderboardCacheKey) && PlayerPrefs.HasKey(LeaderboardCacheTimeKey))
+            var user = FirebaseAuth.DefaultInstance.CurrentUser;
+            if (user == null)
             {
-                // Use Unix timestamp (seconds since 1970) so it survives app restarts
-                double cachedAt = double.Parse(PlayerPrefs.GetString(LeaderboardCacheTimeKey));
-                double now = (System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
-                if (now - cachedAt < LeaderboardCacheDuration)
-                {
-                    string cached = PlayerPrefs.GetString(LeaderboardCacheKey);
-                    Debug.Log("[Leaderboard] Serving from device cache.");
-                    onSuccess?.Invoke(cached);
-                    yield break;
-                }
+                onFailure?.Invoke("User not authenticated");
+                yield break;
             }
 
-            // Cache expired or missing — fetch fresh from server
+            Task<string> tokenTask = user.TokenAsync(true);
+            yield return new WaitUntil(() => tokenTask.IsCompleted);
+
+            if (tokenTask.Exception != null)
+            {
+                Debug.LogError("[Leaderboard] Failed to get Auth Token.");
+                onFailure?.Invoke("Token fetch failed");
+                yield break;
+            }
+
             using (UnityWebRequest request = UnityWebRequest.Get(_leaderboardURL))
             {
+                request.SetRequestHeader("Authorization", "Bearer " + tokenTask.Result);
                 yield return request.SendWebRequest();
 
                 if (request.result == UnityWebRequest.Result.Success)

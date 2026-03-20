@@ -29,6 +29,7 @@ sysinfo.txt
 .idea/
 *.csproj
 *.sln
+*.slnx
 
 #Ignore Node Module Dependencies
 node_modules/

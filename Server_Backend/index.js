@@ -68,8 +68,8 @@ app.get('/api/keys', verifyToken, (req, res) => {
     });
 });
 
-//GET leaderboard endpoint
-app.get('/api/leaderboard', leaderboardController.getGlobalLeaderboard);
+//GET leaderboard endpoint (auth required - guests cannot access)
+app.get('/api/leaderboard', verifyToken, leaderboardController.getGlobalLeaderboard);
 
 //app object is exported so Vercel can use it to start the server
 module.exports = app;
