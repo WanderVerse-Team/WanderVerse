@@ -4,33 +4,59 @@ using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
-    [Header("--- Main Menu Settings Panel ---")]
-    [Tooltip("Drag the Settings Panel used ONLY in the Main Menu here")]
-    public GameObject mainMenuSettingsPanel;
-    public Slider mainMenuMasterSlider;
+    [Header("--- UI References ---")]
+    [Tooltip("Drag your single Settings Panel background here")]
+    public GameObject settingsPanel;
+    
+    [Tooltip("Drag the Return to Menu button here")]
+    public GameObject returnToMenuButton;
+    
+    [Tooltip("Drag the Quit Game button here")]
+    public GameObject quitGameButton;
 
-    [Header("--- In-Game Settings Panel ---")]
-    [Tooltip("Drag the Settings Panel used ONLY during gameplay here")]
-    public GameObject inGameSettingsPanel;
-    public Slider inGameMasterSlider;
+    [Tooltip("Drag the Return to Game button here")]
+    public GameObject returnToGameButton;
+
+    [Tooltip("Drag your single Master Volume Slider here")]
+    public Slider masterVolumeSlider;
 
     [Header("--- Settings ---")]
     [Tooltip("Type the EXACT name of your Main Menu scene here")]
-    public string mainMenuSceneName = "MainMenu"; 
+    public string mainMenuSceneName = "MainMenu"; // Update this to your actual menu scene name
 
     private bool isGamePaused = false;
 
     private void Start()
     {
-        // 1. Ensure both panels are hidden when the scene starts
-        // if (mainMenuSettingsPanel != null) mainMenuSettingsPanel.SetActive(false);
-        // if (inGameSettingsPanel != null) inGameSettingsPanel.SetActive(false);
+        // 1. Hide the panel when the scene loads
+        if (settingsPanel != null) settingsPanel.SetActive(false);
 
-        // 2. Setup the sliders
-        InitializeSliders();
+        // 2. Decide which button to show based on the current scene
+        CheckCurrentScene();
+
+        // 3. Set up the slider and connect it to the AudioManager via code
+        InitializeSlider();
     }
 
-    private void InitializeSliders()
+    private void CheckCurrentScene()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        // if (currentScene == mainMenuSceneName)
+        // {
+        //     // We are in the Main Menu: Show Quit, Hide Return
+        //     if (returnToMenuButton != null) returnToMenuButton.SetActive(false);
+        //     if (quitGameButton != null) quitGameButton.SetActive(true);
+        // }
+        // else
+        // {
+        //     // We are in a Game Level: Show Return, Hide Quit
+        //     if (returnToMenuButton != null) returnToMenuButton.SetActive(true);
+        //     if (quitGameButton != null) quitGameButton.SetActive(false);
+        // }
+    }
+
+    private void InitializeSlider()
     {
         if (AudioManager.Instance == null)
         {
@@ -38,26 +64,15 @@ public class SettingsManager : MonoBehaviour
             return;
         }
 
-        float savedVolume = DBToSliderValue(PlayerPrefs.GetFloat("MasterVol", 0f));
-
-        // Setup Main Menu Slider
-        if (mainMenuMasterSlider != null)
+        if (masterVolumeSlider != null)
         {
-            mainMenuMasterSlider.value = savedVolume;
-            mainMenuMasterSlider.onValueChanged.AddListener(AudioManager.Instance.SetMasterVolume);
-        }
+            // Convert saved Decibels back to a slider value (0.0001 to 1)
+            float savedVolume = PlayerPrefs.GetFloat("MasterVol", 0f);
+            masterVolumeSlider.value = Mathf.Pow(10f, savedVolume / 20f);
 
-        // Setup In-Game Slider
-        if (inGameMasterSlider != null)
-        {
-            inGameMasterSlider.value = savedVolume;
-            inGameMasterSlider.onValueChanged.AddListener(AudioManager.Instance.SetMasterVolume);
+            // Connect the slider to the AudioManager automatically
+            masterVolumeSlider.onValueChanged.AddListener(AudioManager.Instance.SetMasterVolume);
         }
-    }
-
-    private float DBToSliderValue(float dbValue)
-    {
-        return Mathf.Pow(10f, dbValue / 20f);
     }
 
     // ==========================================
@@ -67,19 +82,12 @@ public class SettingsManager : MonoBehaviour
     public void OpenSettings()
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
+        
+        if (settingsPanel != null) settingsPanel.SetActive(true);
 
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        // Check where we are and open the correct panel
-        if (currentScene == mainMenuSceneName)
+        // Only freeze time if we are in a game level
+        if (SceneManager.GetActiveScene().name != mainMenuSceneName)
         {
-            if (mainMenuSettingsPanel != null) mainMenuSettingsPanel.SetActive(true);
-        }
-        else
-        {
-            if (inGameSettingsPanel != null) inGameSettingsPanel.SetActive(true);
-            
-            // Freeze game time
             Time.timeScale = 0f; 
             isGamePaused = true;
         }
@@ -88,10 +96,8 @@ public class SettingsManager : MonoBehaviour
     public void CloseSettings()
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
-
-        // Hide both panels just to be safe
-        if (mainMenuSettingsPanel != null) mainMenuSettingsPanel.SetActive(false);
-        if (inGameSettingsPanel != null) inGameSettingsPanel.SetActive(false);
+        
+        if (settingsPanel != null) settingsPanel.SetActive(false);
 
         // Unfreeze the game if it was paused
         if (isGamePaused)
@@ -103,14 +109,16 @@ public class SettingsManager : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        Time.timeScale = 1f; // CRITICAL: Unfreeze time before leaving!
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
+        
+        Time.timeScale = 1f; // CRITICAL: Unfreeze time before loading a new scene!
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
     public void QuitGame()
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
+        
         Debug.Log("Game is quitting...");
         Application.Quit(); 
     }
