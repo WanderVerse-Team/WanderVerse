@@ -42,6 +42,15 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Golem_Game_Map.unity
     guid: c8e03513295a243439401ab2e8611f53
   - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Space_Game_Map.unity
+    guid: fffb2a657dbc9b9499523bbc348b59a0
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/TalkingDoor_Game_Map.unity
+    guid: 15f1b16318fd2c947b20eaf904ebff2d
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Forest_Game_Map.unity
+    guid: eaa29ff38ca6fae4a8e135a5b34f6139
+  - enabled: 1
     path: Assets/_Game/Scenes/Levels/Hungry Golem/HungryGolem1_1s.unity
     guid: 2438b70a3bb959f42b7bcfd94a3b427d
   - enabled: 1
