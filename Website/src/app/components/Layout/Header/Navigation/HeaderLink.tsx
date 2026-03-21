@@ -3,71 +3,55 @@ import { useState } from "react";
 import Link from "next/link";
 import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const path = usePathname();
-  const handleMouseEnter = () => {
-    if (item.submenu) {
-      setSubmenuOpen(true);
-    }
-  };
-  const handleMouseLeave = () => {
-    setSubmenuOpen(false);
-  };
 
   return (
     <div
       className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => item.submenu && setSubmenuOpen(true)}
+      onMouseLeave={() => setSubmenuOpen(false)}
     >
       <Link
         href={item.href}
-        className={`text-lg flex hover:text-black capitalized  ${
-          path === item.href ? "text-black/75 " : " text-black/75 "
-        }`}
+        className="nav-link relative text-base font-semibold text-black/70 hover:text-black transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-black/5 flex items-center gap-1"
       >
         {item.label}
         {item.submenu && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.5em"
-            height="1.5em"
-            viewBox="0 0 24 24"
+          <motion.span
+            animate={{ rotate: submenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-xs opacity-50"
           >
-            <path
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="m7 10l5 5l5-5"
-            />
-          </svg>
+            ▼
+          </motion.span>
         )}
       </Link>
-      {submenuOpen && (
-        <div
-          className={`absolute py-2 left-0 mt-0.5 w-60 bg-white dark:bg-darklight dark:text-white shadow-lg rounded-lg `}
-          data-aos="fade-up"
-          data-aos-duration="500"
-        >
-          {item.submenu?.map((subItem, index) => (
-            <Link
-              key={index}
-              href={subItem.href}
-              className={`block px-4 py-2   ${
-                path === subItem.href
-                  ? "text-white"
-                  : "text-black dark:text-white hover:bg-primary"
-              }`}
-            >
-              {subItem.label}
-            </Link>
-          ))}
-        </div>
-      )}
+
+      <AnimatePresence>
+        {submenuOpen && item.submenu && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute top-full left-0 mt-2 w-56 bg-white shadow-xl rounded-2xl border border-black/5 overflow-hidden z-50"
+          >
+            {item.submenu.map((subItem, index) => (
+              <Link
+                key={index}
+                href={subItem.href}
+                className="block px-4 py-3 text-sm font-medium text-black/70 hover:text-black hover:bg-primary/5 transition-colors border-b border-black/5 last:border-0"
+              >
+                {subItem.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

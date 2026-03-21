@@ -1,58 +1,54 @@
 'use client'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false)
 
-  // Top: 0 takes us all the way back to the top of the page
-  // Behavior: smooth keeps it smooth!
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {
-    // Button is displayed after scrolling for 500 pixels
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
-    }
-
+    const toggleVisibility = () => setIsVisible(window.pageYOffset > 400)
     window.addEventListener('scroll', toggleVisibility)
-
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
 
   return (
-    <div className='fixed bottom-8 right-8 z-999'>
-      {isVisible && (
-        <div className='fixed bottom-8 right-8 z-999'>
-          <div className='flex items-center gap-2.5'>
-            <Link
-              href={
-                'https://getnextjstemplates.com/products/desgy-nextjs-free-landing-page-template'
-              }
-              target='_blank'
-              className='hidden lg:block bg-primary text-white hover:bg-darkmode text-sm px-4 py-3.5 leading-none rounded-lg font-medium text-nowrap'>
-              Download Now
-            </Link>
-            {isVisible && (
-              <div
-                onClick={scrollToTop}
-                aria-label='scroll to top'
-                className='back-to-top flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-primary/60'>
-                <span className='mt-[6px] h-3 w-3 rotate-45 border-l border-t border-white'></span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+    <div className="fixed bottom-8 right-8 z-999">
+      <AnimatePresence>
+        {isVisible && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 260 }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            className="relative w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden group"
+            style={{ background: 'linear-gradient(135deg, #f35b03, #3d348b)' }}
+          >
+            {/* Ripple on hover */}
+            <span className="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+            {/* Arrow icon */}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="18 15 12 9 6 15" />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

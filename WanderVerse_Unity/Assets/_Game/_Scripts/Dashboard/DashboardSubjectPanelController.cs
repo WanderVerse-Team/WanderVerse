@@ -32,18 +32,33 @@ public class DashboardSubjectPanelController : MonoBehaviour
     {
         if (subjectDropdown == null) return;
 
-        subjectDropdown.onValueChanged.RemoveAllListeners();
-        subjectDropdown.onValueChanged.AddListener(delegate {
-            OnSubjectChanged(subjectDropdown.value);
-        });
+        var data = CloudSyncManager.Instance.CurrentData;
 
-        // Default to Maths
-        subjectDropdown.value = 0;
-        subjectDropdown.RefreshShownValue();
+        int index = subjectDropdown.options.FindIndex(
+            option => option.text == data.selectedSubject
+        );
+
+        if (index >= 0)
+            subjectDropdown.value = index;
+
+        subjectDropdown.onValueChanged.RemoveAllListeners();
+        subjectDropdown.onValueChanged.AddListener(OnSubjectChanged);
     }
 
     public void OnSubjectChanged(int index)
     {
+        string selectedSubject = subjectDropdown.options[index].text;
+
+        if (CloudSyncManager.Instance != null)
+        {
+            var data = CloudSyncManager.Instance.CurrentData;
+
+            CloudSyncManager.Instance.UpdateUserPreferences(
+                data.selectedGrade,
+                selectedSubject
+            );
+        }
+
         UpdateSubjectPanel();
     }
 
@@ -59,7 +74,11 @@ public class DashboardSubjectPanelController : MonoBehaviour
         if (subjectNameText != null)
             subjectNameText.text = selectedSubject;
 
-        float progress = CalculateSubjectProgress(data, selectedSubject);
+        float map1 = CalculateMapProgress(data, "Island1");
+        float map2 = CalculateMapProgress(data, "Island2");
+        float map3 = CalculateMapProgress(data, "Island3");
+
+        float progress = (map1 + map2 + map3) / 3f;
 
         if (subjectProgressBar != null)
             subjectProgressBar.value = progress;
@@ -69,32 +88,42 @@ public class DashboardSubjectPanelController : MonoBehaviour
 
         // Example map progress placeholders for now
         if (map1ProgressText != null)
-            map1ProgressText.text = $"Island 1: {(progress * 100):F0}%";
+            map1ProgressText.text = $"Island 1: {(map1 * 100):F0}%";
 
         if (map2ProgressText != null)
-            map2ProgressText.text = "Island 2: Locked";
+            map2ProgressText.text = map1 >= 1f 
+                ? $"Island 2: {(map2 * 100):F0}%"
+                : "Island 2: Locked";
 
         if (map3ProgressText != null)
-            map3ProgressText.text = "Island 3: Locked";
+            map3ProgressText.text = map2 >= 1f 
+                ? $"Island 3: {(map3 * 100):F0}%"
+                : "Island 3: Locked";
 
         UpdateBadges(data, selectedSubject);
     }
 
-    private float CalculateSubjectProgress(PlayerData data, string subject)
+    private float CalculateMapProgress(PlayerData data, string mapPrefix) 
     {
         if (data.levelProgress == null || data.levelProgress.Count == 0)
             return 0f;
 
         int completed = 0;
-        int total = data.levelProgress.Count;
+        int total = 0;
 
         foreach (var level in data.levelProgress)
         {
+            if (!level.levelID.StartsWith(mapPrefix))
+            continue;
+
+            total++;
+
             if (level.starsEarned > 0)
                 completed++;
         }
 
         if (total == 0) return 0f;
+
         return (float)completed / total;
     }
 
