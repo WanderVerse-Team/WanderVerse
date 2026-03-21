@@ -1,55 +1,54 @@
-import { useState } from "react";
-import Link from "next/link";
-import { HeaderItem } from "../../../../types/menu";
+'use client'
+import { useState } from 'react'
+import Link from 'next/link'
+import { HeaderItem } from '../../../../types/menu'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
-  const [submenuOpen, setSubmenuOpen] = useState(false);
-
-  const handleToggle = () => {
-    setSubmenuOpen(!submenuOpen);
-  };
+  const [submenuOpen, setSubmenuOpen] = useState(false)
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full border-b border-white/10 last:border-0">
       <Link
         href={item.href}
-        onClick={item.submenu ? handleToggle : undefined}
-        className="flex items-center justify-between w-full py-2 text-white text-muted focus:outline-hidden"
+        onClick={item.submenu ? (e) => { e.preventDefault(); setSubmenuOpen(!submenuOpen) } : undefined}
+        className="flex items-center justify-between w-full py-4 text-white font-semibold text-lg hover:text-yellow-400 transition-colors"
       >
-        {item.label}
+        <span>{item.label}</span>
         {item.submenu && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.5em"
-            height="1.5em"
-            viewBox="0 0 24 24"
+          <motion.span
+            animate={{ rotate: submenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.25 }}
+            className="text-white/40 text-xs"
           >
-            <path
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="m7 10l5 5l5-5"
-            />
-          </svg>
+            ▼
+          </motion.span>
         )}
       </Link>
-      {submenuOpen && item.submenu && (
-        <div className="bg-white p-2 w-full">
-          {item.submenu.map((subItem, index) => (
-            <Link
-              key={index}
-              href={subItem.href}
-              className="block py-2 text-gray-500 hover:bg-gray-200"
-            >
-              {subItem.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
-export default MobileHeaderLink;
+      <AnimatePresence>
+        {submenuOpen && item.submenu && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden pl-4"
+          >
+            {item.submenu.map((subItem, index) => (
+              <Link
+                key={index}
+                href={subItem.href}
+                className="block py-2.5 text-white/60 hover:text-white text-base transition-colors"
+              >
+                → {subItem.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default MobileHeaderLink

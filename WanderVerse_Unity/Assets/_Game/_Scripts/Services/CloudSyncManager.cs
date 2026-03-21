@@ -34,6 +34,8 @@ namespace WanderVerse.Backend.Services
         [SerializeField] private string _keyURL = "https://server-backend-eight.vercel.app/api/keys";
         
         private string _leaderboardURL = "https://server-backend-eight.vercel.app/api/leaderboard";
+        private const string LeaderboardCacheKey = "leaderboard_cache_json";
+        private const string LeaderboardCacheTimeKey = "leaderboard_cache_time";
 
         private FirebaseFirestore _db;
         private bool _isSaving = false;
@@ -313,22 +315,58 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        // To get the leaderboard (for senmith's leaderboardController)
+        // To get the leaderboard (auth required)
         public IEnumerator FetchLeaderboard(System.Action<string> onSuccess, System.Action<string> onFailure)
         {
+            var user = FirebaseAuth.DefaultInstance.CurrentUser;
+            if (user == null)
+            {
+                onFailure?.Invoke("User not authenticated");
+                yield break;
+            }
+
+            Task<string> tokenTask = user.TokenAsync(true);
+            yield return new WaitUntil(() => tokenTask.IsCompleted);
+
+            if (tokenTask.Exception != null)
+            {
+                Debug.LogError("[Leaderboard] Failed to get Auth Token.");
+                onFailure?.Invoke("Token fetch failed");
+                yield break;
+            }
+
             using (UnityWebRequest request = UnityWebRequest.Get(_leaderboardURL))
             {
+                request.SetRequestHeader("Authorization", "Bearer " + tokenTask.Result);
                 yield return request.SendWebRequest();
 
                 if (request.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log("[Leaderboard] Success: " + request.downloadHandler.text);
-                    onSuccess?.Invoke(request.downloadHandler.text);
+                    string json = request.downloadHandler.text;
+                    Debug.Log("[Leaderboard] Success: " + json);
+
+                    // Save to device cache with Unix timestamp
+                    double now = (System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
+                    PlayerPrefs.SetString(LeaderboardCacheKey, json);
+                    PlayerPrefs.SetString(LeaderboardCacheTimeKey, now.ToString());
+                    PlayerPrefs.Save();
+
+                    onSuccess?.Invoke(json);
                 }
                 else
                 {
                     Debug.LogError("[Leaderboard] Failed: " + request.error);
-                    onFailure?.Invoke(request.error);
+
+                    // If fetch fails but we have a stale cache, use it rather than showing nothing
+                    if (PlayerPrefs.HasKey(LeaderboardCacheKey))
+                    {
+                        Debug.LogWarning("[Leaderboard] Using stale cache due to network failure.");
+                        onSuccess?.Invoke(PlayerPrefs.GetString(LeaderboardCacheKey));
+                    }
+                    else
+                    {
+                        onFailure?.Invoke(request.error);
+                    }
                 }
             }
         }
