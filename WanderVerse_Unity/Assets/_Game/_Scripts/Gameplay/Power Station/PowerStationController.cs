@@ -127,8 +127,15 @@ public class PowerStationController : BaseLevelController
             machineAnimator.ResetTrigger(overloadTriggerName);
             machineAnimator.ResetTrigger(underloadTriggerName);
             machineAnimator.ResetTrigger(victoryTriggerName);
-            machineAnimator.Play(idleStateName, 0, 0f);
-            return;
+
+            int idleHash = Animator.StringToHash(idleStateName);
+            if (machineAnimator.HasState(0, idleHash))
+            {
+                machineAnimator.Play(idleStateName, 0, 0f);
+                return;
+            }
+
+            Debug.LogWarning($"[PowerStation] Animator state '{idleStateName}' not found. Falling back to idle sprite.");
         }
 
         if (machineImage != null && machineIdle != null)
@@ -367,6 +374,7 @@ public class PowerStationController : BaseLevelController
     /// </summary>
     private List<int> GenerateBatteryPool()
     {
+        ValidateTraySettings();
         List<int> pool = new List<int>();
         requiredDigitCounts.Clear();
         int trayCapacity = GetTrayCapacity();
@@ -414,6 +422,8 @@ public class PowerStationController : BaseLevelController
 
     private void ConfigureBatteryTrayLayout()
     {
+        ValidateTraySettings();
+
         if (batteryTray == null)
         {
             Debug.LogWarning("[PowerStation] Battery Tray is not assigned.");
@@ -505,6 +515,8 @@ public class PowerStationController : BaseLevelController
 
     private void SpawnBatteries(List<int> values)
     {
+        ValidateTraySettings();
+
         if (batteryTray == null)
         {
             Debug.LogWarning("[PowerStation] Cannot spawn batteries: Battery Tray is not assigned.");
@@ -517,9 +529,16 @@ public class PowerStationController : BaseLevelController
             return;
         }
 
-        // Destroy old batteries in the tray
-        foreach (Transform child in batteryTray)
+        // Clear old tray batteries immediately from layout flow (destroy happens end-of-frame)
+        List<Transform> oldChildren = new List<Transform>();
+        for (int i = 0; i < batteryTray.childCount; i++)
+            oldChildren.Add(batteryTray.GetChild(i));
+
+        foreach (Transform child in oldChildren)
+        {
+            child.SetParent(null, false);
             Destroy(child.gameObject);
+        }
 
         // Instantiate one battery UI element per value
         int maxToSpawn = Mathf.Min(values.Count, GetTrayCapacity());
@@ -606,6 +625,8 @@ public class PowerStationController : BaseLevelController
 
     private void RefillTrayAfterSnap()
     {
+        ValidateTraySettings();
+
         if (batteryTray == null || batteryPrefab == null) return;
 
         int trayCapacity = GetTrayCapacity();
@@ -711,9 +732,10 @@ public class PowerStationController : BaseLevelController
 
     private void ValidateTraySettings()
     {
-        if (trayColumns <= 0) trayColumns = 3;
-        if (trayRows <= 0) trayRows = 2;
-        if (maxVisibleBatteries <= 0) maxVisibleBatteries = 6;
+        // Power Station uses a fixed 2x3 tray with 6 visible batteries.
+        if (trayColumns < 3) trayColumns = 3;
+        if (trayRows < 2) trayRows = 2;
+        if (maxVisibleBatteries < 6) maxVisibleBatteries = 6;
     }
 
     private int GetTrayCapacity()
