@@ -55,10 +55,15 @@ public class PowerStationController : BaseLevelController
 
     [Header("--- Machine Visuals ---")]
     public Image machineImage;
+    public Animator machineAnimator;
     public Sprite machineIdle;
     public Sprite machineUnderload;
     public Sprite machineOverload;
     public Sprite machineVictory;
+    public string idleStateName = "Machine_Idle";
+    public string overloadTriggerName = "Overload";
+    public string underloadTriggerName = "Underload";
+    public string victoryTriggerName = "Victory";
 
     [Header("--- Feedback Panels ---")]
     public RectTransform correctPanel;
@@ -96,6 +101,57 @@ public class PowerStationController : BaseLevelController
     private int numColumns;
     private int numRows;
     private bool isProcessingResult = false;
+
+    private void SetMachineIdleVisual()
+    {
+        if (machineAnimator != null)
+        {
+            machineAnimator.ResetTrigger(overloadTriggerName);
+            machineAnimator.ResetTrigger(underloadTriggerName);
+            machineAnimator.ResetTrigger(victoryTriggerName);
+            machineAnimator.Play(idleStateName, 0, 0f);
+            return;
+        }
+
+        if (machineImage != null && machineIdle != null)
+            machineImage.sprite = machineIdle;
+    }
+
+    private void SetMachineOverloadVisual()
+    {
+        if (machineAnimator != null)
+        {
+            machineAnimator.SetTrigger(overloadTriggerName);
+            return;
+        }
+
+        if (machineImage != null && machineOverload != null)
+            machineImage.sprite = machineOverload;
+    }
+
+    private void SetMachineUnderloadVisual()
+    {
+        if (machineAnimator != null)
+        {
+            machineAnimator.SetTrigger(underloadTriggerName);
+            return;
+        }
+
+        if (machineImage != null && machineUnderload != null)
+            machineImage.sprite = machineUnderload;
+    }
+
+    private void SetMachineVictoryVisual()
+    {
+        if (machineAnimator != null)
+        {
+            machineAnimator.SetTrigger(victoryTriggerName);
+            return;
+        }
+
+        if (machineImage != null && machineVictory != null)
+            machineImage.sprite = machineVictory;
+    }
 
     // ═══════════════════════════════════════════
     //  LIFECYCLE
@@ -167,8 +223,7 @@ public class PowerStationController : BaseLevelController
         ResetColumnSumDisplay();
 
         // 8. Reset machine visual
-        if (machineImage != null && machineIdle != null)
-            machineImage.sprite = machineIdle;
+        SetMachineIdleVisual();
 
         Debug.Log($"[PowerStation] Turn {currentTurn}/{totalTurns} — Target: {currentTargetPower} | Columns: {numColumns} | Rows: {numRows}");
     }
@@ -506,8 +561,7 @@ public class PowerStationController : BaseLevelController
             audioSource.PlayOneShot(correctSound);
 
         // Machine idle (correct)
-        if (machineImage != null && machineIdle != null)
-            machineImage.sprite = machineIdle;
+        SetMachineIdleVisual();
 
         Debug.Log($"<color=green>[PowerStation] CORRECT! Turn {currentTurn}/{totalTurns} complete.</color>");
 
@@ -559,8 +613,7 @@ public class PowerStationController : BaseLevelController
             audioSource.PlayOneShot(overloadSound);
 
         // Machine overload
-        if (machineImage != null && machineOverload != null)
-            machineImage.sprite = machineOverload;
+        SetMachineOverloadVisual();
 
         StartCoroutine(ShowFeedbackThenReset(overloadPanel));
 
@@ -575,8 +628,7 @@ public class PowerStationController : BaseLevelController
             audioSource.PlayOneShot(underloadSound);
 
         // Machine underload
-        if (machineImage != null && machineUnderload != null)
-            machineImage.sprite = machineUnderload;
+        SetMachineUnderloadVisual();
 
         StartCoroutine(ShowFeedbackThenReset(underloadPanel));
 
@@ -642,8 +694,7 @@ public class PowerStationController : BaseLevelController
         // Reset column sums and machine visual
         ResetColumnSumDisplay();
 
-        if (machineImage != null && machineIdle != null)
-            machineImage.sprite = machineIdle;
+        SetMachineIdleVisual();
     }
 
     /// <summary>Resets all column sum texts, carry indicators, and pipe colors to default.</summary>
@@ -677,8 +728,7 @@ public class PowerStationController : BaseLevelController
 
     private void ShowVictory()
     {
-        if (machineImage != null && machineVictory != null)
-            machineImage.sprite = machineVictory;
+        SetMachineVictoryVisual();
         if (confetti != null)  confetti.Play();
         if (sparks != null)    sparks.Play();
 
