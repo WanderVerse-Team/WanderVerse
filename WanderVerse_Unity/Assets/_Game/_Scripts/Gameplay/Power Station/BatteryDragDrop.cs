@@ -10,9 +10,12 @@ public class BatteryDragDrop : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Canvas parentCanvas;
+    private RectTransform canvasRectTransform;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private BatteryIdentity batteryIdentity;
+    private Vector2 originalSizeDelta;
+    private Vector2 dragPointerOffset;
     private Vector3 originalPosition;
     private Transform originalParent;
     private bool isPlaced = false;
@@ -26,10 +29,19 @@ public class BatteryDragDrop : MonoBehaviour,
         canvasGroup   = GetComponent<CanvasGroup>();
         batteryIdentity = GetComponent<BatteryIdentity>();
         parentCanvas  = GetComponentInParent<Canvas>();
+        canvasRectTransform = parentCanvas != null ? parentCanvas.GetComponent<RectTransform>() : null;
+        originalSizeDelta = rectTransform != null ? rectTransform.sizeDelta : Vector2.zero;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (rectTransform == null) return;
+
+        if (parentCanvas == null)
+            parentCanvas = GetComponentInParent<Canvas>();
+        if (canvasRectTransform == null && parentCanvas != null)
+            canvasRectTransform = parentCanvas.GetComponent<RectTransform>();
+
         originalPosition = rectTransform.position;
         originalParent   = transform.parent;
 
@@ -52,14 +64,28 @@ public class BatteryDragDrop : MonoBehaviour,
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = false;
 
+        if (parentCanvas != null)
+            transform.SetParent(parentCanvas.transform, true);
+
+        dragPointerOffset = (Vector2)rectTransform.position - eventData.position;
+
         // Render on top of everything
         transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (parentCanvas == null || rectTransform == null) return;
-        rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
+        if (canvasRectTransform == null || rectTransform == null) return;
+
+        Vector2 screenPosition = eventData.position + dragPointerOffset;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRectTransform,
+                screenPosition,
+                eventData.pressEventCamera,
+                out Vector2 localPoint))
+        {
+            rectTransform.localPosition = localPoint;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -114,10 +140,18 @@ public class BatteryDragDrop : MonoBehaviour,
     public void LockIntoSocket(Transform socketTransform)
     {
         isPlaced = true;
-        transform.SetParent(socketTransform, false);
-        rectTransform.anchoredPosition = Vector2.zero; // Center inside socket
-        rectTransform.localScale = Vector3.one;
         currentSocket = socketTransform != null ? socketTransform.GetComponent<BatterySocket>() : null;
+
+        // Keep under canvas so socket parent scale does not squash battery size.
+        if (parentCanvas != null)
+            transform.SetParent(parentCanvas.transform, true);
+
+        if (socketTransform != null)
+            rectTransform.position = socketTransform.position;
+
+        rectTransform.localScale = Vector3.one;
+        if (originalSizeDelta != Vector2.zero)
+            rectTransform.sizeDelta = originalSizeDelta;
 
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;
@@ -130,6 +164,8 @@ public class BatteryDragDrop : MonoBehaviour,
         currentSocket = null;
         transform.SetParent(trayParent, false);
         rectTransform.localScale = Vector3.one;
+        if (originalSizeDelta != Vector2.zero)
+            rectTransform.sizeDelta = originalSizeDelta;
 
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;

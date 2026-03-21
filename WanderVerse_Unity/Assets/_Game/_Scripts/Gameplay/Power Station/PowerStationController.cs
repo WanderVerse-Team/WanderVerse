@@ -1411,15 +1411,25 @@ public class PowerStationController : BaseLevelController
     //  VICTORY
     // ═══════════════════════════════════════════
 
+    private void PlayVictoryAudio()
+    {
+        if (victoryChime == null) return;
+
+        AudioSource source = victoryAudioSource != null ? victoryAudioSource : audioSource;
+        if (source != null)
+            source.PlayOneShot(victoryChime);
+    }
+
     private void ShowVictory()
     {
         SetBoardVisualsVisible(false);
+
+        // Start animation + sound together
         SetMachineVictoryVisual();
+        PlayVictoryAudio();
+
         if (confetti != null)  confetti.Play();
         if (sparks != null)    sparks.Play();
-
-        if (victoryAudioSource != null && victoryChime != null)
-            victoryAudioSource.PlayOneShot(victoryChime);
 
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
