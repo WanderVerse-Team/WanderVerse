@@ -75,7 +75,10 @@ public class PowerStationController : BaseLevelController
     public Sprite machineUnderload;
     public Sprite machineOverload;
     public Sprite machineVictory;
-    public string idleStateName = "Machine_Idle";
+    public string idleStateName = "machine_idle";
+    public string overloadStateName = "machine_overload";
+    public string underloadStateName = "machine_underload";
+    public string victoryStateName = "machine_victory";
     public string overloadTriggerName = "Overload";
     public string underloadTriggerName = "Underload";
     public string victoryTriggerName = "Victory";
@@ -120,18 +123,37 @@ public class PowerStationController : BaseLevelController
     private Dictionary<int, int> requiredDigitCounts = new Dictionary<int, int>();
     private int[,] solutionDigits;
 
+    private void EnsureMachineAnimatorAssigned()
+    {
+        if (machineAnimator != null) return;
+
+        if (machineImage != null)
+            machineAnimator = machineImage.GetComponent<Animator>();
+    }
+
+    private bool TryPlayMachineState(string stateName)
+    {
+        if (machineAnimator == null || string.IsNullOrEmpty(stateName)) return false;
+
+        int stateHash = Animator.StringToHash(stateName);
+        if (!machineAnimator.HasState(0, stateHash)) return false;
+
+        machineAnimator.Play(stateName, 0, 0f);
+        return true;
+    }
+
     private void SetMachineIdleVisual()
     {
+        EnsureMachineAnimatorAssigned();
+
         if (machineAnimator != null)
         {
             machineAnimator.ResetTrigger(overloadTriggerName);
             machineAnimator.ResetTrigger(underloadTriggerName);
             machineAnimator.ResetTrigger(victoryTriggerName);
 
-            int idleHash = Animator.StringToHash(idleStateName);
-            if (machineAnimator.HasState(0, idleHash))
+            if (TryPlayMachineState(idleStateName))
             {
-                machineAnimator.Play(idleStateName, 0, 0f);
                 return;
             }
 
@@ -144,10 +166,20 @@ public class PowerStationController : BaseLevelController
 
     private void SetMachineOverloadVisual()
     {
+        EnsureMachineAnimatorAssigned();
+
         if (machineAnimator != null)
         {
-            machineAnimator.SetTrigger(overloadTriggerName);
-            return;
+            if (TryPlayMachineState(overloadStateName))
+                return;
+
+            if (HasAnimatorTrigger(overloadTriggerName))
+            {
+                machineAnimator.SetTrigger(overloadTriggerName);
+                return;
+            }
+
+            Debug.LogWarning($"[PowerStation] Animator trigger '{overloadTriggerName}' not found. Falling back to overload sprite.");
         }
 
         if (machineImage != null && machineOverload != null)
@@ -156,10 +188,20 @@ public class PowerStationController : BaseLevelController
 
     private void SetMachineUnderloadVisual()
     {
+        EnsureMachineAnimatorAssigned();
+
         if (machineAnimator != null)
         {
-            machineAnimator.SetTrigger(underloadTriggerName);
-            return;
+            if (TryPlayMachineState(underloadStateName))
+                return;
+
+            if (HasAnimatorTrigger(underloadTriggerName))
+            {
+                machineAnimator.SetTrigger(underloadTriggerName);
+                return;
+            }
+
+            Debug.LogWarning($"[PowerStation] Animator trigger '{underloadTriggerName}' not found. Falling back to underload sprite.");
         }
 
         if (machineImage != null && machineUnderload != null)
@@ -168,14 +210,39 @@ public class PowerStationController : BaseLevelController
 
     private void SetMachineVictoryVisual()
     {
+        EnsureMachineAnimatorAssigned();
+
         if (machineAnimator != null)
         {
-            machineAnimator.SetTrigger(victoryTriggerName);
-            return;
+            if (TryPlayMachineState(victoryStateName))
+                return;
+
+            if (HasAnimatorTrigger(victoryTriggerName))
+            {
+                machineAnimator.SetTrigger(victoryTriggerName);
+                return;
+            }
+
+            Debug.LogWarning($"[PowerStation] Animator trigger '{victoryTriggerName}' not found. Falling back to victory sprite.");
         }
 
         if (machineImage != null && machineVictory != null)
             machineImage.sprite = machineVictory;
+    }
+
+    private bool HasAnimatorTrigger(string triggerName)
+    {
+        if (machineAnimator == null || string.IsNullOrEmpty(triggerName)) return false;
+
+        AnimatorControllerParameter[] parameters = machineAnimator.parameters;
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            AnimatorControllerParameter parameter = parameters[i];
+            if (parameter.type == AnimatorControllerParameterType.Trigger && parameter.name == triggerName)
+                return true;
+        }
+
+        return false;
     }
 
     // ═══════════════════════════════════════════
@@ -204,6 +271,7 @@ public class PowerStationController : BaseLevelController
 
         ValidateTraySettings();
         EnsureSocketsInitialized();
+        EnsureColumnSumTextsInitialized();
         ConfigureBatteryTrayLayout();
 
         // Wire submit button
@@ -215,6 +283,53 @@ public class PowerStationController : BaseLevelController
 
         // Start the first turn
         StartNextTurn();
+    }
+
+    private void EnsureColumnSumTextsInitialized()
+    {
+        if (numColumns <= 0) return;
+
+        if (columnSumTexts == null || columnSumTexts.Length < numColumns)
+            columnSumTexts = new TextMeshProUGUI[numColumns];
+
+        bool hasMissing = false;
+        for (int i = 0; i < numColumns; i++)
+        {
+            if (columnSumTexts[i] == null)
+            {
+                hasMissing = true;
+                break;
+            }
+        }
+
+        if (!hasMissing) return;
+
+        TextMeshProUGUI[] allTexts = FindObjectsByType<TextMeshProUGUI>(FindObjectsSortMode.None);
+        for (int i = 0; i < numColumns; i++)
+        {
+            if (columnSumTexts[i] != null) continue;
+
+            string expectedName = $"ColumnSum_{i}";
+            for (int t = 0; t < allTexts.Length; t++)
+            {
+                TextMeshProUGUI text = allTexts[t];
+                if (text == null) continue;
+
+                if (string.Equals(text.name, expectedName, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    columnSumTexts[i] = text;
+                    if (!text.gameObject.activeSelf)
+                        text.gameObject.SetActive(true);
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < numColumns; i++)
+        {
+            if (columnSumTexts[i] == null)
+                Debug.LogWarning($"[PowerStation] Missing ColumnSum_{i} reference. Assign it in inspector or keep exact name for auto-wire.");
+        }
     }
 
     private void EnsureSocketsInitialized()
@@ -261,6 +376,19 @@ public class PowerStationController : BaseLevelController
             }
         }
 
+        // Normalize socket coordinates from object names when available (authoritative)
+        for (int i = 0; i < discovered.Count; i++)
+        {
+            BatterySocket socket = discovered[i];
+            if (socket == null) continue;
+
+            if (TryParseSocketName(socket.name, out int parsedRow, out int parsedColumn))
+            {
+                socket.row = parsedRow;
+                socket.column = parsedColumn;
+            }
+        }
+
         discovered.Sort((a, b) =>
         {
             int rowCompare = a.row.CompareTo(b.row);
@@ -273,6 +401,12 @@ public class PowerStationController : BaseLevelController
             Debug.LogError("[PowerStation] No sockets found. Add objects named like Socket_R0_C0, Socket_R0_C1, Socket_R1_C0, Socket_R1_C1.");
         else
             Debug.Log($"[PowerStation] Auto-wired {sockets.Length} sockets.");
+
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            if (sockets[i] == null) continue;
+            Debug.Log($"[PowerStation] Socket map: {sockets[i].name} => row {sockets[i].row}, col {sockets[i].column}");
+        }
     }
 
     private bool TryParseSocketName(string objectName, out int row, out int column)
@@ -313,6 +447,9 @@ public class PowerStationController : BaseLevelController
 
         // 2. Figure out how many columns (digits) the target has
         numColumns = currentTargetPower.ToString().Length;
+
+        // Ensure ColumnSum_0/1 references are valid for current digit count
+        EnsureColumnSumTextsInitialized();
 
         // 3. Update UI
         UpdateTargetDisplay();
@@ -752,7 +889,7 @@ public class PowerStationController : BaseLevelController
     /// </summary>
     private void UpdateColumnSums()
     {
-        string targetStr = currentTargetPower.ToString().PadLeft(numColumns, '0');
+        EnsureColumnSumTextsInitialized();
 
         // Calculate raw column sums (before carry)
         int[] rawColumnSums = new int[numColumns];
@@ -776,30 +913,12 @@ public class PowerStationController : BaseLevelController
             columnFullFlags[c] = isFull;
         }
 
-        // Process carries from right to left (ones → tens → hundreds…)
+        // Carry values (for carry indicators only)
         int[] carries = new int[numColumns];
-        int[] finalDigits = new int[numColumns];
-
-        for (int c = numColumns - 1; c >= 0; c--)
-        {
-            int total = rawColumnSums[c];
-
-            // Add carry from the column to the right
-            if (c < numColumns - 1)
-                total += carries[c + 1] > 0 ? 0 : 0; // Carry comes FROM the right
-
-            // Actually, carries flow left: column c receives carry from column c+1
-            // But carry is generated BY column c and sent to column c-1
-            // Let's recalculate properly:
-            // Reset and do a clean right-to-left pass
-        }
-
-        // Clean right-to-left carry pass
         int carryIn = 0;
         for (int c = numColumns - 1; c >= 0; c--)
         {
             int total = rawColumnSums[c] + carryIn;
-            finalDigits[c] = total % 10;
             carries[c] = total / 10;   // carry OUT to the column on the left
             carryIn = carries[c];
         }
@@ -807,31 +926,17 @@ public class PowerStationController : BaseLevelController
         // Update column sum texts
         for (int c = 0; c < numColumns; c++)
         {
-            bool columnFull = columnFullFlags[c];
-
             if (c < columnSumTexts.Length && columnSumTexts[c] != null)
             {
-                if (!columnFull)
-                {
-                    // Show partial sum or "?" if column not full
-                    int partial = rawColumnSums[c];
-                    columnSumTexts[c].text = partial > 0 ? partial.ToString() : "?";
-                    columnSumTexts[c].color = Color.white;
-                }
-                else
-                {
-                    // Show the final digit for this column
-                    columnSumTexts[c].text = finalDigits[c].ToString();
-
-                    // Color: green if matches target digit, red if not
-                    int targetDigit = int.Parse(targetStr[c].ToString());
-                    columnSumTexts[c].color = (finalDigits[c] == targetDigit) ? Color.green : Color.red;
-                }
+                int liveSum = rawColumnSums[c];
+                columnSumTexts[c].text = liveSum > 0 ? liveSum.ToString() : "?";
+                columnSumTexts[c].color = Color.white;
             }
 
             // Update carry indicators
             if (c < carryTexts.Length && carryTexts[c] != null)
             {
+                bool columnFull = columnFullFlags[c];
                 if (carries[c] > 0 && columnFull)
                 {
                     carryTexts[c].text = "+" + carries[c].ToString();
@@ -846,18 +951,18 @@ public class PowerStationController : BaseLevelController
             // Tint the pipe image
             if (c < columnPipeImages.Length && columnPipeImages[c] != null)
             {
+                bool columnFull = columnFullFlags[c];
                 if (!columnFull)
                     columnPipeImages[c].color = new Color(0.5f, 0.8f, 1f, 0.5f); // Neutral light blue
                 else
                 {
-                    int targetDigit = int.Parse(targetStr[c].ToString());
-                    if (finalDigits[c] == targetDigit)
-                        columnPipeImages[c].color = Color.green;
-                    else
-                        columnPipeImages[c].color = Color.red;
+                    columnPipeImages[c].color = Color.white;
                 }
             }
         }
+
+        if (numColumns >= 2)
+            Debug.Log($"[PowerStation] Live sums -> C0:{rawColumnSums[0]} C1:{rawColumnSums[1]}");
     }
 
     // ═══════════════════════════════════════════
@@ -918,9 +1023,16 @@ public class PowerStationController : BaseLevelController
 
     private BatterySocket GetSocket(int row, int col)
     {
-        int index = row * numColumns + col;
-        if (index >= 0 && index < sockets.Length)
-            return sockets[index];
+        if (sockets == null) return null;
+
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            BatterySocket socket = sockets[i];
+            if (socket == null) continue;
+            if (socket.row == row && socket.column == col)
+                return socket;
+        }
+
         return null;
     }
 
