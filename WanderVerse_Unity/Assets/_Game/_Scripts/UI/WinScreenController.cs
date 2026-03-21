@@ -105,6 +105,13 @@ public class WinScreenController : MonoBehaviour
             xpText.text = "";
         }
 
+        if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        {
+            bool isFinalLevel = string.IsNullOrEmpty(GameManager.Instance.CurrentLevelData.nextLevelSceneName);
+
+            nextLevelButton.interactable = !isFinalLevel;
+        }
+
         StartCoroutine(AnimateWinScreen(stars, xpAdded));
     }
 
@@ -163,13 +170,23 @@ public class WinScreenController : MonoBehaviour
     {
         Time.timeScale = 1f;
         if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        {
+            string nextScene = GameManager.Instance.CurrentLevelData.nextLevelSceneName;
+            SceneManager.LoadScene(nextScene);
+        }
     }
 
     private void ReturnToMenu()
     {
         Time.timeScale = 1f;
         if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
-        SceneManager.LoadScene("Golem_Game_Map");
+
+        if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        {
+            string mapScene = GameManager.Instance.CurrentLevelData.parentMapSceneName;
+            SceneManager.LoadScene(mapScene);
+        }
     }
 }
