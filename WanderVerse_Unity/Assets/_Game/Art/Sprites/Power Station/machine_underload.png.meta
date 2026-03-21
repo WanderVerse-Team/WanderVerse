@@ -161,9 +161,9 @@ TextureImporter:
       name: machine_underload_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 0
-        width: 1750
+        width: 1672
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -183,9 +183,9 @@ TextureImporter:
       name: machine_underload_1
       rect:
         serializedVersion: 2
-        x: 1750
+        x: 1776
         y: 0
-        width: 1750
+        width: 1674
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -205,9 +205,9 @@ TextureImporter:
       name: machine_underload_2
       rect:
         serializedVersion: 2
-        x: 3500
+        x: 3544
         y: 0
-        width: 1750
+        width: 1675
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -227,9 +227,9 @@ TextureImporter:
       name: machine_underload_3
       rect:
         serializedVersion: 2
-        x: 5250
+        x: 5313
         y: 0
-        width: 1750
+        width: 1671
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
