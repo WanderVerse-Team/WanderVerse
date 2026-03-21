@@ -111,6 +111,10 @@ public class PowerStationController : BaseLevelController
     public ParticleSystem confetti;
     public ParticleSystem sparks;
 
+    [Header("--- Victory Timing ---")]
+    [Tooltip("Delay before ending the level so machine_victory animation can play before WinScreen appears.")]
+    public float victoryAnimationDuration = 1.5f;
+
     [Header("--- Submit ---")]
     public Button submitButton;
 
@@ -1513,9 +1517,7 @@ public class PowerStationController : BaseLevelController
         // Check if all turns are done
         if (currentTurn >= totalTurns)
         {
-            // Level complete!
-            CheckWinCondition();
-            ShowVictory();
+            StartCoroutine(ShowVictoryThenCompleteLevel());
         }
         else
         {
@@ -1746,6 +1748,46 @@ public class PowerStationController : BaseLevelController
 
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
+    }
+
+    private IEnumerator ShowVictoryThenCompleteLevel()
+    {
+        isProcessingResult = true;
+
+        ShowVictory();
+
+        float waitDuration = Mathf.Max(0f, victoryAnimationDuration);
+        float clipLength = GetVictoryClipLength();
+        if (clipLength > 0f)
+            waitDuration = Mathf.Max(waitDuration, clipLength);
+
+        if (waitDuration > 0f)
+            yield return new WaitForSecondsRealtime(waitDuration);
+
+        EndLevel(true);
+        isProcessingResult = false;
+    }
+
+    private float GetVictoryClipLength()
+    {
+        if (machineAnimator == null || machineAnimator.runtimeAnimatorController == null)
+            return 0f;
+
+        AnimationClip[] clips = machineAnimator.runtimeAnimatorController.animationClips;
+        if (clips == null || clips.Length == 0)
+            return 0f;
+
+        for (int i = 0; i < clips.Length; i++)
+        {
+            AnimationClip clip = clips[i];
+            if (clip == null) continue;
+
+            if (string.Equals(clip.name, victoryStateName, System.StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(clip.name, "machine_victory", System.StringComparison.OrdinalIgnoreCase))
+                return clip.length;
+        }
+
+        return 0f;
     }
 
     // ═══════════════════════════════════════════

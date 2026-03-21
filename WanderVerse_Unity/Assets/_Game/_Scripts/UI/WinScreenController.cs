@@ -24,11 +24,21 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private Button menuButton;
 
+    private BaseLevelController activeLevelController;
+    private bool hasShownWin;
+    private CanvasGroup rootCanvasGroup;
+
     private void Awake()
     {
-        restartButton.onClick.AddListener(RestartLevel);
-        nextLevelButton.onClick.AddListener(LoadNextLevel);
-        menuButton.onClick.AddListener(ReturnToMenu);
+        if (restartButton != null) restartButton.onClick.AddListener(RestartLevel);
+        if (nextLevelButton != null) nextLevelButton.onClick.AddListener(LoadNextLevel);
+        if (menuButton != null) menuButton.onClick.AddListener(ReturnToMenu);
+
+        rootCanvasGroup = GetComponent<CanvasGroup>();
+        if (rootCanvasGroup == null)
+            rootCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+        SetCanvasInteractivity(false);
 
         // Hide visuals initially, but KEEP this root script active so it can listen!
         if (mainWindowTransform != null) mainWindowTransform.gameObject.SetActive(false);
@@ -42,10 +52,16 @@ public class WinScreenController : MonoBehaviour
 
     private void OnEnable()
     {
+        hasShownWin = false;
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnLevelCompleted += HandleLevelCompleted;
         }
+
+        activeLevelController = FindAnyObjectByType<BaseLevelController>();
+        if (activeLevelController != null)
+            activeLevelController.OnLevelEnded += HandleLevelEndedFallback;
     }
 
     private void OnDisable()
@@ -54,10 +70,44 @@ public class WinScreenController : MonoBehaviour
         {
             GameManager.Instance.OnLevelCompleted -= HandleLevelCompleted;
         }
+
+        if (activeLevelController != null)
+        {
+            activeLevelController.OnLevelEnded -= HandleLevelEndedFallback;
+            activeLevelController = null;
+        }
     }
 
     private void HandleLevelCompleted(string levelID, int currentRunScore, int xpAdded, int stars, bool isNewBest)
     {
+        ShowWinUI(currentRunScore, xpAdded, stars, isNewBest);
+    }
+
+    private void HandleLevelEndedFallback(bool isSuccess)
+    {
+        if (!isSuccess || hasShownWin) return;
+
+        int score = activeLevelController != null ? activeLevelController.CurrentScore : 0;
+        int mistakes = activeLevelController != null ? activeLevelController.MistakeCount : 0;
+        LevelData levelData = activeLevelController != null ? activeLevelController.CurrentLevelData : null;
+
+        int stars = 1;
+        if (levelData != null)
+        {
+            if (mistakes <= levelData.maxMistakesFor3Stars) stars = 3;
+            else if (mistakes <= levelData.maxMistakesFor2Stars) stars = 2;
+        }
+
+        ShowWinUI(score, 0, stars, false);
+    }
+
+    private void ShowWinUI(int currentRunScore, int xpAdded, int stars, bool isNewBest)
+    {
+        if (hasShownWin) return;
+        hasShownWin = true;
+
+        SetCanvasInteractivity(true);
+
         // 1. Turn the visuals ON
         if (backgroundDimmer != null) backgroundDimmer.SetActive(true);
         if (mainWindowTransform != null)
@@ -87,6 +137,14 @@ public class WinScreenController : MonoBehaviour
 
         // 4. Animate!
         StartCoroutine(AnimateWinScreen(stars));
+    }
+
+    private void SetCanvasInteractivity(bool enabled)
+    {
+        if (rootCanvasGroup == null) return;
+
+        rootCanvasGroup.interactable = enabled;
+        rootCanvasGroup.blocksRaycasts = enabled;
     }
 
     private IEnumerator AnimateWinScreen(int starsAchieved)

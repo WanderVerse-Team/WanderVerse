@@ -39,6 +39,10 @@ public abstract class BaseLevelController : MonoBehaviour
     public System.Action<float> OnTimerUpdated;
     public System.Action<bool> OnLevelEnded;
 
+    public int CurrentScore => currentScore;
+    public int MistakeCount => mistakeCount;
+    public LevelData CurrentLevelData => levelData;
+
     protected virtual void Awake()
     {
         // If you need to initialize any level specific internal variables, do it here
