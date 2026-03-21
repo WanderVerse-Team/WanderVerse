@@ -118,6 +118,13 @@ public class PowerStationController : BaseLevelController
     [Header("--- Submit ---")]
     public Button submitButton;
 
+    [Header("--- Orientation (Power Station Only) ---")]
+    [Tooltip("Force landscape while Power Station scene is active.")]
+    public bool forceLandscapeOnEnter = true;
+
+    [Tooltip("Restore portrait when leaving Power Station scene.")]
+    public bool restorePortraitOnExit = true;
+
     // ═══════════════════════════════════════════
     //  INTERNAL STATE
     // ═══════════════════════════════════════════
@@ -139,6 +146,38 @@ public class PowerStationController : BaseLevelController
 
         if (machineImage != null)
             machineAnimator = machineImage.GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        if (forceLandscapeOnEnter)
+            ApplyLandscapeOrientation();
+    }
+
+    private void OnDisable()
+    {
+        if (restorePortraitOnExit)
+            ApplyPortraitOrientation();
+    }
+
+    private void ApplyLandscapeOrientation()
+    {
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
+
+    private void ApplyPortraitOrientation()
+    {
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortrait = true;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     private bool TryPlayMachineState(string stateName)
