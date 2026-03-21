@@ -26,15 +26,24 @@ public class BatterySocket : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        // Socket already occupied
-        if (currentBattery != null) return;
-
         GameObject dropped = eventData.pointerDrag;
         if (dropped == null) return;
 
         BatteryDragDrop drag = dropped.GetComponent<BatteryDragDrop>();
         BatteryIdentity id  = dropped.GetComponent<BatteryIdentity>();
         if (drag == null || id == null) return;
+
+        TryAcceptBattery(drag, id);
+    }
+
+    public bool TryAcceptBattery(BatteryDragDrop drag, BatteryIdentity id)
+    {
+        // Socket already occupied
+        if (currentBattery != null) return false;
+        if (drag == null || id == null) return false;
+
+        if (controller == null)
+            controller = FindAnyObjectByType<PowerStationController>();
 
         // Snap battery into this socket
         currentBattery = id;
@@ -43,7 +52,10 @@ public class BatterySocket : MonoBehaviour, IDropHandler, IPointerClickHandler
         Debug.Log($"Battery {id.digitValue} placed at Row {row}, Col {column}");
 
         // Notify the controller (updates live column sums)
-        controller.OnBatteryPlaced();
+        if (controller != null)
+            controller.OnBatteryPlaced();
+
+        return true;
     }
 
     /// <summary>Tapping an occupied socket removes the battery and sends it back to the tray.</summary>

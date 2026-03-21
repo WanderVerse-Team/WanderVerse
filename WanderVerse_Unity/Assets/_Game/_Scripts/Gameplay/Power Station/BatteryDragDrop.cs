@@ -12,6 +12,7 @@ public class BatteryDragDrop : MonoBehaviour,
     private Canvas parentCanvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    private BatteryIdentity batteryIdentity;
     private Vector3 originalPosition;
     private Transform originalParent;
     private bool isPlaced = false;
@@ -20,6 +21,7 @@ public class BatteryDragDrop : MonoBehaviour,
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup   = GetComponent<CanvasGroup>();
+        batteryIdentity = GetComponent<BatteryIdentity>();
         parentCanvas  = GetComponentInParent<Canvas>();
     }
 
@@ -50,12 +52,38 @@ public class BatteryDragDrop : MonoBehaviour,
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;
 
+        // Fallback: direct snap check in case socket OnDrop doesn't fire due UI raycast setup
+        if (TrySnapToSocket(eventData))
+            return;
+
         // If not snapped into a socket, return to the tray
         if (!isPlaced)
         {
             transform.SetParent(originalParent, true);
             rectTransform.position = originalPosition;
         }
+    }
+
+    private bool TrySnapToSocket(PointerEventData eventData)
+    {
+        if (batteryIdentity == null) return false;
+
+        BatterySocket[] sockets = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
+        foreach (BatterySocket socket in sockets)
+        {
+            if (socket == null || !socket.gameObject.activeInHierarchy) continue;
+
+            RectTransform socketRect = socket.transform as RectTransform;
+            if (socketRect == null) continue;
+
+            if (!RectTransformUtility.RectangleContainsScreenPoint(socketRect, eventData.position, eventData.enterEventCamera))
+                continue;
+
+            if (socket.TryAcceptBattery(this, batteryIdentity))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>Called by BatterySocket when this battery is accepted into a slot.</summary>
