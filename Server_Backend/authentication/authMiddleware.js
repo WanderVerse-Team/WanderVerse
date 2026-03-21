@@ -21,7 +21,7 @@ exports.verifyToken = async (req, res, next) => {
 
         //Attach the verified user data to the request object
         req.user = decodedToken;
-        next();      //Pass the request to the syncController
+        next();      //Pass the request to the syncController and leaderBoard controller
 
     }catch (e){
 
