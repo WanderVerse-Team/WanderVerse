@@ -1,41 +1,27 @@
 import React from 'react'
 import Hero from '@/app/components/Home/Hero'
+import HorizontalScroll from '@/app/components/Home/HorizontalScroll'
 import Aboutus from '@/app/components/Home/AboutUs'
-import Digital from '@/app/components/Home/Digital'
 import Beliefs from '@/app/components/Home/Beliefs'
 import Work from '@/app/components/Home/Work'
-import Team from '@/app/components/Home/Team'
-import Featured from '@/app/components/Home/Featured'
-// import Manage from '@/app/components/Home/Manage'
 import FAQ from '@/app/components/Home/FAQ'
-import Testimonial from '@/app/components/Home/Testimonials'
-import Articles from '@/app/components/Home/Articles'
-import Join from '@/app/components/Home/Joinus'
-import Insta from '@/app/components/Home/Insta'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'WanderVerse',
+  title: 'WanderVerse — Where Learning Meets Play',
+  description:
+    'WanderVerse gamifies the Grade 3 Sri Lankan Mathematics syllabus into an immersive adventure. Free to download.',
 }
 
 export default function Home() {
   return (
     <main>
       <Hero />
-  <Digital />
-  <Beliefs />
-  {/* <Featured /> */}
-  <Aboutus />
-  <Work />
-      
-  {/* <Team /> */}
-
-  {/* <Manage /> */}
+      <HorizontalScroll />
+      <Beliefs />
+      <Aboutus />
+      <Work />
       <FAQ />
-      {/* <Testimonial /> */}
-      {/* <Articles />
-      <Join />*/}
-      {/* <Insta />  */}
     </main>
   )
 }

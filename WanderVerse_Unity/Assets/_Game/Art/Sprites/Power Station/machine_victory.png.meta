@@ -131,9 +131,9 @@ TextureImporter:
       name: machine_victory_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 13
         y: 0
-        width: 1729
+        width: 1670
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -153,9 +153,9 @@ TextureImporter:
       name: machine_victory_1
       rect:
         serializedVersion: 2
-        x: 1729
+        x: 1748
         y: 0
-        width: 1729
+        width: 1673
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -175,9 +175,9 @@ TextureImporter:
       name: machine_victory_2
       rect:
         serializedVersion: 2
-        x: 3458
+        x: 3483
         y: 0
-        width: 1729
+        width: 1674
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -197,9 +197,9 @@ TextureImporter:
       name: machine_victory_3
       rect:
         serializedVersion: 2
-        x: 5187
+        x: 5217
         y: 0
-        width: 1729
+        width: 1672
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -219,9 +219,9 @@ TextureImporter:
       name: machine_victory_4
       rect:
         serializedVersion: 2
-        x: 6916
+        x: 6955
         y: 0
-        width: 1729
+        width: 1669
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -241,9 +241,9 @@ TextureImporter:
       name: machine_victory_5
       rect:
         serializedVersion: 2
-        x: 8645
+        x: 8686
         y: 0
-        width: 1729
+        width: 1676
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
