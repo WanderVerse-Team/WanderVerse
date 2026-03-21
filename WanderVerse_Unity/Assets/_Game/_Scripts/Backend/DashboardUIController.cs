@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;          // Required for Slider
 using TMPro;                   // Required for TextMeshProUGUI
@@ -37,7 +38,7 @@ namespace WanderVerse.Backend.UI
 
                 // Map & Subject Progress
                 float totalProgress = CalculateSubjectProgress(data);
-                subjectProgressBar.value = totalProgress;
+                subjectProgressBar.value = Mathf.Clamp01(totalProgress);
                 
                 map1PercentageText.text = $"Island 1: {(totalProgress * 100):F0}%";
 
@@ -68,8 +69,21 @@ namespace WanderVerse.Backend.UI
 
             private int CalculateStreak(PlayerData data)
             {
-                // Placeholder: You'll need to compare lastDailyResetTimestamp with current time (to be updated after EnergyManager is created)
-                return 1; 
+                DateTime lastReset = DateTimeOffset
+                    .FromUnixTimeSeconds(data.lastDailyResetTimestamp)
+                    .LocalDateTime.Date;
+
+                DateTime today = DateTime.Now.Date;
+
+                int difference = (today - lastReset).Days;
+
+                if (difference == 0)
+                    return data.loginStreak;
+
+                if (difference == 1)
+                    return data.loginStreak + 1;
+
+                return 1; // reset streak
             }
         }
 }
