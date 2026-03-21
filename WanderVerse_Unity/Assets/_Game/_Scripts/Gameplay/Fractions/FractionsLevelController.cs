@@ -7,40 +7,25 @@ public class FractionsLevelController : BaseLevelController
 {
     protected override GameType SupportedGameType => GameType.Fractions;
 
-    // -------------------------------------------------------
-    // MODE — set this in Inspector per level
-    // -------------------------------------------------------
     public enum FractionMode { Halves, Quarters }
 
     [Header("--- Mode ---")]
     [Tooltip("Halves = Level 1 | Quarters = Level 2")]
     public FractionMode levelMode = FractionMode.Halves;
 
-    // -------------------------------------------------------
-    // FOOD ITEMS
-    // -------------------------------------------------------
     [Header("--- Food Items (Drag items in order) ---")]
     public GameObject[] foodItems;
     private int currentItemIndex = 0;
 
-    // -------------------------------------------------------
-    // GUIDED SETTINGS
-    // -------------------------------------------------------
     [Header("--- Guided Settings ---")]
     [Tooltip("First X items show dotted line(s). Rest do not.")]
     public int guidedItemCount = 5;
 
-    // -------------------------------------------------------
-    // REFERENCES
-    // -------------------------------------------------------
     [Header("--- References ---")]
-    public KnifeCutter knifeCutter;         // Used in Halves mode
-    public QuarterCutter quarterCutter;     // Used in Quarters mode
+    public KnifeCutter knifeCutter;
+    public QuarterCutter quarterCutter;
     public GameObject greenSwitch;
 
-    // -------------------------------------------------------
-    // MR CRUMBLE
-    // -------------------------------------------------------
     [Header("--- Mr. Crumble ---")]
     public SpriteRenderer mrCrumbleRenderer;
     public Sprite crumbleIdle;
@@ -51,17 +36,11 @@ public class FractionsLevelController : BaseLevelController
     public Vector3 crumbleFinalPosition = new Vector3(-6f, -2.41f, 0f);
     public float entranceSpeed = 2f;
 
-    // -------------------------------------------------------
-    // SPEECH BUBBLE
-    // -------------------------------------------------------
     [Header("--- Speech Bubble ---")]
     public GameObject speechBubble;
     public TextMeshProUGUI bubbleText;
     public float bubbleDisplayTime = 3f;
 
-    // -------------------------------------------------------
-    // QUARTERS ONLY — Order Sign & Plate
-    // -------------------------------------------------------
     [Header("--- Quarters Mode Only ---")]
     public GameObject orderSign;
     public TextMeshProUGUI orderSignText;
@@ -73,70 +52,63 @@ public class FractionsLevelController : BaseLevelController
 
     private int requiredPieces = 0;
     private int placedPieces   = 0;
-
     private int[] orderAmounts = new int[] { 1, 2, 4, 1, 2, 4 };
 
-    // -------------------------------------------------------
-    // AUDIO
-    // -------------------------------------------------------
     [Header("--- Audio ---")]
     public AudioSource audioSource;
     public AudioClip correctSound;
     public AudioClip wrongSound;
     public AudioClip levelCompleteSound;
 
-    // -------------------------------------------------------
-    // VICTORY
-    // -------------------------------------------------------
     [Header("--- Victory ---")]
     public GameObject victoryPanel;
     public ParticleSystem confetti;
 
     // -------------------------------------------------------
-    // MESSAGES — HALVES (Level 1) — unchanged
+    // MESSAGES — HALVES (Level 1)
     // -------------------------------------------------------
-    private string halvesWelcome    = "Welcome to Crumble's Bakery! Let's cut food in half!";
-    private string halvesCorrect    = "Perfect! Right down the middle!";
-    private string halvesWrong      = "Oops! Try to cut through the center!";
-    private string halvesLastFive   = "Great job! Now try without the guide line!";
-    private string halvesComplete   = "Amazing! You cut everything in half!";
+    private string halvesWelcome  = "fldfyduo hd¨‍jd'''uu ;uhs l%ïn,a'uf. fílßhg Thdj idorfhka ms<s.kakjd'";
+    private string halvesCorrect  = "kshuhs æ yßhgu ueÈka lemqjd æ'''";
+    private string halvesWrong    = "yßhgu ueÈka lmkak W;aiy lrkak æ";
+    private string halvesLastFive = "ශාබාශ්! දැන් රේඛාව නැතිව උත්සාහ කරන්න!";
+    private string halvesComplete = "Thdkï ienEu olaYfhla ;uhs æ";
 
     private string[] halvesGuided = new string[]
     {
-        "Cut the cake exactly in half!",
-        "Slice right through the middle!",
-        "Follow the dotted line!",
-        "Cut it into two equal parts!",
-        "Right down the center!"
+        "කේක් එක හරියටම බෙදා කපන්න!",
+        "l=lS tl ueÈka lmkakæ",
+        "mSid tl iudk follg lmkakæ",
+        "mdka tl yßhgu ueÈka lmkakæ",
+        "fpdl,Ü tl iudk follg lmkakæ"
     };
 
     private string[] halvesFree = new string[]
     {
-        "Now try without the guide!",
-        "Find the middle yourself!",
-        "Where is the center?",
-        "Cut it equally in two!",
-        "You can do it!"
+        "fu;eka mgka ueo f¾Ldj fkdue;sj W;aiy lrkak æ",
+        "මැද කොතැනද?",
+        "මධ්‍යය සොයා ගන්න!",
+        "සමාන කොටස් දෙකකට කපන්න!",
+        "Tng l< yelshsæ"
     };
 
     // -------------------------------------------------------
     // MESSAGES — QUARTERS (Level 2)
     // -------------------------------------------------------
-    private string quartersWelcome   = "Now let's cut into QUARTERS - 4 equal pieces!";
-    private string quartersFirstCut  = "First cut - slice it in half horizontally!";
-    private string quartersSecondCut = "Great! Now cut it vertically for 4 quarters!";
-    private string quartersServe     = "Perfect quarters! Now drag the pieces to the plate!";
-    private string quartersWrong     = "Try to cut through the exact middle!";
-    private string quartersComplete  = "Amazing! All orders served perfectly!";
+    private string quartersWelcome   = "දැන් කාර්තු හතරට කපමු!";
+    private string quartersFirstCut  = "පළමුව සිරස් කොටසට කපන්න!";
+    private string quartersSecondCut = "ශාබාශ්! දැන් තිරස් කොටසට කපන්න!";
+    private string quartersServe     = "හොඳයි! දැන් කොටස් තහඩුවට දමන්න!";
+    private string quartersWrong     = "හරියටම මැදින් කපන්න!";
+    private string quartersComplete  = "අපූරුයි! සියලු ඇණවුම් ලබා දුන්නා!";
 
     private string[] quartersOrders = new string[]
     {
-        "Give me 1 quarter please!",
-        "Give me 2 quarters please!",
-        "Give me all 4 quarters please!",
-        "Give me 1 quarter please!",
-        "Give me 2 quarters please!",
-        "Give me all 4 quarters please!"
+        "කාර්තු එකක් දෙන්න!",
+        "කාර්තු දෙකක් දෙන්න!",
+        "කාර්තු හතරම දෙන්න!",
+        "කාර්තු එකක් දෙන්න!",
+        "කාර්තු දෙකක් දෙන්න!",
+        "කාර්තු හතරම දෙන්න!"
     };
 
     // ================================================================
@@ -163,7 +135,7 @@ public class FractionsLevelController : BaseLevelController
     }
 
     // ================================================================
-    // MR CRUMBLE ENTRANCE — unchanged from Level 1
+    // MR CRUMBLE ENTRANCE
     // ================================================================
     private IEnumerator MrCrumbleEntrance()
     {
@@ -205,21 +177,16 @@ public class FractionsLevelController : BaseLevelController
     {
         if (currentItemIndex >= foodItems.Length) { AllItemsDone(); return; }
 
-        GameObject item   = foodItems[currentItemIndex];
-        bool isGuided     = currentItemIndex < guidedItemCount;
+        GameObject item = foodItems[currentItemIndex];
+        bool isGuided   = currentItemIndex < guidedItemCount;
         item.SetActive(true);
 
         if (levelMode == FractionMode.Halves)
             ShowItemHalves(item, isGuided);
         else
             ShowItemQuarters(item, isGuided);
-
-        Debug.Log($"[FractionsLevelController] Item {currentItemIndex + 1}/{foodItems.Length} | {levelMode} | Guided: {isGuided}");
     }
 
-    // ----------------------------------------------------------------
-    // HALVES — unchanged from Level 1
-    // ----------------------------------------------------------------
     private void ShowItemHalves(GameObject item, bool isGuided)
     {
         if (currentItemIndex == guidedItemCount)
@@ -228,7 +195,7 @@ public class FractionsLevelController : BaseLevelController
         Transform dottedLine = item.transform.Find("DottedLine");
         if (dottedLine != null) dottedLine.gameObject.SetActive(isGuided);
 
-        if (knifeCutter != null) knifeCutter.SetCurrentItem(item);
+        if (knifeCutter != null) knifeCutter.SetCurrentItem(item, isGuided);
 
         if (currentItemIndex != guidedItemCount)
         {
@@ -240,15 +207,12 @@ public class FractionsLevelController : BaseLevelController
         }
     }
 
-    // ----------------------------------------------------------------
-    // QUARTERS — new for Level 2
-    // ----------------------------------------------------------------
     private void ShowItemQuarters(GameObject item, bool isGuided)
     {
         Transform hLine = item.transform.Find("DottedLineH");
         Transform vLine = item.transform.Find("DottedLineV");
-        if (vLine != null) vLine.gameObject.SetActive(isGuided); // vertical shows first
-        if (hLine != null) hLine.gameObject.SetActive(false);    // horizontal hidden until second cut
+        if (vLine != null) vLine.gameObject.SetActive(isGuided);
+        if (hLine != null) hLine.gameObject.SetActive(false);
 
         if (quarterCutter != null) quarterCutter.SetCurrentItem(item, isGuided);
 
@@ -261,9 +225,7 @@ public class FractionsLevelController : BaseLevelController
     private IEnumerator ShowQuarterOrderSequence()
     {
         yield return StartCoroutine(ShowBubble(quartersFirstCut, bubbleDisplayTime));
-
         ShowOrderSign(requiredPieces);
-
         string orderMsg = quartersOrders[Mathf.Min(currentItemIndex, quartersOrders.Length - 1)];
         yield return StartCoroutine(ShowBubble(orderMsg, bubbleDisplayTime));
     }
@@ -295,7 +257,7 @@ public class FractionsLevelController : BaseLevelController
     }
 
     // ================================================================
-    // CALLED BY QuarterCutter — first cut done
+    // QUARTER CUTTER CALLBACKS
     // ================================================================
     public void OnFirstCutDone()
     {
@@ -305,13 +267,10 @@ public class FractionsLevelController : BaseLevelController
         {
             GameObject item = foodItems[currentItemIndex];
             Transform hLine = item.transform.Find("DottedLineH");
-            if (hLine != null) hLine.gameObject.SetActive(true); // horizontal shows after first cut
+            if (hLine != null) hLine.gameObject.SetActive(true);
         }
     }
 
-    // ================================================================
-    // CALLED BY QuarterCutter — both cuts done
-    // ================================================================
     public void OnBothCutsDone()
     {
         if (audioSource != null && correctSound != null)
@@ -323,13 +282,9 @@ public class FractionsLevelController : BaseLevelController
         if (plate != null) plate.SetActive(true);
     }
 
-    // ================================================================
-    // CALLED BY PieceDragger — piece placed on plate
-    // ================================================================
     public void OnPiecePlaced()
     {
         placedPieces++;
-        Debug.Log($"[FractionsLevelController] Pieces placed: {placedPieces}/{requiredPieces}");
 
         if (placedPieces >= requiredPieces)
         {
@@ -337,14 +292,14 @@ public class FractionsLevelController : BaseLevelController
             StartCoroutine(ShowBubble("Order complete! Well done!", 2f));
             StartCoroutine(HappyReaction());
 
-            if (orderSign != null) orderSign.SetActive(false);
-            if (plate != null)     plate.SetActive(false);
+            if (orderSign != null)   orderSign.SetActive(false);
+            if (plate != null)       plate.SetActive(false);
             if (greenSwitch != null) greenSwitch.SetActive(true);
         }
     }
 
     // ================================================================
-    // CORRECT CUT — Halves mode
+    // KNIFE CUTTER CALLBACKS
     // ================================================================
     public void OnCorrectCut()
     {
@@ -355,9 +310,6 @@ public class FractionsLevelController : BaseLevelController
         StartCoroutine(HappyReaction());
     }
 
-    // ================================================================
-    // WRONG CUT — both modes
-    // ================================================================
     public void OnWrongCut()
     {
         HandleWrongAnswer();
@@ -387,16 +339,13 @@ public class FractionsLevelController : BaseLevelController
         ShowCurrentItem();
     }
 
-    // ================================================================
-    // SHOW GREEN SWITCH — called by KnifeCutter after halves reaction
-    // ================================================================
     public void ShowGreenSwitch()
     {
         if (greenSwitch != null) greenSwitch.SetActive(true);
     }
 
     // ================================================================
-    // ALL DONE
+    // ALL ITEMS DONE
     // ================================================================
     private void AllItemsDone()
     {
@@ -409,12 +358,58 @@ public class FractionsLevelController : BaseLevelController
 
         if (audioSource != null && levelCompleteSound != null)
             audioSource.PlayOneShot(levelCompleteSound);
-        if (confetti != null)     confetti.Play();
+        if (confetti != null)
+        {
+            confetti.gameObject.SetActive(true);
+            confetti.Play();
+        }
         if (victoryPanel != null) victoryPanel.SetActive(true);
+
+        StartCoroutine(CrumbleCelebration());
     }
 
     // ================================================================
-    // MR CRUMBLE REACTIONS — unchanged from Level 1
+    // MR CRUMBLE CELEBRATION — jumps happily at level end
+    // ================================================================
+    private IEnumerator CrumbleCelebration()
+    {
+        if (mrCrumbleRenderer == null) yield break;
+
+        Vector3 origPos = mrCrumbleRenderer.transform.position;
+
+        // Jump 4 times
+        for (int i = 0; i < 4; i++)
+        {
+            mrCrumbleRenderer.sprite = crumbleHappy;
+
+            Vector3 jumpPos = origPos + new Vector3(0, 0.6f, 0);
+            float t = 0;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * 8f;
+                mrCrumbleRenderer.transform.position = Vector3.Lerp(origPos, jumpPos, t);
+                yield return null;
+            }
+
+            t = 0;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * 8f;
+                mrCrumbleRenderer.transform.position = Vector3.Lerp(jumpPos, origPos, t);
+                yield return null;
+            }
+
+            mrCrumbleRenderer.sprite = crumbleIdle;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // Stay happy at the end
+        mrCrumbleRenderer.sprite = crumbleHappy;
+        mrCrumbleRenderer.transform.position = origPos;
+    }
+
+    // ================================================================
+    // MR CRUMBLE REACTIONS
     // ================================================================
     private IEnumerator HappyReaction()
     {
@@ -422,7 +417,7 @@ public class FractionsLevelController : BaseLevelController
         mrCrumbleRenderer.sprite = crumbleHappy;
 
         StartCoroutine(ShowBubble(
-            levelMode == FractionMode.Halves ? halvesCorrect : "Perfect quarters!",
+            levelMode == FractionMode.Halves ? halvesCorrect : "Perfect!",
             2f));
 
         Vector3 orig = mrCrumbleRenderer.transform.position;
@@ -465,7 +460,7 @@ public class FractionsLevelController : BaseLevelController
     }
 
     // ================================================================
-    // SPEECH BUBBLE — unchanged from Level 1
+    // SPEECH BUBBLE
     // ================================================================
     private IEnumerator ShowBubble(string message, float duration)
     {

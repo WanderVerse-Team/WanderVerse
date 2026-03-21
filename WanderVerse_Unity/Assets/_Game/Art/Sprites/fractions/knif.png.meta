@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: eb0f8346dc086e84e8348ed0136774cf
+guid: 9956e65d0207a1c43b85182c3c31d1a4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3949018835019366493
-    second: RightHalf_0
+      213: -25296008638364050
+    second: knif_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RightHalf_0
+      name: knif_0
       rect:
         serializedVersion: 2
-        x: 26
-        y: 21
-        width: 145
-        height: 66
+        x: 100
+        y: 36
+        width: 61
+        height: 332
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d5008a825bbbdc630800000000000000
-      internalID: 3949018835019366493
+      spriteID: e6600e60a6126aff0800000000000000
+      internalID: -25296008638364050
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      RightHalf_0: 3949018835019366493
+      knif_0: -25296008638364050
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
