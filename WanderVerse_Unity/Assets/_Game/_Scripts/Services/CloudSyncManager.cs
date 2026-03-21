@@ -34,6 +34,8 @@ namespace WanderVerse.Backend.Services
         [SerializeField] private string _keyURL = "https://server-backend-eight.vercel.app/api/keys";
         
         private string _leaderboardURL = "https://server-backend-eight.vercel.app/api/leaderboard";
+        private const string LeaderboardCacheKey = "leaderboard_cache_json";
+        private const string LeaderboardCacheTimeKey = "leaderboard_cache_time";
 
         private FirebaseFirestore _db;
         private bool _isSaving = false;
