@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Main controller for the Power Station mini-game (Addition 1).
@@ -60,6 +61,9 @@ public class PowerStationController : BaseLevelController
 
     [Tooltip("TMP texts for carry indicators above each column (index 0 = leftmost). Show '+1' when a carry occurs from the column to its right.")]
     public TextMeshProUGUI[] carryTexts;
+
+    [Tooltip("Optional global carry indicator object (e.g., a '+1' icon named Carry). Will be shown when any carry exists.")]
+    public GameObject carryIndicatorObject;
 
     [Tooltip("Images representing the energy flow lines inside each column pipe. Used to tint green/red as column sums change.")]
     public Image[] columnPipeImages;
@@ -290,6 +294,43 @@ public class PowerStationController : BaseLevelController
         forceIdleRoutine = null;
     }
 
+    private void SetBoardVisualsVisible(bool visible)
+    {
+        if (columnSumTexts != null)
+        {
+            for (int i = 0; i < columnSumTexts.Length; i++)
+            {
+                if (columnSumTexts[i] != null)
+                    columnSumTexts[i].gameObject.SetActive(visible);
+            }
+        }
+
+        if (!visible)
+        {
+            if (carryTexts != null)
+            {
+                for (int i = 0; i < carryTexts.Length; i++)
+                {
+                    if (carryTexts[i] != null)
+                        carryTexts[i].gameObject.SetActive(false);
+                }
+            }
+
+            if (carryIndicatorObject != null)
+                carryIndicatorObject.SetActive(false);
+        }
+
+        if (sockets != null)
+        {
+            for (int i = 0; i < sockets.Length; i++)
+            {
+                BatterySocket socket = sockets[i];
+                if (socket == null || socket.currentBattery == null) continue;
+                socket.currentBattery.gameObject.SetActive(visible);
+            }
+        }
+    }
+
     // ═══════════════════════════════════════════
     //  LIFECYCLE
     // ═══════════════════════════════════════════
@@ -317,6 +358,7 @@ public class PowerStationController : BaseLevelController
         ValidateTraySettings();
         EnsureSocketsInitialized();
         EnsureColumnSumTextsInitialized();
+        EnsureCarryIndicatorInitialized();
         ConfigureBatteryTrayLayout();
 
         // Wire submit button
@@ -328,6 +370,41 @@ public class PowerStationController : BaseLevelController
 
         // Start the first turn
         StartNextTurn();
+    }
+
+    private void EnsureCarryIndicatorInitialized()
+    {
+        if (carryIndicatorObject == null)
+        {
+            GameObject found = GameObject.Find("Carry");
+            if (found != null)
+                carryIndicatorObject = found;
+        }
+
+        // Fallback: find inactive Carry object in the loaded scene
+        if (carryIndicatorObject == null)
+        {
+            GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+            Scene activeScene = SceneManager.GetActiveScene();
+
+            for (int i = 0; i < allObjects.Length; i++)
+            {
+                GameObject obj = allObjects[i];
+                if (obj == null) continue;
+                if (!obj.scene.IsValid() || obj.scene != activeScene) continue;
+
+                if (string.Equals(obj.name, "Carry", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    carryIndicatorObject = obj;
+                    break;
+                }
+            }
+        }
+
+        if (carryIndicatorObject != null)
+            carryIndicatorObject.SetActive(false);
+        else
+            Debug.LogWarning("[PowerStation] Carry indicator object not found. Assign Carry object in inspector or name it 'Carry'.");
     }
 
     private void EnsureColumnSumTextsInitialized()
@@ -486,6 +563,8 @@ public class PowerStationController : BaseLevelController
     private void StartNextTurn()
     {
         currentTurn++;
+
+        SetBoardVisualsVisible(true);
 
         // 1. Generate a random target power within the configured range
         currentTargetPower = Random.Range(levelData.minTargetPower, levelData.maxTargetPower + 1);
@@ -805,6 +884,15 @@ public class PowerStationController : BaseLevelController
         OnBatteryPlaced();
     }
 
+    /// <summary>Called when a battery is dropped into the dustbin.</summary>
+    public void OnBatteryDiscarded(bool refillTray = true)
+    {
+        if (refillTray)
+            RefillTrayToCapacity();
+
+        OnBatteryPlaced();
+    }
+
     private void RefillTrayAfterSnap()
     {
         ValidateTraySettings();
@@ -818,6 +906,23 @@ public class PowerStationController : BaseLevelController
         BatteryIdentity id = go.GetComponent<BatteryIdentity>();
         if (id != null)
             id.Setup(GetRefillDigitValue());
+
+        if (useManualTrayGridLayout)
+            ApplyManualTrayGridLayout();
+    }
+
+    private void RefillTrayToCapacity()
+    {
+        if (batteryTray == null || batteryPrefab == null) return;
+
+        int trayCapacity = GetTrayCapacity();
+        while (batteryTray.childCount < trayCapacity)
+        {
+            GameObject go = Instantiate(batteryPrefab, batteryTray);
+            BatteryIdentity id = go.GetComponent<BatteryIdentity>();
+            if (id != null)
+                id.Setup(GetRefillDigitValue());
+        }
 
         if (useManualTrayGridLayout)
             ApplyManualTrayGridLayout();
@@ -939,6 +1044,7 @@ public class PowerStationController : BaseLevelController
         // Calculate raw column sums (before carry)
         int[] rawColumnSums = new int[numColumns];
         bool[] columnFullFlags = new bool[numColumns];
+        bool[] columnHasAnyBattery = new bool[numColumns];
 
         for (int c = 0; c < numColumns; c++)
         {
@@ -949,7 +1055,10 @@ public class PowerStationController : BaseLevelController
             {
                 BatterySocket socket = GetSocket(r, c);
                 if (socket != null && socket.currentBattery != null)
+                {
                     colSum += socket.currentBattery.digitValue;
+                    columnHasAnyBattery[c] = true;
+                }
                 else
                     isFull = false;
             }
@@ -958,38 +1067,69 @@ public class PowerStationController : BaseLevelController
             columnFullFlags[c] = isFull;
         }
 
-        // Carry values (for carry indicators only)
-        int[] carries = new int[numColumns];
+        // Carry flow right -> left (ones to tens to hundreds)
+        int[] carryInForColumn = new int[numColumns];
+        int[] carryOutFromColumn = new int[numColumns];
         int carryIn = 0;
         for (int c = numColumns - 1; c >= 0; c--)
         {
+            carryInForColumn[c] = carryIn;
             int total = rawColumnSums[c] + carryIn;
-            carries[c] = total / 10;   // carry OUT to the column on the left
-            carryIn = carries[c];
+
+            if (columnFullFlags[c])
+            {
+                carryOutFromColumn[c] = total / 10; // carry OUT to the column on the left
+                carryIn = carryOutFromColumn[c];
+            }
+            else
+            {
+                // Column not complete yet: do not cascade carry further left.
+                carryOutFromColumn[c] = 0;
+                carryIn = 0;
+            }
+        }
+
+        // Reset all carry indicators first
+        bool anyCarryVisible = false;
+
+        for (int c = 0; c < carryTexts.Length; c++)
+        {
+            if (carryTexts[c] != null)
+                carryTexts[c].gameObject.SetActive(false);
         }
 
         // Update column sum texts
         for (int c = 0; c < numColumns; c++)
         {
+            int totalWithCarry = rawColumnSums[c] + carryInForColumn[c];
+
             if (c < columnSumTexts.Length && columnSumTexts[c] != null)
             {
-                int liveSum = rawColumnSums[c];
-                columnSumTexts[c].text = liveSum > 0 ? liveSum.ToString() : "?";
-                columnSumTexts[c].color = Color.white;
-            }
-
-            // Update carry indicators
-            if (c < carryTexts.Length && carryTexts[c] != null)
-            {
-                bool columnFull = columnFullFlags[c];
-                if (carries[c] > 0 && columnFull)
+                if (columnFullFlags[c])
                 {
-                    carryTexts[c].text = "+" + carries[c].ToString();
-                    carryTexts[c].gameObject.SetActive(true);
+                    // Final displayed digit for this column (e.g. 7+6=13 => show 3)
+                    columnSumTexts[c].text = (totalWithCarry % 10).ToString();
                 }
                 else
                 {
-                    carryTexts[c].gameObject.SetActive(false);
+                    // Live running total for incomplete column, including carry-in.
+                    bool hasValueToShow = columnHasAnyBattery[c] || carryInForColumn[c] > 0;
+                    columnSumTexts[c].text = hasValueToShow ? totalWithCarry.ToString() : "?";
+                }
+
+                columnSumTexts[c].color = Color.white;
+            }
+
+            // Carry produced by this column is displayed above the column to its left
+            if (columnFullFlags[c] && carryOutFromColumn[c] > 0)
+            {
+                anyCarryVisible = true;
+
+                int leftColumn = c - 1;
+                if (leftColumn >= 0 && leftColumn < carryTexts.Length && carryTexts[leftColumn] != null)
+                {
+                    carryTexts[leftColumn].text = "+" + carryOutFromColumn[c].ToString();
+                    carryTexts[leftColumn].gameObject.SetActive(true);
                 }
             }
 
@@ -1007,7 +1147,10 @@ public class PowerStationController : BaseLevelController
         }
 
         if (numColumns >= 2)
-            Debug.Log($"[PowerStation] Live sums -> C0:{rawColumnSums[0]} C1:{rawColumnSums[1]}");
+            Debug.Log($"[PowerStation] Live sums -> C0:{rawColumnSums[0]} C1:{rawColumnSums[1]} | CarryInC0:{carryInForColumn[0]} CarryOutC1:{carryOutFromColumn[1]}");
+
+        if (carryIndicatorObject != null)
+            carryIndicatorObject.SetActive(anyCarryVisible);
     }
 
     // ═══════════════════════════════════════════
@@ -1092,6 +1235,8 @@ public class PowerStationController : BaseLevelController
         if (audioSource != null && correctSound != null)
             audioSource.PlayOneShot(correctSound);
 
+        SetBoardVisualsVisible(false);
+
         // Machine idle (correct)
         SetMachineIdleVisual();
 
@@ -1144,6 +1289,8 @@ public class PowerStationController : BaseLevelController
         if (audioSource != null && overloadSound != null)
             audioSource.PlayOneShot(overloadSound);
 
+        SetBoardVisualsVisible(false);
+
         // Machine overload
         SetMachineOverloadVisual();
 
@@ -1158,6 +1305,8 @@ public class PowerStationController : BaseLevelController
 
         if (audioSource != null && underloadSound != null)
             audioSource.PlayOneShot(underloadSound);
+
+        SetBoardVisualsVisible(false);
 
         // Machine underload
         SetMachineUnderloadVisual();
@@ -1217,6 +1366,7 @@ public class PowerStationController : BaseLevelController
 
     private void ResetCurrentTurn()
     {
+        SetBoardVisualsVisible(true);
         ClearAllSockets();
 
         // Re-generate batteries for the same target
@@ -1247,6 +1397,9 @@ public class PowerStationController : BaseLevelController
                 carryTexts[c].gameObject.SetActive(false);
         }
 
+        if (carryIndicatorObject != null)
+            carryIndicatorObject.SetActive(false);
+
         for (int c = 0; c < columnPipeImages.Length; c++)
         {
             if (columnPipeImages[c] != null)
@@ -1260,6 +1413,7 @@ public class PowerStationController : BaseLevelController
 
     private void ShowVictory()
     {
+        SetBoardVisualsVisible(false);
         SetMachineVictoryVisual();
         if (confetti != null)  confetti.Play();
         if (sparks != null)    sparks.Play();

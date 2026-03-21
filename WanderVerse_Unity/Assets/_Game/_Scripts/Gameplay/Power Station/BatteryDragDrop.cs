@@ -16,6 +16,9 @@ public class BatteryDragDrop : MonoBehaviour,
     private Vector3 originalPosition;
     private Transform originalParent;
     private bool isPlaced = false;
+    private BatterySocket currentSocket;
+
+    public BatterySocket CurrentSocket => currentSocket;
 
     private void Awake()
     {
@@ -27,13 +30,27 @@ public class BatteryDragDrop : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (isPlaced) return;
-
         originalPosition = rectTransform.position;
         originalParent   = transform.parent;
 
+        // If this battery is currently in a socket, clear that socket occupancy while dragging.
+        if (currentSocket == null && originalParent != null)
+            currentSocket = originalParent.GetComponent<BatterySocket>();
+
+        if (currentSocket != null)
+        {
+            currentSocket.currentBattery = null;
+
+            PowerStationController controller = FindAnyObjectByType<PowerStationController>();
+            if (controller != null)
+                controller.OnBatteryPlaced();
+
+            isPlaced = false;
+        }
+
         // Let raycasts pass through so sockets can detect the drop
-        canvasGroup.blocksRaycasts = false;
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = false;
 
         // Render on top of everything
         transform.SetAsLastSibling();
@@ -41,7 +58,7 @@ public class BatteryDragDrop : MonoBehaviour,
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (isPlaced) return;
+        if (parentCanvas == null || rectTransform == null) return;
         rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
     }
 
@@ -59,6 +76,13 @@ public class BatteryDragDrop : MonoBehaviour,
         // If not snapped into a socket, return to the tray
         if (!isPlaced)
         {
+            BatterySocket originalSocket = originalParent != null ? originalParent.GetComponent<BatterySocket>() : null;
+            if (originalSocket != null && batteryIdentity != null)
+            {
+                if (originalSocket.TryAcceptBattery(this, batteryIdentity))
+                    return;
+            }
+
             transform.SetParent(originalParent, true);
             rectTransform.position = originalPosition;
         }
@@ -93,15 +117,17 @@ public class BatteryDragDrop : MonoBehaviour,
         transform.SetParent(socketTransform, false);
         rectTransform.anchoredPosition = Vector2.zero; // Center inside socket
         rectTransform.localScale = Vector3.one;
+        currentSocket = socketTransform != null ? socketTransform.GetComponent<BatterySocket>() : null;
 
         if (canvasGroup != null)
-            canvasGroup.blocksRaycasts = false;         // Prevent re-dragging
+            canvasGroup.blocksRaycasts = true;
     }
 
     /// <summary>Called to release the battery back to the tray (on reset).</summary>
     public void Unlock(Transform trayParent)
     {
         isPlaced = false;
+        currentSocket = null;
         transform.SetParent(trayParent, false);
         rectTransform.localScale = Vector3.one;
 
