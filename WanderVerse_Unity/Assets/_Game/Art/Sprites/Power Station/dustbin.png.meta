@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b51b7214723467c4e9f4c595b5315f9a
+guid: 0066b115e8a2bb14283696f6b9b9daec
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 222753993883822482
-    second: cake_left (1)_0
+      213: -4251031290429609134
+    second: dustbin_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -109,30 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cake_left (1)_0
+      name: dustbin_0
       rect:
         serializedVersion: 2
-        x: 191
-        y: 47
-        width: 250
-        height: 424
+        x: 772
+        y: 114
+        width: 798
+        height: 877
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 299aeb5c391671300800000000000000
-      internalID: 222753993883822482
+      spriteID: 25b6fd4709d4105c0800000000000000
+      internalID: -4251031290429609134
       vertices: []
       indices: 
       edges: []
@@ -151,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cake_left (1)_0: 222753993883822482
+      dustbin_0: -4251031290429609134
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
