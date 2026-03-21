@@ -118,6 +118,7 @@ public class PowerStationController : BaseLevelController
     private bool isProcessingResult = false;
     private bool useManualTrayGridLayout = false;
     private Dictionary<int, int> requiredDigitCounts = new Dictionary<int, int>();
+    private int[,] solutionDigits;
 
     private void SetMachineIdleVisual()
     {
@@ -373,6 +374,7 @@ public class PowerStationController : BaseLevelController
         // --- Step A: Build valid addends whose sum == currentTargetPower ---
         // We generate (numRows) random addends that sum to the target.
         int[] addends = GenerateAddends(currentTargetPower, numRows);
+        solutionDigits = new int[numRows, numColumns];
 
         // Extract individual digits from each addend and add to the pool
         for (int r = 0; r < addends.Length; r++)
@@ -382,6 +384,7 @@ public class PowerStationController : BaseLevelController
             {
                 int digit = int.Parse(addendStr[c].ToString());
                 pool.Add(digit);
+                solutionDigits[r, c] = digit;
                 if (!requiredDigitCounts.ContainsKey(digit))
                     requiredDigitCounts[digit] = 0;
                 requiredDigitCounts[digit]++;
@@ -647,6 +650,27 @@ public class PowerStationController : BaseLevelController
             }
         }
 
+        // Prioritize the currently active column (ones first, then tens...)
+        int activeColumn = GetActiveColumnIndex();
+        if (activeColumn >= 0 && solutionDigits != null)
+        {
+            Dictionary<int, int> requiredForColumn = new Dictionary<int, int>();
+            for (int r = 0; r < numRows; r++)
+            {
+                int requiredDigit = solutionDigits[r, activeColumn];
+                if (!requiredForColumn.ContainsKey(requiredDigit)) requiredForColumn[requiredDigit] = 0;
+                requiredForColumn[requiredDigit]++;
+            }
+
+            foreach (var pair in requiredForColumn)
+            {
+                int required = pair.Value;
+                int available = availableCounts.ContainsKey(pair.Key) ? availableCounts[pair.Key] : 0;
+                if (available < required)
+                    return pair.Key;
+            }
+        }
+
         // If any required solution digit is missing, spawn that first
         foreach (var pair in requiredDigitCounts)
         {
@@ -658,6 +682,31 @@ public class PowerStationController : BaseLevelController
 
         // Otherwise spawn a distractor
         return Random.Range(0, 10);
+    }
+
+    private int GetActiveColumnIndex()
+    {
+        if (sockets == null || sockets.Length == 0) return -1;
+
+        // Ones-first flow: prioritize rightmost incomplete column.
+        for (int c = numColumns - 1; c >= 0; c--)
+        {
+            bool columnComplete = true;
+            for (int r = 0; r < numRows; r++)
+            {
+                BatterySocket socket = GetSocket(r, c);
+                if (socket == null || socket.currentBattery == null)
+                {
+                    columnComplete = false;
+                    break;
+                }
+            }
+
+            if (!columnComplete)
+                return c;
+        }
+
+        return -1;
     }
 
     private void ValidateTraySettings()
