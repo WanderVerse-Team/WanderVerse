@@ -69,9 +69,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4f57c527b22dcb045bbcd5c0b09f663b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1e724479306b5864a8107e3e49a5c12c, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BatteryIdentity
   digitValue: 0
-  labelText: {fileID: 0}
+  labelText: {fileID: 27183850154735225}
 --- !u!114 &7897753750987100026
 MonoBehaviour:
   m_ObjectHideFlags: 0

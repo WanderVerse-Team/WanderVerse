@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 /// Works with Unity UI (Canvas-based).
 /// </summary>
 public class BatteryDragDrop : MonoBehaviour,
-    IPointerDownHandler, IDragHandler, IPointerUpHandler
+    IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Canvas parentCanvas;
     private RectTransform rectTransform;
@@ -23,7 +23,7 @@ public class BatteryDragDrop : MonoBehaviour,
         parentCanvas  = GetComponentInParent<Canvas>();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
         if (isPlaced) return;
 
@@ -43,17 +43,18 @@ public class BatteryDragDrop : MonoBehaviour,
         rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData)
     {
         if (isPlaced) return;
 
-        canvasGroup.blocksRaycasts = true;
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = true;
 
         // If not snapped into a socket, return to the tray
         if (!isPlaced)
         {
+            transform.SetParent(originalParent, true);
             rectTransform.position = originalPosition;
-            transform.SetParent(originalParent);
         }
     }
 
@@ -61,16 +62,22 @@ public class BatteryDragDrop : MonoBehaviour,
     public void LockIntoSocket(Transform socketTransform)
     {
         isPlaced = true;
-        transform.SetParent(socketTransform);
+        transform.SetParent(socketTransform, false);
         rectTransform.anchoredPosition = Vector2.zero; // Center inside socket
-        canvasGroup.blocksRaycasts = false;             // Prevent re-dragging
+        rectTransform.localScale = Vector3.one;
+
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = false;         // Prevent re-dragging
     }
 
     /// <summary>Called to release the battery back to the tray (on reset).</summary>
     public void Unlock(Transform trayParent)
     {
         isPlaced = false;
-        transform.SetParent(trayParent);
-        canvasGroup.blocksRaycasts = true;
+        transform.SetParent(trayParent, false);
+        rectTransform.localScale = Vector3.one;
+
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = true;
     }
 }

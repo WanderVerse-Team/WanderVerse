@@ -33,6 +33,21 @@ public class PowerStationController : BaseLevelController
     [Tooltip("Parent transform that holds the battery tray (available batteries)")]
     public Transform batteryTray;
 
+    [Tooltip("Maximum number of batteries visible in the tray at one time")]
+    public int maxVisibleBatteries = 6;
+
+    [Tooltip("Number of columns in the battery tray grid")]
+    public int trayColumns = 3;
+
+    [Tooltip("Number of rows in the battery tray grid")]
+    public int trayRows = 2;
+
+    [Tooltip("Horizontal spacing between batteries in tray")]
+    public float traySpacingX = 12f;
+
+    [Tooltip("Vertical spacing between battery rows in tray")]
+    public float traySpacingY = 8f;
+
     [Tooltip("Prefab for a single battery UI element (must have BatteryIdentity + BatteryDragDrop + CanvasGroup)")]
     public GameObject batteryPrefab;
 
@@ -101,6 +116,7 @@ public class PowerStationController : BaseLevelController
     private int numColumns;
     private int numRows;
     private bool isProcessingResult = false;
+    private bool useManualTrayGridLayout = false;
 
     private void SetMachineIdleVisual()
     {
@@ -176,6 +192,8 @@ public class PowerStationController : BaseLevelController
         totalTurns = levelData.totalTurns;
         numRows    = levelData.batteryRows;
         currentTurn = 0;
+
+        ConfigureBatteryTrayLayout();
 
         // Wire submit button
         if (submitButton != null)
@@ -284,7 +302,8 @@ public class PowerStationController : BaseLevelController
         }
 
         // --- Step B: Add distractor batteries ---
-        int distractorCount = levelData.extraDistractorBatteries;
+        int maxDistractorsByCapacity = Mathf.Max(0, maxVisibleBatteries - pool.Count);
+        int distractorCount = Mathf.Min(levelData.extraDistractorBatteries, maxDistractorsByCapacity);
         for (int i = 0; i < distractorCount; i++)
         {
             pool.Add(Random.Range(0, 10));
@@ -293,7 +312,68 @@ public class PowerStationController : BaseLevelController
         // --- Step C: Shuffle the pool so correct digits aren't always first ---
         ShuffleList(pool);
 
+        // Hard cap to tray capacity while preserving all required digits added above
+        if (pool.Count > maxVisibleBatteries)
+            pool = pool.GetRange(0, maxVisibleBatteries);
+
         return pool;
+    }
+
+    private void ConfigureBatteryTrayLayout()
+    {
+        if (batteryTray == null)
+        {
+            Debug.LogWarning("[PowerStation] Battery Tray is not assigned.");
+            return;
+        }
+
+        GameObject trayObject = batteryTray.gameObject;
+        if (trayObject == null)
+        {
+            Debug.LogWarning("[PowerStation] Battery Tray GameObject is missing.");
+            return;
+        }
+
+        useManualTrayGridLayout = false;
+
+        HorizontalLayoutGroup horizontal = trayObject.GetComponent<HorizontalLayoutGroup>();
+        if (horizontal != null) horizontal.enabled = false;
+
+        ContentSizeFitter fitter = trayObject.GetComponent<ContentSizeFitter>();
+        if (fitter != null) fitter.enabled = false;
+
+        GridLayoutGroup grid = trayObject.GetComponent<GridLayoutGroup>();
+        if (grid == null)
+        {
+            LayoutGroup anyLayout = trayObject.GetComponent<LayoutGroup>();
+            if (anyLayout != null && !(anyLayout is GridLayoutGroup))
+            {
+                useManualTrayGridLayout = true;
+                Debug.LogWarning("[PowerStation] Tray already has a non-grid LayoutGroup. Using manual 2x3 layout fallback.");
+                return;
+            }
+
+            grid = trayObject.AddComponent<GridLayoutGroup>();
+            if (grid == null)
+            {
+                useManualTrayGridLayout = true;
+                Debug.LogWarning("[PowerStation] Could not add GridLayoutGroup. Using manual 2x3 layout fallback.");
+                return;
+            }
+        }
+
+        RectTransform batteryRect = batteryPrefab != null ? batteryPrefab.GetComponent<RectTransform>() : null;
+        Vector2 cellSize = batteryRect != null && batteryRect.sizeDelta != Vector2.zero
+            ? batteryRect.sizeDelta
+            : new Vector2(80f, 120f);
+
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = Mathf.Max(1, trayColumns);
+        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        grid.startAxis = GridLayoutGroup.Axis.Horizontal;
+        grid.childAlignment = TextAnchor.MiddleCenter;
+        grid.cellSize = cellSize;
+        grid.spacing = new Vector2(traySpacingX, traySpacingY);
     }
 
     /// <summary>
@@ -332,17 +412,71 @@ public class PowerStationController : BaseLevelController
 
     private void SpawnBatteries(List<int> values)
     {
+        if (batteryTray == null)
+        {
+            Debug.LogWarning("[PowerStation] Cannot spawn batteries: Battery Tray is not assigned.");
+            return;
+        }
+
+        if (batteryPrefab == null)
+        {
+            Debug.LogWarning("[PowerStation] Cannot spawn batteries: Battery Prefab is not assigned.");
+            return;
+        }
+
         // Destroy old batteries in the tray
         foreach (Transform child in batteryTray)
             Destroy(child.gameObject);
 
         // Instantiate one battery UI element per value
-        foreach (int val in values)
+        int maxToSpawn = Mathf.Min(values.Count, Mathf.Max(1, trayColumns * trayRows), maxVisibleBatteries);
+        for (int i = 0; i < maxToSpawn; i++)
         {
+            int val = values[i];
             GameObject go = Instantiate(batteryPrefab, batteryTray);
             BatteryIdentity id = go.GetComponent<BatteryIdentity>();
             if (id != null)
                 id.Setup(val);
+        }
+
+        if (useManualTrayGridLayout)
+            ApplyManualTrayGridLayout();
+    }
+
+    private void ApplyManualTrayGridLayout()
+    {
+        if (batteryTray == null) return;
+
+        RectTransform batteryRect = batteryPrefab != null ? batteryPrefab.GetComponent<RectTransform>() : null;
+        Vector2 cellSize = batteryRect != null && batteryRect.sizeDelta != Vector2.zero
+            ? batteryRect.sizeDelta
+            : new Vector2(80f, 120f);
+
+        int columns = Mathf.Max(1, trayColumns);
+        int rows = Mathf.Max(1, trayRows);
+        int maxCells = columns * rows;
+
+        float totalWidth = columns * cellSize.x + (columns - 1) * traySpacingX;
+        float totalHeight = rows * cellSize.y + (rows - 1) * traySpacingY;
+
+        int childCount = Mathf.Min(batteryTray.childCount, maxCells);
+        for (int i = 0; i < childCount; i++)
+        {
+            RectTransform child = batteryTray.GetChild(i) as RectTransform;
+            if (child == null) continue;
+
+            int row = i / columns;
+            int column = i % columns;
+
+            float x = -totalWidth * 0.5f + cellSize.x * 0.5f + column * (cellSize.x + traySpacingX);
+            float y = totalHeight * 0.5f - cellSize.y * 0.5f - row * (cellSize.y + traySpacingY);
+
+            child.anchorMin = new Vector2(0.5f, 0.5f);
+            child.anchorMax = new Vector2(0.5f, 0.5f);
+            child.pivot = new Vector2(0.5f, 0.5f);
+            child.anchoredPosition = new Vector2(x, y);
+            child.sizeDelta = cellSize;
+            child.localScale = Vector3.one;
         }
     }
 

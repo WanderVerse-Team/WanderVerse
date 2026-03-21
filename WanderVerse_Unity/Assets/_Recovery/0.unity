@@ -1347,7 +1347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c17800cc1100e64f82f516c76c80598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerStationController
-  levelData: {fileID: 11400000, guid: 41f7279f104909a488e35b89f115f415, type: 2}
+  levelData: {fileID: 0}
   tutorialPanel: {fileID: 0}
   dialogueText: {fileID: 0}
   mascotImage: {fileID: 0}
@@ -1359,11 +1359,6 @@ MonoBehaviour:
   targetPowerText: {fileID: 882215250}
   targetDigitTexts: []
   batteryTray: {fileID: 1807714625}
-  maxVisibleBatteries: 6
-  trayColumns: 3
-  trayRows: 2
-  traySpacingX: 80
-  traySpacingY: -10
   batteryPrefab: {fileID: 6264667779268557930, guid: 0b7eef35e02b8f04fbb3bca78bd48485, type: 3}
   sockets: []
   columnSumTexts: []
@@ -1371,7 +1366,7 @@ MonoBehaviour:
   columnPipeImages: []
   turnProgressText: {fileID: 0}
   machineImage: {fileID: 2112816335}
-  machineAnimator: {fileID: 2112816337}
+  machineAnimator: {fileID: 0}
   machineIdle: {fileID: 4400619628164744790, guid: aeea67a093e897f41a4b10a66461b771, type: 3}
   machineUnderload: {fileID: -4021759008427491913, guid: 5e50140d67918db4b87cf34c32a6417a, type: 3}
   machineOverload: {fileID: 8727002977860248637, guid: 9a21463fb83a1dc448f4a2090ac074fd, type: 3}
@@ -1635,8 +1630,6 @@ GameObject:
   - component: {fileID: 1807714625}
   - component: {fileID: 1807714627}
   - component: {fileID: 1807714626}
-  - component: {fileID: 1807714629}
-  - component: {fileID: 1807714628}
   m_Layer: 5
   m_Name: tray
   m_TagString: Untagged
@@ -1653,15 +1646,15 @@ RectTransform:
   m_GameObject: {fileID: 1807714624}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4.61, y: 4.61, z: 4.61}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1379258776}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 359, y: -308}
-  m_SizeDelta: {x: 900, y: 500}
+  m_AnchoredPosition: {x: 381, y: -321}
+  m_SizeDelta: {x: 174.738, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1807714626
 MonoBehaviour:
@@ -1701,46 +1694,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807714624}
   m_CullTransparentMesh: 1
---- !u!114 &1807714628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807714624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 0
-  m_VerticalFit: 0
---- !u!114 &1807714629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807714624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 12
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &1830586508
 GameObject:
   m_ObjectHideFlags: 0
