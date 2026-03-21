@@ -193,6 +193,7 @@ public class PowerStationController : BaseLevelController
         numRows    = levelData.batteryRows;
         currentTurn = 0;
 
+        EnsureSocketsInitialized();
         ConfigureBatteryTrayLayout();
 
         // Wire submit button
@@ -204,6 +205,85 @@ public class PowerStationController : BaseLevelController
 
         // Start the first turn
         StartNextTurn();
+    }
+
+    private void EnsureSocketsInitialized()
+    {
+        bool hasSerializedSockets = sockets != null && sockets.Length > 0;
+        if (hasSerializedSockets)
+        {
+            bool allValid = true;
+            for (int i = 0; i < sockets.Length; i++)
+            {
+                if (sockets[i] == null)
+                {
+                    allValid = false;
+                    break;
+                }
+            }
+
+            if (allValid) return;
+        }
+
+        List<BatterySocket> discovered = new List<BatterySocket>();
+
+        // 1) Existing BatterySocket components in scene
+        BatterySocket[] existing = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
+        if (existing != null && existing.Length > 0)
+            discovered.AddRange(existing);
+
+        // 2) Fallback: add BatterySocket to objects named Socket_Rx_Cy
+        if (discovered.Count == 0)
+        {
+            RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
+            foreach (RectTransform rect in rects)
+            {
+                if (rect == null) continue;
+                if (!TryParseSocketName(rect.name, out int row, out int column)) continue;
+
+                BatterySocket socket = rect.GetComponent<BatterySocket>();
+                if (socket == null)
+                    socket = rect.gameObject.AddComponent<BatterySocket>();
+
+                socket.row = row;
+                socket.column = column;
+                discovered.Add(socket);
+            }
+        }
+
+        discovered.Sort((a, b) =>
+        {
+            int rowCompare = a.row.CompareTo(b.row);
+            return rowCompare != 0 ? rowCompare : a.column.CompareTo(b.column);
+        });
+
+        sockets = discovered.ToArray();
+
+        if (sockets.Length == 0)
+            Debug.LogError("[PowerStation] No sockets found. Add objects named like Socket_R0_C0, Socket_R0_C1, Socket_R1_C0, Socket_R1_C1.");
+        else
+            Debug.Log($"[PowerStation] Auto-wired {sockets.Length} sockets.");
+    }
+
+    private bool TryParseSocketName(string objectName, out int row, out int column)
+    {
+        row = -1;
+        column = -1;
+
+        if (string.IsNullOrEmpty(objectName)) return false;
+        if (!objectName.StartsWith("Socket_R", System.StringComparison.OrdinalIgnoreCase)) return false;
+
+        string[] parts = objectName.Split('_');
+        if (parts.Length < 3) return false;
+
+        string rowPart = parts[1]; // e.g. R0
+        string colPart = parts[2]; // e.g. C1
+
+        if (rowPart.Length < 2 || colPart.Length < 2) return false;
+        if (!int.TryParse(rowPart.Substring(1), out row)) return false;
+        if (!int.TryParse(colPart.Substring(1), out column)) return false;
+
+        return true;
     }
 
     // ═══════════════════════════════════════════
@@ -502,6 +582,29 @@ public class PowerStationController : BaseLevelController
     {
         UpdateColumnSums();
         Debug.Log("[PowerStation] Battery placed — column sums updated.");
+    }
+
+    /// <summary>Called after a battery successfully snaps into a socket.</summary>
+    public void OnBatterySnappedToSocket()
+    {
+        RefillTrayAfterSnap();
+        OnBatteryPlaced();
+    }
+
+    private void RefillTrayAfterSnap()
+    {
+        if (batteryTray == null || batteryPrefab == null) return;
+
+        int trayCapacity = Mathf.Min(Mathf.Max(1, trayColumns * trayRows), maxVisibleBatteries);
+        if (batteryTray.childCount >= trayCapacity) return;
+
+        GameObject go = Instantiate(batteryPrefab, batteryTray);
+        BatteryIdentity id = go.GetComponent<BatteryIdentity>();
+        if (id != null)
+            id.Setup(Random.Range(0, 10));
+
+        if (useManualTrayGridLayout)
+            ApplyManualTrayGridLayout();
     }
 
     /// <summary>

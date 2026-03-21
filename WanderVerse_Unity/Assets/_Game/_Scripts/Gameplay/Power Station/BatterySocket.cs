@@ -53,7 +53,7 @@ public class BatterySocket : MonoBehaviour, IDropHandler, IPointerClickHandler
 
         // Notify the controller (updates live column sums)
         if (controller != null)
-            controller.OnBatteryPlaced();
+            controller.OnBatterySnappedToSocket();
 
         return true;
     }
