@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3441791130087773711}
   - component: {fileID: 7431125462549315614}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: QuitToMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466685513175101861}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SettingsManager, Assembly-CSharp
         m_MethodName: ReturnToMenu
         m_Mode: 1
@@ -481,7 +481,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466685513175101861}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SettingsManager, Assembly-CSharp
         m_MethodName: CloseSettings
         m_Mode: 1
@@ -745,10 +745,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 080e27e6acfcb33489b57a29c2769138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
-  mainMenuSettingsPanel: {fileID: 0}
-  mainMenuMasterSlider: {fileID: 5888589675470568562}
-  inGameSettingsPanel: {fileID: 0}
-  inGameMasterSlider: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  returnToMenuButton: {fileID: 0}
+  quitGameButton: {fileID: 0}
+  returnToGameButton: {fileID: 0}
+  masterVolumeSlider: {fileID: 0}
   mainMenuSceneName: MainMenu
 --- !u!1 &4446648980735598720
 GameObject:
@@ -1183,7 +1184,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466685513175101861}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SettingsManager, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1

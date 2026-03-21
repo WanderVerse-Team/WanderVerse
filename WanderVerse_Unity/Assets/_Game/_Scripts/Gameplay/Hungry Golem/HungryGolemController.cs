@@ -251,7 +251,7 @@ public void CheckIfFinished()
         CheckWinCondition();
         DoorLogic doorLogic = FindObjectOfType<DoorLogic>();
         doorLogic.OpenDoor();
-        VictoryScreen();
+        //VictoryScreen();
         Debug.Log("The door creaks open as the Golem is perfectly fed!");
     }
     else if (currentScore < targetScore)
