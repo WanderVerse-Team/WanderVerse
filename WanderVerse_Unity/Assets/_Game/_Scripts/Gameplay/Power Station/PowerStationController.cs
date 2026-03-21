@@ -56,9 +56,9 @@ public class PowerStationController : BaseLevelController
     [Header("--- Machine Visuals ---")]
     public Image machineImage;
     public Sprite machineIdle;
-    public Sprite machinePowered;
-    public Sprite machineExplode;
-    public Sprite machineDead;
+    public Sprite machineUnderload;
+    public Sprite machineOverload;
+    public Sprite machineVictory;
 
     [Header("--- Feedback Panels ---")]
     public RectTransform correctPanel;
@@ -505,9 +505,9 @@ public class PowerStationController : BaseLevelController
         if (audioSource != null && correctSound != null)
             audioSource.PlayOneShot(correctSound);
 
-        // Machine powers up
-        if (machineImage != null && machinePowered != null)
-            machineImage.sprite = machinePowered;
+        // Machine idle (correct)
+        if (machineImage != null && machineIdle != null)
+            machineImage.sprite = machineIdle;
 
         Debug.Log($"<color=green>[PowerStation] CORRECT! Turn {currentTurn}/{totalTurns} complete.</color>");
 
@@ -558,9 +558,9 @@ public class PowerStationController : BaseLevelController
         if (audioSource != null && overloadSound != null)
             audioSource.PlayOneShot(overloadSound);
 
-        // Machine explodes
-        if (machineImage != null && machineExplode != null)
-            machineImage.sprite = machineExplode;
+        // Machine overload
+        if (machineImage != null && machineOverload != null)
+            machineImage.sprite = machineOverload;
 
         StartCoroutine(ShowFeedbackThenReset(overloadPanel));
 
@@ -574,9 +574,9 @@ public class PowerStationController : BaseLevelController
         if (audioSource != null && underloadSound != null)
             audioSource.PlayOneShot(underloadSound);
 
-        // Machine shuts down
-        if (machineImage != null && machineDead != null)
-            machineImage.sprite = machineDead;
+        // Machine underload
+        if (machineImage != null && machineUnderload != null)
+            machineImage.sprite = machineUnderload;
 
         StartCoroutine(ShowFeedbackThenReset(underloadPanel));
 
@@ -677,6 +677,8 @@ public class PowerStationController : BaseLevelController
 
     private void ShowVictory()
     {
+        if (machineImage != null && machineVictory != null)
+            machineImage.sprite = machineVictory;
         if (confetti != null)  confetti.Play();
         if (sparks != null)    sparks.Play();
 

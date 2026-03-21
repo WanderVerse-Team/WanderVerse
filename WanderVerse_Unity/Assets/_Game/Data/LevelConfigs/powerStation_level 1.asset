@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac25f2abb44d67048b01407e824ebb84, type: 3}
+  m_Name: powerStation_level 1
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  lessonID: 
+  lessonTitle: 
+  levelID: 
+  levelTitle: 
+  description: 
+  gameType: 0
+  targetScore: 10
+  possibleTargets: 
+  pointsForCorrect: 1
+  pointsForWrong: 1
+  maxMistakes: 0
+  useTimer: 0
+  levelTimeLimit: 0
+  maxXpReward: 100
+  baseXpReward: 20
+  xpDeductionPerMistake: 5
+  perfectRunBonus: 5
+  maxMistakesFor3Stars: 0
+  maxMistakesFor2Stars: 2
+  backgroundMusic: {fileID: 0}
+  spawnItems: []
+  distractors: []
+  validValue: 1
+  spawnRate: 2
+  itemFallSpeed: 3
+  questions: []
+  totalTurns: 3
+  batteryRows: 2
+  minTargetPower: 20
+  maxTargetPower: 99
+  extraDistractorBatteries: 3
