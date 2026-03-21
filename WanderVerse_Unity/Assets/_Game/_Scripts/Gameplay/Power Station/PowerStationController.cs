@@ -122,6 +122,7 @@ public class PowerStationController : BaseLevelController
     private bool useManualTrayGridLayout = false;
     private Dictionary<int, int> requiredDigitCounts = new Dictionary<int, int>();
     private int[,] solutionDigits;
+    private Coroutine forceIdleRoutine;
 
     private void EnsureMachineAnimatorAssigned()
     {
@@ -142,9 +143,26 @@ public class PowerStationController : BaseLevelController
         return true;
     }
 
+    private bool TryPlayFirstAvailableMachineState(string[] stateNames)
+    {
+        if (stateNames == null || stateNames.Length == 0) return false;
+
+        for (int i = 0; i < stateNames.Length; i++)
+        {
+            if (TryPlayMachineState(stateNames[i]))
+                return true;
+        }
+
+        return false;
+    }
+
     private void SetMachineIdleVisual()
     {
         EnsureMachineAnimatorAssigned();
+
+        // Immediate visual fallback so the machine does not remain on previous state's last frame.
+        if (machineImage != null && machineIdle != null)
+            machineImage.sprite = machineIdle;
 
         if (machineAnimator != null)
         {
@@ -152,16 +170,22 @@ public class PowerStationController : BaseLevelController
             machineAnimator.ResetTrigger(underloadTriggerName);
             machineAnimator.ResetTrigger(victoryTriggerName);
 
-            if (TryPlayMachineState(idleStateName))
+            string[] idleCandidates = { idleStateName, "machine_idle", "Machine_Idle", "Idle" };
+
+            if (TryPlayFirstAvailableMachineState(idleCandidates))
             {
                 return;
             }
 
+            // Rebind and try again once (helps after one-shot states/transitions).
+            machineAnimator.Rebind();
+            machineAnimator.Update(0f);
+
+            if (TryPlayFirstAvailableMachineState(idleCandidates))
+                return;
+
             Debug.LogWarning($"[PowerStation] Animator state '{idleStateName}' not found. Falling back to idle sprite.");
         }
-
-        if (machineImage != null && machineIdle != null)
-            machineImage.sprite = machineIdle;
     }
 
     private void SetMachineOverloadVisual()
@@ -243,6 +267,27 @@ public class PowerStationController : BaseLevelController
         }
 
         return false;
+    }
+
+    private void ForceMachineIdleForTurnStart()
+    {
+        SetMachineIdleVisual();
+
+        if (forceIdleRoutine != null)
+            StopCoroutine(forceIdleRoutine);
+
+        forceIdleRoutine = StartCoroutine(ForceIdleNextFrame());
+    }
+
+    private IEnumerator ForceIdleNextFrame()
+    {
+        yield return null;
+        SetMachineIdleVisual();
+
+        yield return new WaitForEndOfFrame();
+        SetMachineIdleVisual();
+
+        forceIdleRoutine = null;
     }
 
     // ═══════════════════════════════════════════
@@ -468,7 +513,7 @@ public class PowerStationController : BaseLevelController
         ResetColumnSumDisplay();
 
         // 8. Reset machine visual
-        SetMachineIdleVisual();
+        ForceMachineIdleForTurnStart();
 
         Debug.Log($"[PowerStation] Turn {currentTurn}/{totalTurns} — Target: {currentTargetPower} | Columns: {numColumns} | Rows: {numRows}");
     }
@@ -1181,7 +1226,7 @@ public class PowerStationController : BaseLevelController
         // Reset column sums and machine visual
         ResetColumnSumDisplay();
 
-        SetMachineIdleVisual();
+        ForceMachineIdleForTurnStart();
     }
 
     /// <summary>Resets all column sum texts, carry indicators, and pipe colors to default.</summary>
