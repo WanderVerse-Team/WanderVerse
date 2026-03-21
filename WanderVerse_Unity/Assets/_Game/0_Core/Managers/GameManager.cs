@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public LevelData CurrentLevelData { get; private set; }
+
     // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
     public event Action<string, int, int, int, bool> OnLevelCompleted;
 
@@ -37,11 +39,11 @@ public class GameManager : MonoBehaviour
     // Called by BaseLevelController on Start()
     public LevelData GetPendingLevelData()
     {
-        LevelData dataToReturn = pendingLevelData;
+        CurrentLevelData = pendingLevelData;
 
         pendingLevelData = null;
 
-        return dataToReturn;
+        return CurrentLevelData;
     }
 
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)
