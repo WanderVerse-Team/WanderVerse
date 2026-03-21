@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 7c58a2ac7e66d054b8ca94ddcf303f9c
+<<<<<<< HEAD
+guid: 6b71fc637fb7a9342894d8b62346e84b
+=======
+guid: 7f80e0daf05296049a38bb2d2544ee5a
+>>>>>>> origin/develop
 TextureImporter:
   internalIDToNameTable:
   - first:
