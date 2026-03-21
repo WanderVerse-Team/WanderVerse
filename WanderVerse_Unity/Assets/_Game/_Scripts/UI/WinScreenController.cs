@@ -13,6 +13,9 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private Image[] starImages;
     [SerializeField] private Sprite fullStarSprite;
 
+    [Tooltip("Drag the Otter Image GameObject here")]
+    [SerializeField] private RectTransform otterTransform;
+
     [Tooltip("Drag the Main_Window Image here")]
     [SerializeField] private RectTransform mainWindowTransform;
 
@@ -26,18 +29,16 @@ public class WinScreenController : MonoBehaviour
 
     private void Awake()
     {
+        // Setup Button Listeners
         restartButton.onClick.AddListener(RestartLevel);
         nextLevelButton.onClick.AddListener(LoadNextLevel);
         menuButton.onClick.AddListener(ReturnToMenu);
 
-        // Hide visuals initially, but KEEP this root script active so it can listen!
+        // Hide visuals initially
         if (mainWindowTransform != null) mainWindowTransform.gameObject.SetActive(false);
         if (backgroundDimmer != null) backgroundDimmer.SetActive(false);
-
-        foreach (Image star in starImages)
-        {
-            star.transform.localScale = Vector3.zero;
-        }
+        if (otterTransform != null) otterTransform.localScale = Vector3.zero;
+        if (xpText != null) xpText.transform.localScale = Vector3.zero;
     }
 
     private void OnEnable()
@@ -58,56 +59,66 @@ public class WinScreenController : MonoBehaviour
 
     private void HandleLevelCompleted(string levelID, int currentRunScore, int xpAdded, int stars, bool isNewBest)
     {
-        // 1. Turn the visuals ON
+        // Turn the visuals ON
         if (backgroundDimmer != null) backgroundDimmer.SetActive(true);
         if (mainWindowTransform != null)
         {
             mainWindowTransform.gameObject.SetActive(true);
-            mainWindowTransform.localScale = Vector3.zero; // Reset scale for the pop
+            mainWindowTransform.localScale = Vector3.zero;
         }
+        if (otterTransform != null) otterTransform.gameObject.SetActive(true);
 
-        // 2. Pause the game world
+        // Pause the game world
         Time.timeScale = 0f;
 
-        // 3. Set Text
-        scoreText.text = currentRunScore.ToString();
+        scoreText.text = $"Score: {currentRunScore}";
 
-        if (isNewBest)
+        if (xpAdded > 0)
         {
-            xpText.text = $"+{xpAdded} XP (New Best!)";
-        }
-        else if (xpAdded > 0)
-        {
-            xpText.text = $"+{xpAdded} XP (Perfect Revision!)";
+            if (isNewBest) xpText.text = $"+{xpAdded} XP (New Best!)";
+            else xpText.text = $"+{xpAdded} XP (Perfect Revision!)";
         }
         else
         {
-            xpText.text = "+0 XP";
+            xpText.text = "";
         }
 
-        // 4. Animate!
-        StartCoroutine(AnimateWinScreen(stars));
+        StartCoroutine(AnimateWinScreen(stars, xpAdded));
     }
 
-    private IEnumerator AnimateWinScreen(int starsAchieved)
+    private IEnumerator AnimateWinScreen(int starsAchieved, int xpAdded)
     {
         if (mainWindowTransform != null)
         {
             mainWindowTransform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
         }
 
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.25f);
+        if (otterTransform != null)
+        {
+            otterTransform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
+            // AudioManager.Instance.PlaySFX("OtterSound");
+        }
+
+        yield return new WaitForSecondsRealtime(0.25f);
 
         for (int i = 0; i < starImages.Length; i++)
         {
             if (i < starsAchieved)
             {
+                starImages[i].transform.localScale = Vector3.zero;
                 starImages[i].sprite = fullStarSprite;
                 starImages[i].transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
 
-                // AudioManager.Instance.PlaySFX("VictorySound");
+                // AudioManager.Instance.PlaySFX("StarPopSound");
                 yield return new WaitForSecondsRealtime(0.3f);
             }
+        }
+
+        if (xpAdded > 0 && xpText != null)
+        {
+            yield return new WaitForSecondsRealtime(0.2f);
+            xpText.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
         }
     }
 
