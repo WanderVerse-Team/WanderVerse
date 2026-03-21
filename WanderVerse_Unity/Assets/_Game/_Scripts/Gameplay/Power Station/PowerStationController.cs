@@ -117,6 +117,7 @@ public class PowerStationController : BaseLevelController
     private int numRows;
     private bool isProcessingResult = false;
     private bool useManualTrayGridLayout = false;
+    private Dictionary<int, int> requiredDigitCounts = new Dictionary<int, int>();
 
     private void SetMachineIdleVisual()
     {
@@ -193,6 +194,7 @@ public class PowerStationController : BaseLevelController
         numRows    = levelData.batteryRows;
         currentTurn = 0;
 
+        ValidateTraySettings();
         EnsureSocketsInitialized();
         ConfigureBatteryTrayLayout();
 
@@ -365,6 +367,8 @@ public class PowerStationController : BaseLevelController
     private List<int> GenerateBatteryPool()
     {
         List<int> pool = new List<int>();
+        requiredDigitCounts.Clear();
+        int trayCapacity = GetTrayCapacity();
 
         // --- Step A: Build valid addends whose sum == currentTargetPower ---
         // We generate (numRows) random addends that sum to the target.
@@ -378,23 +382,29 @@ public class PowerStationController : BaseLevelController
             {
                 int digit = int.Parse(addendStr[c].ToString());
                 pool.Add(digit);
+                if (!requiredDigitCounts.ContainsKey(digit))
+                    requiredDigitCounts[digit] = 0;
+                requiredDigitCounts[digit]++;
             }
         }
 
         // --- Step B: Add distractor batteries ---
-        int maxDistractorsByCapacity = Mathf.Max(0, maxVisibleBatteries - pool.Count);
+        int maxDistractorsByCapacity = Mathf.Max(0, trayCapacity - pool.Count);
         int distractorCount = Mathf.Min(levelData.extraDistractorBatteries, maxDistractorsByCapacity);
         for (int i = 0; i < distractorCount; i++)
         {
             pool.Add(Random.Range(0, 10));
         }
 
+        while (pool.Count < trayCapacity)
+            pool.Add(Random.Range(0, 10));
+
         // --- Step C: Shuffle the pool so correct digits aren't always first ---
         ShuffleList(pool);
 
         // Hard cap to tray capacity while preserving all required digits added above
-        if (pool.Count > maxVisibleBatteries)
-            pool = pool.GetRange(0, maxVisibleBatteries);
+        if (pool.Count > trayCapacity)
+            pool = pool.GetRange(0, trayCapacity);
 
         return pool;
     }
@@ -509,7 +519,7 @@ public class PowerStationController : BaseLevelController
             Destroy(child.gameObject);
 
         // Instantiate one battery UI element per value
-        int maxToSpawn = Mathf.Min(values.Count, Mathf.Max(1, trayColumns * trayRows), maxVisibleBatteries);
+        int maxToSpawn = Mathf.Min(values.Count, GetTrayCapacity());
         for (int i = 0; i < maxToSpawn; i++)
         {
             int val = values[i];
@@ -595,16 +605,73 @@ public class PowerStationController : BaseLevelController
     {
         if (batteryTray == null || batteryPrefab == null) return;
 
-        int trayCapacity = Mathf.Min(Mathf.Max(1, trayColumns * trayRows), maxVisibleBatteries);
+        int trayCapacity = GetTrayCapacity();
         if (batteryTray.childCount >= trayCapacity) return;
 
         GameObject go = Instantiate(batteryPrefab, batteryTray);
         BatteryIdentity id = go.GetComponent<BatteryIdentity>();
         if (id != null)
-            id.Setup(Random.Range(0, 10));
+            id.Setup(GetRefillDigitValue());
 
         if (useManualTrayGridLayout)
             ApplyManualTrayGridLayout();
+    }
+
+    private int GetRefillDigitValue()
+    {
+        // Count currently available digits from tray + sockets
+        Dictionary<int, int> availableCounts = new Dictionary<int, int>();
+
+        if (batteryTray != null)
+        {
+            foreach (Transform child in batteryTray)
+            {
+                BatteryIdentity battery = child.GetComponent<BatteryIdentity>();
+                if (battery == null) continue;
+
+                int digit = battery.digitValue;
+                if (!availableCounts.ContainsKey(digit)) availableCounts[digit] = 0;
+                availableCounts[digit]++;
+            }
+        }
+
+        if (sockets != null)
+        {
+            foreach (BatterySocket socket in sockets)
+            {
+                if (socket == null || socket.currentBattery == null) continue;
+
+                int digit = socket.currentBattery.digitValue;
+                if (!availableCounts.ContainsKey(digit)) availableCounts[digit] = 0;
+                availableCounts[digit]++;
+            }
+        }
+
+        // If any required solution digit is missing, spawn that first
+        foreach (var pair in requiredDigitCounts)
+        {
+            int required = pair.Value;
+            int available = availableCounts.ContainsKey(pair.Key) ? availableCounts[pair.Key] : 0;
+            if (available < required)
+                return pair.Key;
+        }
+
+        // Otherwise spawn a distractor
+        return Random.Range(0, 10);
+    }
+
+    private void ValidateTraySettings()
+    {
+        if (trayColumns <= 0) trayColumns = 3;
+        if (trayRows <= 0) trayRows = 2;
+        if (maxVisibleBatteries <= 0) maxVisibleBatteries = 6;
+    }
+
+    private int GetTrayCapacity()
+    {
+        int byGrid = Mathf.Max(1, trayColumns * trayRows);
+        int byLimit = Mathf.Max(1, maxVisibleBatteries);
+        return Mathf.Min(byGrid, byLimit);
     }
 
     /// <summary>
