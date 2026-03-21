@@ -171,9 +171,14 @@ public class PowerStationController : BaseLevelController
 
         if (machineAnimator != null)
         {
-            machineAnimator.ResetTrigger(overloadTriggerName);
-            machineAnimator.ResetTrigger(underloadTriggerName);
-            machineAnimator.ResetTrigger(victoryTriggerName);
+            if (HasAnimatorTrigger(overloadTriggerName))
+                machineAnimator.ResetTrigger(overloadTriggerName);
+
+            if (HasAnimatorTrigger(underloadTriggerName))
+                machineAnimator.ResetTrigger(underloadTriggerName);
+
+            if (HasAnimatorTrigger(victoryTriggerName))
+                machineAnimator.ResetTrigger(victoryTriggerName);
 
             string[] idleCandidates = { idleStateName, "machine_idle", "Machine_Idle", "Idle" };
 
@@ -457,6 +462,7 @@ public class PowerStationController : BaseLevelController
 
     private void EnsureSocketsInitialized()
     {
+        int expectedSocketCount = Mathf.Max(1, numRows) * Mathf.Max(1, numColumns);
         bool hasSerializedSockets = sockets != null && sockets.Length > 0;
         if (hasSerializedSockets)
         {
@@ -470,7 +476,7 @@ public class PowerStationController : BaseLevelController
                 }
             }
 
-            if (allValid) return;
+            if (allValid && sockets.Length >= expectedSocketCount) return;
         }
 
         List<BatterySocket> discovered = new List<BatterySocket>();
@@ -480,23 +486,22 @@ public class PowerStationController : BaseLevelController
         if (existing != null && existing.Length > 0)
             discovered.AddRange(existing);
 
-        // 2) Fallback: add BatterySocket to objects named Socket_Rx_Cy
-        if (discovered.Count == 0)
+        // 2) Enforce BatterySocket on objects named Socket_Rx_Cy
+        RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
+        foreach (RectTransform rect in rects)
         {
-            RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
-            foreach (RectTransform rect in rects)
-            {
-                if (rect == null) continue;
-                if (!TryParseSocketName(rect.name, out int row, out int column)) continue;
+            if (rect == null) continue;
+            if (!TryParseSocketName(rect.name, out int row, out int column)) continue;
 
-                BatterySocket socket = rect.GetComponent<BatterySocket>();
-                if (socket == null)
-                    socket = rect.gameObject.AddComponent<BatterySocket>();
+            BatterySocket socket = rect.GetComponent<BatterySocket>();
+            if (socket == null)
+                socket = rect.gameObject.AddComponent<BatterySocket>();
 
-                socket.row = row;
-                socket.column = column;
+            socket.row = row;
+            socket.column = column;
+
+            if (!discovered.Contains(socket))
                 discovered.Add(socket);
-            }
         }
 
         // Normalize socket coordinates from object names when available (authoritative)
@@ -637,49 +642,142 @@ public class PowerStationController : BaseLevelController
     private List<int> GenerateBatteryPool()
     {
         ValidateTraySettings();
-        List<int> pool = new List<int>();
-        requiredDigitCounts.Clear();
         int trayCapacity = GetTrayCapacity();
 
-        // --- Step A: Build valid addends whose sum == currentTargetPower ---
-        // We generate (numRows) random addends that sum to the target.
-        int[] addends = GenerateAddends(currentTargetPower, numRows);
-        solutionDigits = new int[numRows, numColumns];
+        List<int> lastCandidate = null;
+        const int maxGenerationAttempts = 20;
 
-        // Extract individual digits from each addend and add to the pool
-        for (int r = 0; r < addends.Length; r++)
+        for (int attempt = 0; attempt < maxGenerationAttempts; attempt++)
         {
-            string addendStr = addends[r].ToString().PadLeft(numColumns, '0');
-            for (int c = 0; c < addendStr.Length; c++)
+            List<int> pool = new List<int>();
+            requiredDigitCounts.Clear();
+
+            // --- Step A: Build valid addends whose sum == currentTargetPower ---
+            int[] addends = GenerateAddends(currentTargetPower, numRows);
+            solutionDigits = new int[numRows, numColumns];
+
+            for (int r = 0; r < addends.Length; r++)
             {
-                int digit = int.Parse(addendStr[c].ToString());
-                pool.Add(digit);
-                solutionDigits[r, c] = digit;
-                if (!requiredDigitCounts.ContainsKey(digit))
-                    requiredDigitCounts[digit] = 0;
-                requiredDigitCounts[digit]++;
+                string addendStr = addends[r].ToString().PadLeft(numColumns, '0');
+                for (int c = 0; c < addendStr.Length; c++)
+                {
+                    int digit = int.Parse(addendStr[c].ToString());
+                    pool.Add(digit);
+                    solutionDigits[r, c] = digit;
+
+                    if (!requiredDigitCounts.ContainsKey(digit))
+                        requiredDigitCounts[digit] = 0;
+                    requiredDigitCounts[digit]++;
+                }
+            }
+
+            // --- Step B: Add distractor batteries ---
+            int maxDistractorsByCapacity = Mathf.Max(0, trayCapacity - pool.Count);
+            int distractorCount = Mathf.Min(levelData.extraDistractorBatteries, maxDistractorsByCapacity);
+            for (int i = 0; i < distractorCount; i++)
+                pool.Add(Random.Range(0, 10));
+
+            while (pool.Count < trayCapacity)
+                pool.Add(Random.Range(0, 10));
+
+            ShuffleList(pool);
+
+            if (pool.Count > trayCapacity)
+                pool = pool.GetRange(0, trayCapacity);
+
+            lastCandidate = pool;
+
+            if (IsPoolSolvableForTarget(pool))
+                return pool;
+        }
+
+        Debug.LogWarning("[PowerStation] Could not generate a solvable tray in time. Using deterministic fallback pool.");
+
+        List<int> fallbackPool = new List<int>();
+        requiredDigitCounts.Clear();
+
+        if (solutionDigits != null)
+        {
+            for (int r = 0; r < numRows; r++)
+            {
+                for (int c = 0; c < numColumns; c++)
+                {
+                    int digit = solutionDigits[r, c];
+                    fallbackPool.Add(digit);
+                    if (!requiredDigitCounts.ContainsKey(digit))
+                        requiredDigitCounts[digit] = 0;
+                    requiredDigitCounts[digit]++;
+                }
             }
         }
 
-        // --- Step B: Add distractor batteries ---
-        int maxDistractorsByCapacity = Mathf.Max(0, trayCapacity - pool.Count);
-        int distractorCount = Mathf.Min(levelData.extraDistractorBatteries, maxDistractorsByCapacity);
-        for (int i = 0; i < distractorCount; i++)
+        while (fallbackPool.Count < trayCapacity)
+            fallbackPool.Add(Random.Range(0, 10));
+
+        if (fallbackPool.Count > trayCapacity)
+            fallbackPool = fallbackPool.GetRange(0, trayCapacity);
+
+        if (!IsPoolSolvableForTarget(fallbackPool) && lastCandidate != null)
+            return lastCandidate;
+
+        ShuffleList(fallbackPool);
+        return fallbackPool;
+    }
+
+    private bool IsPoolSolvableForTarget(List<int> pool)
+    {
+        if (pool == null) return false;
+
+        int requiredCells = numRows * numColumns;
+        if (requiredCells <= 0) return false;
+        if (pool.Count < requiredCells) return false;
+
+        int[] counts = new int[10];
+        for (int i = 0; i < pool.Count; i++)
         {
-            pool.Add(Random.Range(0, 10));
+            int digit = Mathf.Clamp(pool[i], 0, 9);
+            counts[digit]++;
         }
 
-        while (pool.Count < trayCapacity)
-            pool.Add(Random.Range(0, 10));
+        int[] placeValues = new int[numColumns];
+        for (int c = 0; c < numColumns; c++)
+            placeValues[c] = (int)Mathf.Pow(10, numColumns - 1 - c);
 
-        // --- Step C: Shuffle the pool so correct digits aren't always first ---
-        ShuffleList(pool);
+        int[] rowAddends = new int[numRows];
+        return TryBuildRowsForTarget(0, counts, rowAddends, placeValues);
+    }
 
-        // Hard cap to tray capacity while preserving all required digits added above
-        if (pool.Count > trayCapacity)
-            pool = pool.GetRange(0, trayCapacity);
+    private bool TryBuildRowsForTarget(int cellIndex, int[] counts, int[] rowAddends, int[] placeValues)
+    {
+        int totalCells = numRows * numColumns;
+        if (cellIndex >= totalCells)
+        {
+            int total = 0;
+            for (int r = 0; r < rowAddends.Length; r++)
+                total += rowAddends[r];
 
-        return pool;
+            return total == currentTargetPower;
+        }
+
+        int row = cellIndex / numColumns;
+        int column = cellIndex % numColumns;
+        int placeValue = placeValues[column];
+
+        for (int digit = 0; digit <= 9; digit++)
+        {
+            if (counts[digit] <= 0) continue;
+
+            counts[digit]--;
+            rowAddends[row] += digit * placeValue;
+
+            if (TryBuildRowsForTarget(cellIndex + 1, counts, rowAddends, placeValues))
+                return true;
+
+            rowAddends[row] -= digit * placeValue;
+            counts[digit]++;
+        }
+
+        return false;
     }
 
     private void ConfigureBatteryTrayLayout()
@@ -942,27 +1040,6 @@ public class PowerStationController : BaseLevelController
 
     private bool IsTraySolvableForRemainingSockets()
     {
-        Dictionary<int, int> neededCounts = new Dictionary<int, int>();
-
-        for (int r = 0; r < numRows; r++)
-        {
-            for (int c = 0; c < numColumns; c++)
-            {
-                BatterySocket socket = GetSocket(r, c);
-                if (socket != null && socket.currentBattery != null) continue;
-
-                if (solutionDigits == null || r >= solutionDigits.GetLength(0) || c >= solutionDigits.GetLength(1))
-                    continue;
-
-                int requiredDigit = solutionDigits[r, c];
-                if (!neededCounts.ContainsKey(requiredDigit)) neededCounts[requiredDigit] = 0;
-                neededCounts[requiredDigit]++;
-            }
-        }
-
-        if (neededCounts.Count == 0)
-            return true;
-
         Dictionary<int, int> trayCounts = new Dictionary<int, int>();
         foreach (Transform child in batteryTray)
         {
@@ -974,14 +1051,7 @@ public class PowerStationController : BaseLevelController
             trayCounts[digit]++;
         }
 
-        foreach (var pair in neededCounts)
-        {
-            int available = trayCounts.ContainsKey(pair.Key) ? trayCounts[pair.Key] : 0;
-            if (available < pair.Value)
-                return false;
-        }
-
-        return true;
+        return TryFindCompletionForCurrentBoard(trayCounts, out _);
     }
 
     private void RefreshTrayForRemainingSockets()
@@ -993,20 +1063,9 @@ public class PowerStationController : BaseLevelController
         List<int> refreshed = new List<int>();
         int trayCapacity = GetTrayCapacity();
 
-        // Add all required digits for currently empty sockets first.
-        for (int r = 0; r < numRows; r++)
-        {
-            for (int c = 0; c < numColumns; c++)
-            {
-                BatterySocket socket = GetSocket(r, c);
-                if (socket != null && socket.currentBattery != null) continue;
-
-                if (solutionDigits == null || r >= solutionDigits.GetLength(0) || c >= solutionDigits.GetLength(1))
-                    continue;
-
-                refreshed.Add(solutionDigits[r, c]);
-            }
-        }
+        // Add digits that solve the currently remaining empty sockets.
+        if (TryFindCompletionForCurrentBoard(null, out List<int> requiredForRemaining))
+            refreshed.AddRange(requiredForRemaining);
 
         // Fill remaining tray slots with random distractors.
         while (refreshed.Count < trayCapacity)
@@ -1021,6 +1080,111 @@ public class PowerStationController : BaseLevelController
         isRefreshingTray = false;
 
         Debug.Log("[PowerStation] Tray refreshed to keep target reachable.");
+    }
+
+    private bool TryFindCompletionForCurrentBoard(Dictionary<int, int> availableDigits, out List<int> requiredDigits)
+    {
+        requiredDigits = new List<int>();
+
+        if (numRows <= 0 || numColumns <= 0) return false;
+
+        int[] rowValues = new int[numRows];
+        List<int> emptyRows = new List<int>();
+        List<int> emptyPlaceValues = new List<int>();
+
+        for (int r = 0; r < numRows; r++)
+        {
+            for (int c = 0; c < numColumns; c++)
+            {
+                BatterySocket socket = GetSocket(r, c);
+                int placeValue = (int)Mathf.Pow(10, numColumns - 1 - c);
+
+                if (socket != null && socket.currentBattery != null)
+                {
+                    rowValues[r] += socket.currentBattery.digitValue * placeValue;
+                }
+                else
+                {
+                    emptyRows.Add(r);
+                    emptyPlaceValues.Add(placeValue);
+                }
+            }
+        }
+
+        if (emptyRows.Count == 0)
+        {
+            int currentTotal = 0;
+            for (int r = 0; r < rowValues.Length; r++)
+                currentTotal += rowValues[r];
+
+            return currentTotal == currentTargetPower;
+        }
+
+        int[] availableCounts = null;
+        if (availableDigits != null)
+        {
+            availableCounts = new int[10];
+            for (int d = 0; d <= 9; d++)
+                availableCounts[d] = availableDigits.TryGetValue(d, out int count) ? count : 0;
+        }
+
+        List<int> candidate = new List<int>();
+        bool solved = TryAssignDigitsForCurrentBoard(
+            0,
+            rowValues,
+            emptyRows,
+            emptyPlaceValues,
+            availableCounts,
+            candidate);
+
+        if (solved)
+            requiredDigits.AddRange(candidate);
+
+        return solved;
+    }
+
+    private bool TryAssignDigitsForCurrentBoard(
+        int index,
+        int[] rowValues,
+        List<int> emptyRows,
+        List<int> emptyPlaceValues,
+        int[] availableCounts,
+        List<int> chosenDigits)
+    {
+        if (index >= emptyRows.Count)
+        {
+            int total = 0;
+            for (int r = 0; r < rowValues.Length; r++)
+                total += rowValues[r];
+
+            return total == currentTargetPower;
+        }
+
+        int row = emptyRows[index];
+        int placeValue = emptyPlaceValues[index];
+
+        for (int digit = 0; digit <= 9; digit++)
+        {
+            if (availableCounts != null && availableCounts[digit] <= 0)
+                continue;
+
+            if (availableCounts != null)
+                availableCounts[digit]--;
+
+            rowValues[row] += digit * placeValue;
+            chosenDigits.Add(digit);
+
+            if (TryAssignDigitsForCurrentBoard(index + 1, rowValues, emptyRows, emptyPlaceValues, availableCounts, chosenDigits))
+                return true;
+
+            chosenDigits.RemoveAt(chosenDigits.Count - 1);
+            rowValues[row] -= digit * placeValue;
+
+            if (availableCounts != null)
+                availableCounts[digit]++;
+        }
+
+        return false;
     }
 
     private int GetRefillDigitValue()
@@ -1515,13 +1679,58 @@ public class PowerStationController : BaseLevelController
     //  VICTORY
     // ═══════════════════════════════════════════
 
+    private AudioSource ResolveVictoryAudioSource()
+    {
+        if (victoryAudioSource != null) return victoryAudioSource;
+        if (audioSource != null) return audioSource;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource != null) return audioSource;
+
+        if (machineImage != null)
+        {
+            AudioSource imageSource = machineImage.GetComponent<AudioSource>();
+            if (imageSource != null)
+            {
+                audioSource = imageSource;
+                return imageSource;
+            }
+        }
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+        audioSource.spatialBlend = 0f;
+        return audioSource;
+    }
+
     private void PlayVictoryAudio()
     {
-        if (victoryChime == null) return;
+        AudioClip clipToPlay = victoryChime;
 
-        AudioSource source = victoryAudioSource != null ? victoryAudioSource : audioSource;
+        if (clipToPlay == null && AudioManager.Instance != null)
+            clipToPlay = AudioManager.Instance.levelCompleteSound;
+
+        if (clipToPlay == null)
+        {
+            Debug.LogWarning("[PowerStation] Victory audio skipped: no Victory Chime assigned and no AudioManager levelCompleteSound available.");
+            return;
+        }
+
+        AudioSource source = ResolveVictoryAudioSource();
         if (source != null)
-            source.PlayOneShot(victoryChime);
+        {
+            source.PlayOneShot(clipToPlay);
+            return;
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayLevelComplete();
+            return;
+        }
+
+        Debug.LogWarning("[PowerStation] Victory audio skipped: no AudioSource and no AudioManager available.");
     }
 
     private void ShowVictory()

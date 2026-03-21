@@ -118,6 +118,8 @@ public class BatteryDragDrop : MonoBehaviour,
     {
         if (batteryIdentity == null) return false;
 
+        EnsureSocketsExistInScene();
+
         BatterySocket[] sockets = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
         foreach (BatterySocket socket in sockets)
         {
@@ -134,6 +136,47 @@ public class BatteryDragDrop : MonoBehaviour,
         }
 
         return false;
+    }
+
+    private void EnsureSocketsExistInScene()
+    {
+        BatterySocket[] existing = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
+        if (existing != null && existing.Length > 0) return;
+
+        RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
+        foreach (RectTransform rect in rects)
+        {
+            if (rect == null) continue;
+            if (!TryParseSocketName(rect.name, out int row, out int column)) continue;
+
+            BatterySocket socket = rect.GetComponent<BatterySocket>();
+            if (socket == null)
+                socket = rect.gameObject.AddComponent<BatterySocket>();
+
+            socket.row = row;
+            socket.column = column;
+        }
+    }
+
+    private bool TryParseSocketName(string objectName, out int row, out int column)
+    {
+        row = -1;
+        column = -1;
+
+        if (string.IsNullOrEmpty(objectName)) return false;
+        if (!objectName.StartsWith("Socket_R", System.StringComparison.OrdinalIgnoreCase)) return false;
+
+        string[] parts = objectName.Split('_');
+        if (parts.Length < 3) return false;
+
+        string rowPart = parts[1];
+        string colPart = parts[2];
+
+        if (rowPart.Length < 2 || colPart.Length < 2) return false;
+        if (!int.TryParse(rowPart.Substring(1), out row)) return false;
+        if (!int.TryParse(colPart.Substring(1), out column)) return false;
+
+        return true;
     }
 
     /// <summary>Called by BatterySocket when this battery is accepted into a slot.</summary>
