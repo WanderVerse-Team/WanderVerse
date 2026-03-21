@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   lessonID: 
   lessonTitle: 
-  levelID: 
+  levelID: L02_DOR_1
   levelTitle: 
   description: 
   gameType: 1
@@ -46,9 +46,6 @@ MonoBehaviour:
     - 12
     - 7
     - 9
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: ' fol '
     promptAudio: {fileID: 8300000, guid: 2ca0018420d540a4eaf91d7fab4c5a30, type: 3}
     correctString: 2
@@ -57,9 +54,6 @@ MonoBehaviour:
     - 6
     - 7
     - 12
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: ;=k
     promptAudio: {fileID: 8300000, guid: 389af41f9b8cdbd42a85bde83a2d1c28, type: 3}
     correctString: 3
@@ -68,9 +62,6 @@ MonoBehaviour:
     - 7
     - 5
     - 13
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: ' y;r'
     promptAudio: {fileID: 8300000, guid: 1ecded916104cc64b96da6011d9f1408, type: 3}
     correctString: 4
@@ -79,9 +70,6 @@ MonoBehaviour:
     - 16
     - 8
     - 12
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: my
     promptAudio: {fileID: 8300000, guid: 5cd1ed89519100d41b334a65529be0d7, type: 3}
     correctString: 5
@@ -90,9 +78,6 @@ MonoBehaviour:
     - 2
     - 8
     - 15
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: yh
     promptAudio: {fileID: 8300000, guid: 05fffcb2bcfe97641819278eed926a6f, type: 3}
     correctString: 6
@@ -101,9 +86,6 @@ MonoBehaviour:
     - 9
     - 16
     - 2
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: y;
     promptAudio: {fileID: 8300000, guid: d48dcd2bbb570184786fc150fa29a867, type: 3}
     correctString: 7
@@ -112,9 +94,6 @@ MonoBehaviour:
     - 8
     - 1
     - 9
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: wg
     promptAudio: {fileID: 8300000, guid: 829f8f4510280f844bcc4f1d73cad5f4, type: 3}
     correctString: 8
@@ -123,9 +102,6 @@ MonoBehaviour:
     - 17
     - 7
     - 12
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: kjh
     promptAudio: {fileID: 8300000, guid: 4152233993249134888a192e1b34dde6, type: 3}
     correctString: 9
@@ -134,9 +110,6 @@ MonoBehaviour:
     - 11
     - 6
     - 19
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oyh
     promptAudio: {fileID: 8300000, guid: 5abc6f7d1b88dcc46b3edafc84349d68, type: 3}
     correctString: 10
@@ -145,9 +118,6 @@ MonoBehaviour:
     - 7
     - 20
     - 1
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: tfld<y
     promptAudio: {fileID: 8300000, guid: bc4b1c555f4f51844893bd1bcb42d1be, type: 3}
     correctString: 11
@@ -156,9 +126,6 @@ MonoBehaviour:
     - 18
     - 12
     - 1
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: fod<y
     promptAudio: {fileID: 8300000, guid: bf50c55b9eedbbc44aa3b3e9f581a0b2, type: 3}
     correctString: 12
@@ -167,9 +134,6 @@ MonoBehaviour:
     - 19
     - 2
     - 14
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oy;=k
     promptAudio: {fileID: 8300000, guid: e4348ac07c3327742906b0f4ed9e81c7, type: 3}
     correctString: 13
@@ -178,9 +142,6 @@ MonoBehaviour:
     - 11
     - 16
     - 3
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oyy;r
     promptAudio: {fileID: 8300000, guid: 153c06da4da9d094baeb2daad1cbc01c, type: 3}
     correctString: 14
@@ -189,9 +150,6 @@ MonoBehaviour:
     - 18
     - 4
     - 16
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: myf<dj
     promptAudio: {fileID: 8300000, guid: b753585bc1ad0a5448b2c48ca5115c79, type: 3}
     correctString: 15
@@ -200,9 +158,6 @@ MonoBehaviour:
     - 18
     - 17
     - 5
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oyih
     promptAudio: {fileID: 8300000, guid: 5c61a2a3f21eed24ab8760022e4c4970, type: 3}
     correctString: 16
@@ -211,9 +166,6 @@ MonoBehaviour:
     - 7
     - 6
     - 18
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oyy;
     promptAudio: {fileID: 8300000, guid: 4703867e20a21ea4eb291a85695b891d, type: 3}
     correctString: 17
@@ -222,9 +174,6 @@ MonoBehaviour:
     - 8
     - 7
     - 11
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oywg
     promptAudio: {fileID: 8300000, guid: 53508cf1a797d944a920b3c35f35271f, type: 3}
     correctString: 18
@@ -233,9 +182,6 @@ MonoBehaviour:
     - 8
     - 19
     - 11
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: oykjh
     promptAudio: {fileID: 8300000, guid: 292ee1db9c4ca8142af8c150b8dbe55c, type: 3}
     correctString: 19
@@ -244,9 +190,6 @@ MonoBehaviour:
     - 10
     - 13
     - 11
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
   - promptText: "\xFAiai"
     promptAudio: {fileID: 8300000, guid: 2388bf6f82a51be48b2ad19c793f7e90, type: 3}
     correctString: 20
@@ -255,6 +198,13 @@ MonoBehaviour:
     - 2
     - 15
     - 12
-    tensObjectPrefab: {fileID: 0}
-    onesObjectPrefab: {fileID: 0}
-    maxOnesAllowed: 9
+  totalTurns: 3
+  batteryRows: 2
+  minTargetPower: 20
+  maxTargetPower: 99
+  extraDistractorBatteries: 3
+  totalItems: 10
+  guidedItemCount: 5
+  cutTolerance: 0.4
+  treasureRounds: []
+  correctDaysSequence: []

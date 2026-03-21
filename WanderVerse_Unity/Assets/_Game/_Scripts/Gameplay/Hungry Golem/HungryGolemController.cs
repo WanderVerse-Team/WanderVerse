@@ -49,44 +49,39 @@ public class HungryGolemController : BaseLevelController
     public ParticleSystem confetti;
     public ParticleSystem fireworks;
 
-    // 1. Tell the framework we are a Spawner game
+    
     protected override GameType SupportedGameType => GameType.Counting;
 
     protected override void Start()
 {
-    // 1. Run Randiv's BaseLevelController logic 
-    // This turns on isGameActive, sets the timer, and loads the score!
+     
     base.Start(); 
+    Screen.orientation = ScreenOrientation.LandscapeLeft;
     confetti.Stop();
     fireworks.Stop();
     victoryPanel.SetActive(false);
     
     
 
-    // 2. Now do your Golem-specific setup
+    
     if (golemRenderer != null && idleSprite != null)
     {
         golemRenderer.sprite = idleSprite;
     }
 }
 
-    // 2. Setup the Golem based on the ScriptableObject
+    
     protected override void InitializeLevel()
     {
         golemRenderer.sprite = idleSprite;
         nextSpawnTime = Time.time + levelData.spawnRate;
         Debug.Log($"Golem is hungry for {targetScore} {levelData.levelTitle}s");
-        if (instructionText != null)
-    {
-        // This puts the random number right into the sentence!
-        instructionText.text = "Feed the Golem " + targetScore + " fruits!";
-    }
     }
 
-    // 3. Handle the spawning loop
+    //Spawn fruits at regular intervals
     public override void Update()
     {
-        base.Update(); // IMPORTANT: Keeps Randiv's timer running
+        base.Update(); 
 
         if (isGameActive)
         {
@@ -112,24 +107,24 @@ public class HungryGolemController : BaseLevelController
     {
         int index = Random.Range(0, levelData.spawnItems.Count);
         prefabToSpawn = levelData.spawnItems[index];
-        correctFruitsOnScreen++; // We just added one!
+        correctFruitsOnScreen++; 
     }
     else{
-    // 1. Pick the prefab 
+    // Mix correct fruits with occasional distractors
     bool spawnCorrect = Random.value < 0.3f;
         prefabToSpawn = spawnCorrect ? 
         levelData.spawnItems[Random.Range(0, levelData.spawnItems.Count)] : 
         levelData.distractors[Random.Range(0, levelData.distractors.Count)];
     }
-    // 2. THE AREA LOGIC
-    // We pick a random number between the Left point and the Right point
+    
+    //Randomize horizontal position within the spawn line
     float randomX = Random.Range(spawnLineLeft.position.x, spawnLineRight.position.x);
 
-    // 3. Spawn the fruit at that random X, but keep the Height (Y) from your line
+    // Spawn the fruit at that random coordinate
     Vector3 spawnPos = new Vector3(randomX, spawnLineLeft.position.y, 0);
     GameObject fruit = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
-    // 4. Set the speed
+    
     Rigidbody2D rb = fruit.GetComponent<Rigidbody2D>();
     if(rb != null) rb.linearVelocity = Vector2.down * levelData.itemFallSpeed;
 
@@ -141,10 +136,10 @@ public class HungryGolemController : BaseLevelController
         fruitScript.controller = this; 
     }
 
-    // Increase the count
+    
     currentActiveFruits++;
 }
-    // 4. The "State Swap" Logic
+    //Update sprite when fruit enters the Golem's mouth
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Fruit"))
@@ -155,15 +150,15 @@ public class HungryGolemController : BaseLevelController
         }
     }
 
-    // 2. Add a function to lower the count
+    //Decrement fruit count when a fruit is destroyed
 public void RemoveFruit(FruitIdentity fruit)
 {
     currentActiveFruits--;
     
-    // Safety check: prevent negative numbers if something glitches
+    
     if (currentActiveFruits < 0) currentActiveFruits = 0;
 
-    // Check if the fruit that died was a "Valid" one
+    // Only count valid fruits toward the score threshold
     if (fruit.fruitValue == levelData.validValue)
     {
         correctFruitsOnScreen--;
@@ -184,7 +179,7 @@ public void RemoveFruit(FruitIdentity fruit)
         }
     }
 
-    // 5. The Core Validation (Called by DragDropItem)
+    
     
 public  void ValidateDrop(GameObject item, GameObject zone)
 {
@@ -194,30 +189,30 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 
     if (fruit != null)
     {
-        // RULE: Golem only eats things worth EXACTLY 1
+        // Only accept the correct fruit value
         if (fruit.fruitValue == levelData.validValue)
         {
             HandleCorrectAnswer(); 
             Debug.Log($"<color=green>SUCCESS!</color> Ate {item.name}. Total Score: {currentScore}");
 
-            // Play the gulp!
+            
             if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(eatSound);
             StartCoroutine(GulpRoutine());
         }
         else
         {
-            // If value is 2, 5, etc., it's WRONG
+            
             HandleWrongAnswer();
             StartCoroutine(AutoSignSequence(wrongValuePanel));
             
             
             
-            // Optional: Penalty (Resets score)
+            
             currentScore = 0; 
             Debug.Log($"<color=red>TOO MUCH!</color> The Golem can't eat {fruit.fruitValue} fruits at once!");
 
 
-                // Play the mistake sound!
+                
                 if (AudioManager.Instance != null) AudioManager.Instance.PlayError();
         }
     }
@@ -230,13 +225,13 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 
     private IEnumerator GulpRoutine()
 {
-    // 1. Change to the eating/open mouth image
+    //Show the eating sprite
     golemRenderer.sprite = openMouthSprite;
 
-    // 2. Wait for a brief moment (0.4 seconds)
+    
     yield return new WaitForSeconds(0.4f);
 
-    // 3. If no more fruits are touching the Golem, go back to Idle
+    
     if (fruitsNearMouth <= 0)
     {
         golemRenderer.sprite = idleSprite;
@@ -257,16 +252,15 @@ public void CheckIfFinished()
     else if (currentScore < targetScore)
     {
         HandleWrongAnswer();
-        // Too few fruits
+        
         StartCoroutine(AutoSignSequence(underfeedPanel));
-        // Tip: Change the text to "The door is still locked! Did the Golem eat enough?"
+        
         currentScore = 0;
         Debug.Log("The door is still locked! Did the Golem eat enough?");
     }
     else
     {
         HandleWrongAnswer();
-        // Too many fruits (Overfed)
         StartCoroutine(AutoSignSequence(overfeedPanel));
         currentScore = 0;
     }
@@ -277,27 +271,23 @@ public void CheckIfFinished()
     if (sign == null) yield break;
     isProcessingMistake = true;
 
-    // 1. Setup Positions
     Vector2 hiddenPos = new Vector2(targetX, hiddenY);
     Vector2 visiblePos = new Vector2(targetX, visibleY);
 
-    // 2. Reset Score and Show Sign
     currentScore = 0;
-    sign.anchoredPosition = hiddenPos; // Snap to start position
+    sign.anchoredPosition = hiddenPos;
     sign.gameObject.SetActive(true);
     
     if (AudioManager.Instance != null) AudioManager.Instance.PlayError();
 
-    // 3. Slide Down (From hidden to visible)
+    //Slide the sign down into view
     yield return StartCoroutine(MoveSign(sign, hiddenPos, visiblePos));
 
-    // 4. Wait
     yield return new WaitForSecondsRealtime(waitTime);
 
-    // 5. Slide Up (From visible back to hidden)
+    //Slide it back up
     yield return StartCoroutine(MoveSign(sign, visiblePos, hiddenPos));
 
-    // 6. Finalize
     sign.gameObject.SetActive(false);
     isProcessingMistake = false;
 }
@@ -311,10 +301,9 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
         elapsed += Time.unscaledDeltaTime;
         float t = elapsed / duration;
         
-        // Smooth bounce/ease effect
+        //Ease the movement for a smoother animation
         float curve = t * t * (3f - 2f * t); 
         
-        // Use Vector2.Lerp to move both X and Y at the same time
         rect.anchoredPosition = Vector2.Lerp(startPos, endPos, curve);
         
         yield return null;
@@ -323,7 +312,7 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
 }
     public void VictoryScreen()
 {
-    // 1. Play the particle effects
+    //Trigger confetti and fireworks
     if (confetti != null)
     {
         confetti.Play();
@@ -333,7 +322,7 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
         fireworks.Play();
     }
 
-    // 2. Show the UI
+    //Display the victory UI
     victoryPanel.SetActive(true); 
 
 

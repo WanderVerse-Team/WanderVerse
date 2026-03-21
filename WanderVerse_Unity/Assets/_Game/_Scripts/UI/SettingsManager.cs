@@ -111,8 +111,9 @@ public class SettingsManager : MonoBehaviour
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
         
-        Time.timeScale = 1f; // CRITICAL: Unfreeze time before loading a new scene!
+        Time.timeScale = 1f; //Unfreeze time before loading a new scene
         SceneManager.LoadScene(mainMenuSceneName);
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     public void QuitGame()

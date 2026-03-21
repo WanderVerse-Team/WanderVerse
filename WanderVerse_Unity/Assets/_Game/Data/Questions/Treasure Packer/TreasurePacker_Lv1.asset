@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   lessonID: 
   lessonTitle: 
-  levelID: 
+  levelID: L02_PAC_1
   levelTitle: 
   description: 
   gameType: 11
@@ -43,6 +43,9 @@ MonoBehaviour:
   minTargetPower: 20
   maxTargetPower: 99
   extraDistractorBatteries: 3
+  totalItems: 10
+  guidedItemCount: 5
+  cutTolerance: 0.4
   treasureRounds:
   - targetValue: 13
     signPromptText: 13

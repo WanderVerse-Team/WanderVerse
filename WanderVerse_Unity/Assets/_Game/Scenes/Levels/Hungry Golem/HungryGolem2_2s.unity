@@ -850,6 +850,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: QuitGame
       objectReference: {fileID: 0}
+    - target: {fileID: 2419404193602828290, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2419404193602828290, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2419404193602828290, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 3980650350728521284, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_Name
       value: SettingsCanvas
@@ -2560,7 +2572,6 @@ MonoBehaviour:
   - "uq\xBF m,;=re .dk {TARGET} fjk \xFA\xC8hg fofla m,;=re f.d,\xEFg ljkak'"
   mascotVoices: []
   mascotPoses:
-  - {fileID: -7124887380464925333, guid: 079144e946c83424f80f1c2822304881, type: 3}
   - {fileID: -2890515563447498509, guid: f455c5eefae12ae4182825d923034a84, type: 3}
   - {fileID: -7373929441469380039, guid: 0062ffa8713939047a8b734e34e6997a, type: 3}
   - {fileID: 7470444149582743412, guid: bd744cf1c9cfb9040a812838e0832169, type: 3}
