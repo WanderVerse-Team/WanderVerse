@@ -124,6 +124,7 @@ public class PowerStationController : BaseLevelController
     private int numRows;
     private bool isProcessingResult = false;
     private bool useManualTrayGridLayout = false;
+    private bool isRefreshingTray = false;
     private Dictionary<int, int> requiredDigitCounts = new Dictionary<int, int>();
     private int[,] solutionDigits;
     private Coroutine forceIdleRoutine;
@@ -874,6 +875,7 @@ public class PowerStationController : BaseLevelController
     public void OnBatteryPlaced()
     {
         UpdateColumnSums();
+        EnsureTraySolvableOrRefresh();
         Debug.Log("[PowerStation] Battery placed — column sums updated.");
     }
 
@@ -926,6 +928,99 @@ public class PowerStationController : BaseLevelController
 
         if (useManualTrayGridLayout)
             ApplyManualTrayGridLayout();
+    }
+
+    private void EnsureTraySolvableOrRefresh()
+    {
+        if (isRefreshingTray) return;
+        if (solutionDigits == null || sockets == null || batteryTray == null || batteryPrefab == null) return;
+
+        if (IsTraySolvableForRemainingSockets()) return;
+
+        RefreshTrayForRemainingSockets();
+    }
+
+    private bool IsTraySolvableForRemainingSockets()
+    {
+        Dictionary<int, int> neededCounts = new Dictionary<int, int>();
+
+        for (int r = 0; r < numRows; r++)
+        {
+            for (int c = 0; c < numColumns; c++)
+            {
+                BatterySocket socket = GetSocket(r, c);
+                if (socket != null && socket.currentBattery != null) continue;
+
+                if (solutionDigits == null || r >= solutionDigits.GetLength(0) || c >= solutionDigits.GetLength(1))
+                    continue;
+
+                int requiredDigit = solutionDigits[r, c];
+                if (!neededCounts.ContainsKey(requiredDigit)) neededCounts[requiredDigit] = 0;
+                neededCounts[requiredDigit]++;
+            }
+        }
+
+        if (neededCounts.Count == 0)
+            return true;
+
+        Dictionary<int, int> trayCounts = new Dictionary<int, int>();
+        foreach (Transform child in batteryTray)
+        {
+            BatteryIdentity battery = child.GetComponent<BatteryIdentity>();
+            if (battery == null) continue;
+
+            int digit = battery.digitValue;
+            if (!trayCounts.ContainsKey(digit)) trayCounts[digit] = 0;
+            trayCounts[digit]++;
+        }
+
+        foreach (var pair in neededCounts)
+        {
+            int available = trayCounts.ContainsKey(pair.Key) ? trayCounts[pair.Key] : 0;
+            if (available < pair.Value)
+                return false;
+        }
+
+        return true;
+    }
+
+    private void RefreshTrayForRemainingSockets()
+    {
+        if (batteryTray == null || batteryPrefab == null) return;
+
+        isRefreshingTray = true;
+
+        List<int> refreshed = new List<int>();
+        int trayCapacity = GetTrayCapacity();
+
+        // Add all required digits for currently empty sockets first.
+        for (int r = 0; r < numRows; r++)
+        {
+            for (int c = 0; c < numColumns; c++)
+            {
+                BatterySocket socket = GetSocket(r, c);
+                if (socket != null && socket.currentBattery != null) continue;
+
+                if (solutionDigits == null || r >= solutionDigits.GetLength(0) || c >= solutionDigits.GetLength(1))
+                    continue;
+
+                refreshed.Add(solutionDigits[r, c]);
+            }
+        }
+
+        // Fill remaining tray slots with random distractors.
+        while (refreshed.Count < trayCapacity)
+            refreshed.Add(Random.Range(0, 10));
+
+        if (refreshed.Count > trayCapacity)
+            refreshed = refreshed.GetRange(0, trayCapacity);
+
+        ShuffleList(refreshed);
+        SpawnBatteries(refreshed);
+
+        isRefreshingTray = false;
+
+        Debug.Log("[PowerStation] Tray refreshed to keep target reachable.");
     }
 
     private int GetRefillDigitValue()
@@ -1102,26 +1197,35 @@ public class PowerStationController : BaseLevelController
         for (int c = 0; c < numColumns; c++)
         {
             int totalWithCarry = rawColumnSums[c] + carryInForColumn[c];
+            bool isRightmostColumn = (c == numColumns - 1);
 
             if (c < columnSumTexts.Length && columnSumTexts[c] != null)
             {
                 if (columnFullFlags[c])
                 {
-                    // Final displayed digit for this column (e.g. 7+6=13 => show 3)
-                    columnSumTexts[c].text = (totalWithCarry % 10).ToString();
+                    if (isRightmostColumn)
+                    {
+                        // Carry logic only for ones/rightmost column (e.g. 7+6=13 => show 3)
+                        columnSumTexts[c].text = (totalWithCarry % 10).ToString();
+                    }
+                    else
+                    {
+                        // For left column(s), show full value (e.g. 8+5 => 13)
+                        columnSumTexts[c].text = totalWithCarry.ToString();
+                    }
                 }
                 else
                 {
                     // Live running total for incomplete column, including carry-in.
                     bool hasValueToShow = columnHasAnyBattery[c] || carryInForColumn[c] > 0;
-                    columnSumTexts[c].text = hasValueToShow ? totalWithCarry.ToString() : "?";
+                    columnSumTexts[c].text = hasValueToShow ? totalWithCarry.ToString() : "0";
                 }
 
                 columnSumTexts[c].color = Color.white;
             }
 
             // Carry produced by this column is displayed above the column to its left
-            if (columnFullFlags[c] && carryOutFromColumn[c] > 0)
+            if (isRightmostColumn && columnFullFlags[c] && carryOutFromColumn[c] > 0)
             {
                 anyCarryVisible = true;
 
@@ -1386,7 +1490,7 @@ public class PowerStationController : BaseLevelController
         {
             if (columnSumTexts[c] != null)
             {
-                columnSumTexts[c].text = "?";
+                columnSumTexts[c].text = "0";
                 columnSumTexts[c].color = Color.white;
             }
         }
