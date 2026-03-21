@@ -27,8 +27,26 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private Button menuButton;
 
+    [Header("Effects")]
+    //[Tooltip("Drag the Confetti_Particles here")]
+    //[SerializeField] private ParticleSystem confettiParticles;
+
+    [Tooltip("Drag the Confetti here")]
+    [SerializeField] private ParticleSystem confettiParticles;
+
+    [Tooltip("Drag the Fireworks here")]
+    [SerializeField] private ParticleSystem fireworksParticles;
+
     private void Awake()
     {
+        Canvas myCanvas = GetComponent<Canvas>();
+        if (myCanvas != null)
+        {
+            myCanvas.worldCamera = Camera.main;
+
+            myCanvas.planeDistance = 1f;
+        }
+
         // Setup Button Listeners
         restartButton.onClick.AddListener(RestartLevel);
         nextLevelButton.onClick.AddListener(LoadNextLevel);
@@ -39,6 +57,10 @@ public class WinScreenController : MonoBehaviour
         if (backgroundDimmer != null) backgroundDimmer.SetActive(false);
         if (otterTransform != null) otterTransform.localScale = Vector3.zero;
         if (xpText != null) xpText.transform.localScale = Vector3.zero;
+
+        //if (confettiParticles != null) confettiParticles.Stop();
+        if (confettiParticles != null) confettiParticles.Stop();
+        if (fireworksParticles != null) fireworksParticles.Stop();
     }
 
     private void OnEnable()
@@ -93,6 +115,14 @@ public class WinScreenController : MonoBehaviour
             mainWindowTransform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
         }
 
+        //if (confettiParticles != null)
+        //{
+        //    confettiParticles.gameObject.SetActive(true);
+        //    confettiParticles.Play();
+        //}
+        if (confettiParticles != null) confettiParticles.Play();
+        if (fireworksParticles != null) fireworksParticles.Play();
+
         yield return new WaitForSecondsRealtime(0.25f);
         if (otterTransform != null)
         {
@@ -125,18 +155,21 @@ public class WinScreenController : MonoBehaviour
     private void RestartLevel()
     {
         Time.timeScale = 1f;
+        if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void LoadNextLevel()
     {
         Time.timeScale = 1f;
+        if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void ReturnToMenu()
     {
         Time.timeScale = 1f;
+        if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
         SceneManager.LoadScene("Golem_Game_Map");
     }
 }
