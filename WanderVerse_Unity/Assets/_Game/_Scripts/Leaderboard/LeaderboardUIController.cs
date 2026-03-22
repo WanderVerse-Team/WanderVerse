@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using WanderVerse.Backend.Services;
 using WanderVerse.Framework.Data;
@@ -36,6 +37,9 @@ public class LeaderboardUIController : MonoBehaviour
 
     [Header("My Rank Container")]
     public LeaderboardRowUI myRankRowUI;
+
+    [Header("Avatar")]
+    public Sprite defaultAvatarSprite;
 
     [Header("Optional UI")]
     public TextMeshProUGUI statusText;
@@ -172,6 +176,8 @@ public class LeaderboardUIController : MonoBehaviour
                 bool isCurrentPlayer = !string.IsNullOrEmpty(currentUserId) && entry.userID == currentUserId;
                 rowUI.Setup(rank, entry.userName, entry.xp, isCurrentPlayer);
             }
+
+            ApplyDefaultAvatarToRow(rowObj);
         }
 
         // Fill the separate "My Rank" row
@@ -185,6 +191,8 @@ public class LeaderboardUIController : MonoBehaviour
             {
                 SetupMyRankFallback();
             }
+
+            ApplyDefaultAvatarToRow(myRankRowUI.gameObject);
         }
 
         if (statusText != null)
@@ -269,6 +277,29 @@ public class LeaderboardUIController : MonoBehaviour
                 0,
                 true
             );
+        }
+
+        ApplyDefaultAvatarToRow(myRankRowUI.gameObject);
+    }
+
+    private void ApplyDefaultAvatarToRow(GameObject rowObject)
+    {
+        if (rowObject == null || defaultAvatarSprite == null)
+            return;
+
+        Transform avatarTransform = rowObject.transform.Find("AvatarImage");
+
+        if (avatarTransform != null)
+        {
+            Image avatarImage = avatarTransform.GetComponent<Image>();
+            if (avatarImage != null)
+            {
+                avatarImage.sprite = defaultAvatarSprite;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[LeaderboardUI] AvatarImage child not found in row: " + rowObject.name);
         }
     }
 
