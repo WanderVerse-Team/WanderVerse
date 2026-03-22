@@ -60,28 +60,30 @@ public class FractionsLevelController : BaseLevelController
     public ParticleSystem confetti;
 
     // HALVES messages
-    private string halvesWelcome  = "හෙලෝ! ක්‍රම්බල්ගේ බේකරියට සාදරයෙන් පිළිගනිමු!";
-    private string halvesCorrect  = "හොඳයි! හරියටම මැද කැපුවා!";
-    private string halvesWrong    = "අනේ! මැදින් කපන්න උත්සාහ කරන්න!";
-    private string halvesLastFive = "ශාබාශ්! දැන් රේඛාව නැතිව උත්සාහ කරන්න!";
-    private string halvesComplete = "අපූරුයි! ඔබ සියල්ල බෙදා කැපුවා!";
+    private string halvesWelcome  = "fldfyduo hd¨‍jd'''uu ;uhs l%ïn,a'uf. fílßhg Thdj idorfhka ms<s.kakjd'";
+    private string halvesCorrect  = "kshuhs æ yßhgu ueÈka lemqjd æ'''";
+    private string halvesWrong    = "yßhgu ueÈka lmkak W;aiy lrkak æ";
+    private string halvesLastFive = " f¾Ldj ke;sj W;aidy lrkakæ";
+    private string halvesComplete = "Thdkï ienEu olaYfhla ;uhs æ";
+
+
 
     private string[] halvesGuided = new string[]
     {
-        "කේක් එක හරියටම බෙදා කපන්න!",
-        "කුකී එක මැදින් කපන්න!",
-        "පීසා එක සමාන දෙකකට කපන්න!",
-        "පාන් එක හරියටම මැදින් කපන්න!",
-        "චොකලට් එක සමාන දෙකකට කපන්න!"
+        "flala tl yßhgu ueÈka lmkakæ",
+        "fodvï f.äh folg lmkakæ",
+        "iekaâúÉ tl folg lmkakæ",
+        "lma flala tl folg lmkakæ",
+        "mdka tl yßhgu ueÈka lmkakæ"
     };
 
     private string[] halvesFree = new string[]
     {
-        "දැන් රේඛාවක් නැතිව කපන්න!",
-        "මැද කොතැනද?",
-        "මධ්‍යය සොයා ගන්න!",
-        "සමාන කොටස් දෙකකට කපන්න!",
-        "ඔබට කළ හැකියි!"
+        "fu;eka mgka ueo f¾Ldj fkdue;sj W;aiy lrkak æ",
+        "ueo fld;eko@",
+        "uOHh fidhd .kakæ",
+        "iudk fldgia follg lmkakæ",
+        "Tng l< yelshsæ"
     };
 
     // QUARTERS messages
@@ -358,7 +360,7 @@ public class FractionsLevelController : BaseLevelController
 
         if (totalWrongs >= 6)
         {
-            yield return StartCoroutine(ShowBubble("අවාසනාවකට! ඔබේ අවස්ථා ඉවරයි! නැවත උත්සාහ කරන්න!", 3f));
+            yield return StartCoroutine(ShowBubble("wfka hd¨‍jd'Thdf. wjia:d bjrhs'kej; W;aiy lrkak æ", 3f));
             UnityEngine.SceneManagement.SceneManager.LoadScene(
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
             yield break;
