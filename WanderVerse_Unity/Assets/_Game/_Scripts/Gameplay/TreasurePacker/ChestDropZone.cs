@@ -15,7 +15,7 @@ public class ChestDropZone : MonoBehaviour
         {
             itemValue.hasBeenCounted = true;
             collision.enabled = false; // Disable the collider to prevent multiple triggers
-            // 2. Tell the controller to add the points
+            // Add the points in the controller
             controller.ConsumeItem(itemValue.goldValue);
 
             // 3. Destroy the coin immediately

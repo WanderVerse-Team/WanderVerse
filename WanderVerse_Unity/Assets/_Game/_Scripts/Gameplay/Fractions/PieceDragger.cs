@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 // Attach this to each quarter piece (TopLeft, TopRight, BottomLeft, BottomRight)
 public class PieceDragger : MonoBehaviour
@@ -36,12 +37,15 @@ public class PieceDragger : MonoBehaviour
     {
         if (isPlaced) return;
 
-        Vector2 screenPos = Mouse.current.position.ReadValue();
+        var pointer = Pointer.current;
+        if (pointer == null) return;
+
+        Vector2 screenPos = pointer.position.ReadValue();
         Vector2 worldPos  = mainCam.ScreenToWorldPoint(
             new Vector3(screenPos.x, screenPos.y, mainCam.nearClipPlane));
 
-        // Press — check if player clicked this piece
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        // Press
+        if (pointer.press.wasPressedThisFrame && !isDragging)
         {
             Collider2D hit = Physics2D.OverlapPoint(worldPos);
             if (hit != null && hit.transform == transform)
@@ -52,13 +56,13 @@ public class PieceDragger : MonoBehaviour
         }
 
         // Drag
-        if (Mouse.current.leftButton.isPressed && isDragging)
+        if (pointer.press.isPressed && isDragging)
         {
             transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
         }
 
         // Release
-        if (Mouse.current.leftButton.wasReleasedThisFrame && isDragging)
+        if (pointer.press.wasReleasedThisFrame && isDragging)
         {
             isDragging = false;
             CheckIfOnPlate();
@@ -108,9 +112,23 @@ public class PieceDragger : MonoBehaviour
     {
         isPlaced   = false;
         isDragging = false;
-        transform.position = startPos;
 
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = true;
+
+        StartCoroutine(AnimateBackToStart());
+    }
+
+    private IEnumerator AnimateBackToStart()
+    {
+        Vector3 from = transform.position;
+        float t = 0;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 5f;
+            transform.position = Vector3.Lerp(from, startPos, t);
+            yield return null;
+        }
+        transform.position = startPos;
     }
 }
