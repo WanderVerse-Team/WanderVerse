@@ -12,12 +12,12 @@ public class HungryGolemController : BaseLevelController
     public Sprite openMouthSprite;
 
     [Header("--- Spawning Setup ---")]
-    public Transform spawnLineLeft;  // Empty GameObject at top-left
-    public Transform spawnLineRight; // Empty GameObject at top-right
-    public GameObject mouthZone;     // The "Stomach" trigger area
+    public Transform spawnLineLeft;  
+    public Transform spawnLineRight; 
+    public GameObject mouthZone;     
 
-    public int maxFruitsOnScreen = 5; // The Limit
-    private int currentActiveFruits = 0; // The Counter
+    public int maxFruitsOnScreen = 5; // Maximum fruits we can have on screen at once
+    private int currentActiveFruits = 0; // Keeps track of how many fruits are currently active
 
     
 
@@ -31,9 +31,9 @@ public class HungryGolemController : BaseLevelController
     public RectTransform underfeedPanel;
 
     [Header("--- Settings ---")]
-    public float hiddenY = 800f; // Height above screen
-    public float visibleY = 0f;  // Center of screen
-    public float waitTime = 2.0f; // How long the sign stays visible
+    public float hiddenY = 800f; // Sign position when hidden above screen
+    public float visibleY = 0f;  // Sign position when centered on screen
+    public float waitTime = 2.0f; // How long warning signs stay on screen
     public float targetX = 0f;
 
     [Header("--- UI References ---")]
@@ -45,7 +45,7 @@ public class HungryGolemController : BaseLevelController
     private int correctFruitsOnScreen = 0;
 
     [Header("--- Victory Screen ---")]
-    public GameObject victoryPanel; // Drag your UI Panel here
+    public GameObject victoryPanel; 
     public ParticleSystem confetti;
     public ParticleSystem fireworks;
 
@@ -110,17 +110,17 @@ public class HungryGolemController : BaseLevelController
         correctFruitsOnScreen++; 
     }
     else{
-    // Mix correct fruits with occasional distractors
+    //Chance to spawn a distractor
     bool spawnCorrect = Random.value < 0.3f;
         prefabToSpawn = spawnCorrect ? 
         levelData.spawnItems[Random.Range(0, levelData.spawnItems.Count)] : 
         levelData.distractors[Random.Range(0, levelData.distractors.Count)];
     }
     
-    //Randomize horizontal position within the spawn line
+    // Pick a random spot between the left and right boundaries to spawn
     float randomX = Random.Range(spawnLineLeft.position.x, spawnLineRight.position.x);
 
-    // Spawn the fruit at that random coordinate
+    // Create the fruit at this random position
     Vector3 spawnPos = new Vector3(randomX, spawnLineLeft.position.y, 0);
     GameObject fruit = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
@@ -139,7 +139,7 @@ public class HungryGolemController : BaseLevelController
     
     currentActiveFruits++;
 }
-    //Update sprite when fruit enters the Golem's mouth
+    // Show the golem opening its mouth when a fruit enters
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Fruit"))
@@ -150,7 +150,7 @@ public class HungryGolemController : BaseLevelController
         }
     }
 
-    //Decrement fruit count when a fruit is destroyed
+    
 public void RemoveFruit(FruitIdentity fruit)
 {
     currentActiveFruits--;
@@ -158,7 +158,7 @@ public void RemoveFruit(FruitIdentity fruit)
     
     if (currentActiveFruits < 0) currentActiveFruits = 0;
 
-    // Only count valid fruits toward the score threshold
+    // Only count the right type of fruit 
     if (fruit.fruitValue == levelData.validValue)
     {
         correctFruitsOnScreen--;
@@ -189,7 +189,7 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 
     if (fruit != null)
     {
-        // Only accept the correct fruit value
+        
         if (fruit.fruitValue == levelData.validValue)
         {
             HandleCorrectAnswer(); 
@@ -225,7 +225,7 @@ public  void ValidateDrop(GameObject item, GameObject zone)
 
     private IEnumerator GulpRoutine()
 {
-    //Show the eating sprite
+    // Change to the eating sprite briefly
     golemRenderer.sprite = openMouthSprite;
 
     
@@ -280,12 +280,12 @@ public void CheckIfFinished()
     
     if (AudioManager.Instance != null) AudioManager.Instance.PlayError();
 
-    //Slide the sign down into view
+    // Animate the sign sliding down from above
     yield return StartCoroutine(MoveSign(sign, hiddenPos, visiblePos));
 
     yield return new WaitForSecondsRealtime(waitTime);
 
-    //Slide it back up
+    // Slide it back up out of view
     yield return StartCoroutine(MoveSign(sign, visiblePos, hiddenPos));
 
     sign.gameObject.SetActive(false);
@@ -301,7 +301,7 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
         elapsed += Time.unscaledDeltaTime;
         float t = elapsed / duration;
         
-        //Ease the movement for a smoother animation
+        
         float curve = t * t * (3f - 2f * t); 
         
         rect.anchoredPosition = Vector2.Lerp(startPos, endPos, curve);
@@ -323,7 +323,7 @@ private IEnumerator MoveSign(RectTransform rect, Vector2 startPos, Vector2 endPo
     }
 
     //Display the victory UI
-    victoryPanel.SetActive(true); 
+    //victoryPanel.SetActive(true); 
 
 
     

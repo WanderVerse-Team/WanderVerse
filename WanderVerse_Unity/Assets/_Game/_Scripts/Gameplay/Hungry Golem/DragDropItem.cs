@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-//IPointer interfaces provide better mobile support
+
 public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private Rigidbody2D rb;
@@ -14,7 +14,7 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        mainCamera = Camera.main; //Cache the camera for performance
+        mainCamera = Camera.main; 
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -45,7 +45,7 @@ public class DragDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     if (rb != null) 
     {
         rb.gravityScale = 0.5f; //Re-enable gravity
-        isReleased = true;      //Track that the item has been released
+        isReleased = true;      
     }
 }
 
@@ -69,7 +69,7 @@ private void OnTriggerEnter2D(Collider2D other)
     private Vector3 GetMouseWorldPos(Vector2 screenPosition)
     {
         Vector3 worldPoint = mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 0));
-        worldPoint.z = 0; // Keep it in 2D space
+        worldPoint.z = 0; 
         return worldPoint;
     }
 }
