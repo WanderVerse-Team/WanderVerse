@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;          // Required for Slider
 using TMPro;                   // Required for TextMeshProUGUI
@@ -68,8 +69,20 @@ namespace WanderVerse.Backend.UI
 
             private int CalculateStreak(PlayerData data)
             {
-                // Placeholder: You'll need to compare lastDailyResetTimestamp with current time (to be updated after EnergyManager is created)
-                return 1; 
+                if (data == null) return 1;
+
+                int savedStreak = Mathf.Max(1, data.loginStreak);
+                if (data.lastDailyResetTimestamp <= 0) return savedStreak;
+
+                DateTime lastResetDate = DateTimeOffset.FromUnixTimeSeconds(data.lastDailyResetTimestamp).LocalDateTime.Date;
+                DateTime currentDate = DateTimeOffset.Now.Date;
+                int dayGap = (currentDate - lastResetDate).Days;
+
+                if (dayGap <= 0) return savedStreak;
+                if (dayGap == 1) return savedStreak + 1;
+
+                // Missed one or more days, so streak resets.
+                return 1;
             }
         }
 }

@@ -76,9 +76,7 @@ namespace WanderVerse.Backend.Services
 
             if (signUpUsernameInput != null) signUpUsernameInput.readOnly = true;
 
-            // 2. HARD-WIRE ALL BUTTONS
-            // IMPORTANT: Activate both panels before setting up buttons
-            // GameObject.Find() only works on active GameObjects
+            // HARD-WIRE ALL BUTTONS
             if (panelSignIn != null) panelSignIn.SetActive(true);
             if (panelSignUp != null) panelSignUp.SetActive(true);
 
@@ -92,19 +90,19 @@ namespace WanderVerse.Backend.Services
 
             Debug.Log("<color=cyan>[Auth] All UI listeners hard-wired via code.</color>");
 
-            // Now set initial panel visibility (show SignUp, hide SignIn by default)
+            // Set initial panel visibility (show SignUp, hide SignIn by default)
             if (panelSignIn != null) panelSignIn.SetActive(false);
             if (panelSignUp != null) panelSignUp.SetActive(true);
 
             // Auto logs in a user
-            /*if (_auth.CurrentUser != null)
+            if (_auth.CurrentUser != null)
             {
                 Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
                 LoadWorldMap();
-            }*/
+            }
         }
 
-        // A helper method to keep your Start() clean
+        // A helper method to keep Start() clean
         private void SetupButton(string gameObjectName, UnityEngine.Events.UnityAction action)
         {
             GameObject btnObj = GameObject.Find(gameObjectName);
@@ -496,10 +494,10 @@ namespace WanderVerse.Backend.Services
         {
             if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
             {
-                // 1. Tell CloudSyncManager to fetch the user data
+                // Tell CloudSyncManager to fetch the user data
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
                 
-                // 2. Start a Coroutine to wait for the data to arrive before switching scenes
+                // Start a Coroutine to wait for the data to arrive before switching scenes
                 StartCoroutine(WaitForDataAndRedirect());
             }
         }
