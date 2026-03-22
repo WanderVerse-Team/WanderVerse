@@ -25,17 +25,5 @@ public class TempleDoor : MonoBehaviour,IPointerClickHandler
             }
         }
 
-        private void OnMouseEnter()
-    {
-        // Make the door glow or brighten
-        GetComponent<SpriteRenderer>().color = Color.gray; 
-    }
-
-    private void OnMouseExit()
-    {
-        // Return to normal color
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
-
     
 }
