@@ -8,10 +8,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public LevelData CurrentLevelData { get; private set; }
+
     // Parameters: LevelID, Score, XP Added, Stars, Is New Highscore
     public event Action<string, int, int, int, bool> OnLevelCompleted;
-
-    private LevelData pendingLevelData;
 
     private void Awake()
     {
@@ -27,21 +27,14 @@ public class GameManager : MonoBehaviour
     }
 
     // Call this from level menu buttons
-    public void LoadLevel(LevelData dataToLoad, string sceneName) 
+    public void LoadLevel(string sceneName) 
     {
-        pendingLevelData = dataToLoad;
-
         SceneManager.LoadScene(sceneName);
     }
 
-    // Called by BaseLevelController on Start()
-    public LevelData GetPendingLevelData()
+    public void SetCurrentLevelData(LevelData data)
     {
-        LevelData dataToReturn = pendingLevelData;
-
-        pendingLevelData = null;
-
-        return dataToReturn;
+        CurrentLevelData = data;
     }
 
     public void ProcessLevelCompletion(string levelID, int mistakes, LevelData levelData)

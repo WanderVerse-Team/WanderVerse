@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:WanderVerse_Unity/Assets/_Game/_Scripts/Backend/DashboardUIController.cs.meta
 guid: bf2a108816a65fc46979a94cbacb74ed
+========
+guid: b79287ed60eaa224ca543d85e7191c51
+>>>>>>>> e30edea627d5819cbb7a80111a305fa75c0fe34a:WanderVerse_Unity/Assets/_Game/Scenes/Menus/Scene_Leaderboard.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

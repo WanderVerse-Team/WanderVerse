@@ -48,8 +48,17 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/TalkingDoor_Game_Map.unity
     guid: 15f1b16318fd2c947b20eaf904ebff2d
   - enabled: 1
-    path: Assets/_Game/Scenes/Menus/Forest_Game_Map.unity
+    path: Assets/_Game/Scenes/Menus/Treasure_Game_Map.unity
     guid: eaa29ff38ca6fae4a8e135a5b34f6139
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/City_Minimap.unity
+    guid: e6dcc985871190648bd1ef4bfcdcf756
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Factory_Game_Map.unity
+    guid: ca30ee1c75974d344863869d3943c25c
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Bakery_Game_Map.unity
+    guid: f70a6c282a40fba41af08c5af9797c2f
   - enabled: 1
     path: Assets/_Game/Scenes/Levels/Hungry Golem/HungryGolem1_1s.unity
     guid: 2438b70a3bb959f42b7bcfd94a3b427d

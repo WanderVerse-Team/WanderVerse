@@ -84,6 +84,16 @@ public class AudioManager : MonoBehaviour
         musicSource.Stop();
     }
 
+    public void StopAllAudio()
+    {
+        if (musicSource != null) musicSource.Stop();
+        if (sfxSource != null) sfxSource.Stop();
+        if (voiceSource != null) voiceSource.Stop();
+
+        StopAllCoroutines();
+        mainMixer.SetFloat("MusicVol", PlayerPrefs.GetFloat("MusicVol", 0f));
+    }
+
     // ========================================================================
     // 2. SFX LOGIC (Global)
     // ========================================================================
