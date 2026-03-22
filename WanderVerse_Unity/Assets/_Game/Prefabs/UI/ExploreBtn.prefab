@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 128642514771700562}
   - component: {fileID: 7748346251775500021}
   m_Layer: 5
-  m_Name: Golem_ExpBtn
+  m_Name: ExploreBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
