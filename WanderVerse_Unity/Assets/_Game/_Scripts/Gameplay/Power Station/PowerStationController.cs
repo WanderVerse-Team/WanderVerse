@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using WanderVerse.Framework.Data;
 
 /// <summary>
 /// Main controller for the Power Station mini-game (Addition 1).
@@ -399,6 +400,8 @@ public class PowerStationController : BaseLevelController
     /// </summary>
     protected override void InitializeLevel()
     {
+        EnsureLevelIdConfiguredForPowerStation();
+
         // Read configurable values from the ScriptableObject
         totalTurns = levelData.totalTurns;
         numRows    = levelData.batteryRows;
@@ -419,6 +422,17 @@ public class PowerStationController : BaseLevelController
 
         // Start the first turn
         StartNextTurn();
+    }
+
+    private void EnsureLevelIdConfiguredForPowerStation()
+    {
+        if (levelData == null) return;
+
+        if (string.IsNullOrWhiteSpace(levelData.levelID) || levelData.levelID == CourseCatalog.NONE)
+        {
+            levelData.levelID = CourseCatalog.L03_POW_1;
+            Debug.LogWarning("[PowerStation] LevelData levelID was unassigned. Defaulted to L03_POW_1 so completion and WinScreen flow can proceed.");
+        }
     }
 
     private void EnsureCarryIndicatorInitialized()

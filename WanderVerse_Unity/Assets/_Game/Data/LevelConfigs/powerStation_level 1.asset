@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   lessonID: '"vertical_addition"'
   lessonTitle: 
-  levelID: None
+  levelID: L03_POW_1
   levelTitle: 
   description: 
   gameType: 2
