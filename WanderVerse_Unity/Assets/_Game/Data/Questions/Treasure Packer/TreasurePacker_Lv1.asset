@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   lessonID: 
   lessonTitle: 
-  levelID: None
+  levelID: L02_PAC_1
   levelTitle: 
   description: 
   gameType: 11
