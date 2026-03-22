@@ -288,6 +288,7 @@ MonoBehaviour:
   contentParent: {fileID: 1523313093}
   leaderboardRowPrefab: {fileID: 3281953026456917363, guid: 5cfeec1d87174b04381cfe1bc2febb01, type: 3}
   myRankRowUI: {fileID: 736655327}
+  defaultAvatarSprite: {fileID: -1835005186748302022, guid: 132eaa45a4869074f8b7de131bb527eb, type: 3}
   statusText: {fileID: 0}
   showOnlyTop10: 1
   maxRows: 10
@@ -678,7 +679,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -34.5, y: 18.63}
-  m_SizeDelta: {x: 20, y: 80}
+  m_SizeDelta: {x: 30, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &887047494
 GameObject:

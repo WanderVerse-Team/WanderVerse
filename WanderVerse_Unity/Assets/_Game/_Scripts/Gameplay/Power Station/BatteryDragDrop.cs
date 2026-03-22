@@ -121,17 +121,42 @@ public class BatteryDragDrop : MonoBehaviour,
         EnsureSocketsExistInScene();
 
         BatterySocket[] sockets = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
+        Vector2 releaseScreenPoint = RectTransformUtility.WorldToScreenPoint(eventData != null ? eventData.pressEventCamera : null, rectTransform.position);
+        BatterySocket nearestSocket = null;
+        float nearestDistance = float.MaxValue;
+
         foreach (BatterySocket socket in sockets)
         {
             if (socket == null || !socket.gameObject.activeInHierarchy) continue;
+            if (socket.currentBattery != null) continue;
 
             RectTransform socketRect = socket.transform as RectTransform;
             if (socketRect == null) continue;
 
-            if (!RectTransformUtility.RectangleContainsScreenPoint(socketRect, eventData.position, eventData.enterEventCamera))
-                continue;
+            bool containsReleasePoint = RectTransformUtility.RectangleContainsScreenPoint(
+                socketRect,
+                releaseScreenPoint,
+                eventData != null ? eventData.pressEventCamera : null);
 
-            if (socket.TryAcceptBattery(this, batteryIdentity))
+            if (containsReleasePoint)
+            {
+                if (socket.TryAcceptBattery(this, batteryIdentity))
+                    return true;
+            }
+
+            float distance = Vector2.Distance(rectTransform.position, socketRect.position);
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestSocket = socket;
+            }
+        }
+
+        // Fallback: snap to nearest empty socket if release is close enough.
+        const float maxSnapDistance = 140f;
+        if (nearestSocket != null && nearestDistance <= maxSnapDistance)
+        {
+            if (nearestSocket.TryAcceptBattery(this, batteryIdentity))
                 return true;
         }
 
@@ -140,9 +165,6 @@ public class BatteryDragDrop : MonoBehaviour,
 
     private void EnsureSocketsExistInScene()
     {
-        BatterySocket[] existing = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
-        if (existing != null && existing.Length > 0) return;
-
         RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
         foreach (RectTransform rect in rects)
         {
