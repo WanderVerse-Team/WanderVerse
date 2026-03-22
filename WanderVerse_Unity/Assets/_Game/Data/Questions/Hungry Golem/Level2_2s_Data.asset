@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: 
   description: 
   gameType: 0
+  parentMapSceneName: Golem_Game_Map
+  nextLevelSceneName: HungryGolem3_5s
   targetScore: 0
   possibleTargets: 06000000080000000a0000000c0000000e00000010000000
   pointsForCorrect: 2
