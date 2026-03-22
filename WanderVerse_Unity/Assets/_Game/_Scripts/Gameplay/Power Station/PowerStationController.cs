@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using WanderVerse.Framework.Data;
 
 /// <summary>
 /// Main controller for the Power Station mini-game (Addition 1).
@@ -111,8 +112,19 @@ public class PowerStationController : BaseLevelController
     public ParticleSystem confetti;
     public ParticleSystem sparks;
 
+    [Header("--- Victory Timing ---")]
+    [Tooltip("Delay before ending the level so machine_victory animation can play before WinScreen appears.")]
+    public float victoryAnimationDuration = 1.5f;
+
     [Header("--- Submit ---")]
     public Button submitButton;
+
+    [Header("--- Orientation (Power Station Only) ---")]
+    [Tooltip("Force landscape while Power Station scene is active.")]
+    public bool forceLandscapeOnEnter = true;
+
+    [Tooltip("Restore portrait when leaving Power Station scene.")]
+    public bool restorePortraitOnExit = true;
 
     // ═══════════════════════════════════════════
     //  INTERNAL STATE
@@ -135,6 +147,38 @@ public class PowerStationController : BaseLevelController
 
         if (machineImage != null)
             machineAnimator = machineImage.GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        if (forceLandscapeOnEnter)
+            ApplyLandscapeOrientation();
+    }
+
+    private void OnDisable()
+    {
+        if (restorePortraitOnExit)
+            ApplyPortraitOrientation();
+    }
+
+    private void ApplyLandscapeOrientation()
+    {
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
+
+    private void ApplyPortraitOrientation()
+    {
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortrait = true;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     private bool TryPlayMachineState(string stateName)
@@ -356,6 +400,8 @@ public class PowerStationController : BaseLevelController
     /// </summary>
     protected override void InitializeLevel()
     {
+        EnsureLevelIdConfiguredForPowerStation();
+
         // Read configurable values from the ScriptableObject
         totalTurns = levelData.totalTurns;
         numRows    = levelData.batteryRows;
@@ -376,6 +422,17 @@ public class PowerStationController : BaseLevelController
 
         // Start the first turn
         StartNextTurn();
+    }
+
+    private void EnsureLevelIdConfiguredForPowerStation()
+    {
+        if (levelData == null) return;
+
+        if (string.IsNullOrWhiteSpace(levelData.levelID) || levelData.levelID == CourseCatalog.NONE)
+        {
+            levelData.levelID = CourseCatalog.L03_POW_1;
+            Debug.LogWarning("[PowerStation] LevelData levelID was unassigned. Defaulted to L03_POW_1 so completion and WinScreen flow can proceed.");
+        }
     }
 
     private void EnsureCarryIndicatorInitialized()
@@ -1513,9 +1570,7 @@ public class PowerStationController : BaseLevelController
         // Check if all turns are done
         if (currentTurn >= totalTurns)
         {
-            // Level complete!
-            CheckWinCondition();
-            ShowVictory();
+            StartCoroutine(ShowVictoryThenCompleteLevel());
         }
         else
         {
@@ -1746,6 +1801,46 @@ public class PowerStationController : BaseLevelController
 
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
+    }
+
+    private IEnumerator ShowVictoryThenCompleteLevel()
+    {
+        isProcessingResult = true;
+
+        ShowVictory();
+
+        float waitDuration = Mathf.Max(0f, victoryAnimationDuration);
+        float clipLength = GetVictoryClipLength();
+        if (clipLength > 0f)
+            waitDuration = Mathf.Max(waitDuration, clipLength);
+
+        if (waitDuration > 0f)
+            yield return new WaitForSecondsRealtime(waitDuration);
+
+        EndLevel(true);
+        isProcessingResult = false;
+    }
+
+    private float GetVictoryClipLength()
+    {
+        if (machineAnimator == null || machineAnimator.runtimeAnimatorController == null)
+            return 0f;
+
+        AnimationClip[] clips = machineAnimator.runtimeAnimatorController.animationClips;
+        if (clips == null || clips.Length == 0)
+            return 0f;
+
+        for (int i = 0; i < clips.Length; i++)
+        {
+            AnimationClip clip = clips[i];
+            if (clip == null) continue;
+
+            if (string.Equals(clip.name, victoryStateName, System.StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(clip.name, "machine_victory", System.StringComparison.OrdinalIgnoreCase))
+                return clip.length;
+        }
+
+        return 0f;
     }
 
     // ═══════════════════════════════════════════
