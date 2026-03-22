@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: 
   description: 
   gameType: 9
+  parentMapSceneName: Bakery_Game_Map
+  nextLevelSceneName: 
   targetScore: 10
   possibleTargets: 
   pointsForCorrect: 1
