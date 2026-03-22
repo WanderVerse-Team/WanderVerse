@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: 
   description: 
   gameType: 9
+  parentMapSceneName: Bakery_Game_Map
+  nextLevelSceneName: Crumble'sBakery_2
   targetScore: 10
   possibleTargets: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   pointsForCorrect: 1
