@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:WanderVerse_Unity/Assets/_Game/Art/Sprites/fractions/Frac_Level1.meta
 guid: 366d41e1a3e16c94a8d52c14777aa334
 folderAsset: yes
+========
+guid: bf2a108816a65fc46979a94cbacb74ed
+>>>>>>>> e30edea627d5819cbb7a80111a305fa75c0fe34a:WanderVerse_Unity/Assets/_Game/_Scripts/Backend/DashboardUIController.cs.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

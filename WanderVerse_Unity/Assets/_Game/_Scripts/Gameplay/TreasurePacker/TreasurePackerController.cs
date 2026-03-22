@@ -80,6 +80,7 @@ public class TreasurePackerController : BaseLevelController
     
     protected override void BeginLevel()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         base.BeginLevel(); // This sets up the timer/score in the Base class
         
         // This shoots the coins for the Treasure Packer!
