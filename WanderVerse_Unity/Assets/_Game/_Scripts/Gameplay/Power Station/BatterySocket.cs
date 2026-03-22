@@ -63,6 +63,10 @@ public class BatterySocket : MonoBehaviour, IDropHandler, IPointerClickHandler
     {
         if (currentBattery == null) return;
 
+        if (controller == null)
+            controller = FindAnyObjectByType<PowerStationController>();
+        if (controller == null) return;
+
         // Return battery to the tray
         Transform tray = controller.batteryTray;
         BatteryDragDrop drag = currentBattery.GetComponent<BatteryDragDrop>();

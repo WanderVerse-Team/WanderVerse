@@ -22,7 +22,14 @@ public class LevelData : ScriptableObject
     [TextArea] public string description;
     public GameType gameType;          // Selects which logic to run
 
-    [Header("--- 3. WIN CONDITIONS ---")]
+    [Header("--- 3. NAVIGATION ---")]
+    [Tooltip("The exact name of the Level Map scene to return to")]
+    public string parentMapSceneName;
+
+    [Tooltip("The exact name of the next level scene. Leave empty if this is the final level!")]
+    public string nextLevelSceneName;
+
+    [Header("--- 4. WIN CONDITIONS ---")]
     public int targetScore = 10;
     public int[] possibleTargets;
 
@@ -35,14 +42,14 @@ public class LevelData : ScriptableObject
     [Tooltip("Set to 0 to allow infinite mistakes. Enter ONLY POSITIVE values")]
     public int maxMistakes = 0;
 
-    [Header("--- 4. TIMER ---")]
+    [Header("--- 5. TIMER ---")]
     public bool useTimer = false;
     public float levelTimeLimit = 0f;
 
     // ========================================================================
     // 2. XP SYSTEM
     // ========================================================================
-    [Header("--- 5. SCORING & XP ---")]
+    [Header("--- 6. SCORING & XP ---")]
 
     [Tooltip("The MAXIMUM XP a player gets for a Perfect Run (0 Mistakes).")]
     public int maxXpReward = 100;
@@ -59,12 +66,12 @@ public class LevelData : ScriptableObject
     // ========================================================================
     // 3. STAR THRESHOLDS (Visuals Only)
     // ========================================================================
-    [Header("--- 6. VISUAL STARS ---")]
+    [Header("--- 7. VISUAL STARS ---")]
     [Tooltip("XP does NOT depend on stars. This is just for the UI.")]
     public int maxMistakesFor3Stars = 0;
     public int maxMistakesFor2Stars = 2;
 
-    [Header("--- 7. AUDIO & VISUALS ---")]
+    [Header("--- 8. AUDIO & VISUALS ---")]
     //public Sprite backgroundImage;
     //public GameObject environmentPrefab; // Forest, Cave, Space
     public AudioClip backgroundMusic;

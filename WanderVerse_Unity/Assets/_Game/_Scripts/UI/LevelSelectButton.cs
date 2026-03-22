@@ -4,10 +4,7 @@ using WanderVerse.Backend.Services;
 
 public class LevelSelectButton : MonoBehaviour
 {
-    [Header("Level Data")]
-    [Tooltip("Drag the specific LevelData file (ScriptableObject) here")]
-    public LevelData levelDataForThisButton;
-
+    [Header("Level Scene")]
     [Tooltip("Enter the exact name of the Unity Scene to load")]
     public string sceneToLoad = "";
 
@@ -29,13 +26,14 @@ public class LevelSelectButton : MonoBehaviour
             return;
         }
 
-        bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+        //bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+        bool canPlay = true;
 
         if (canPlay)
         {
             Debug.Log($"[LevelSelectButton] Energy consumed! Telling GameManager to load: {sceneToLoad}");
 
-            GameManager.Instance.LoadLevel(levelDataForThisButton, sceneToLoad);
+            GameManager.Instance.LoadLevel(sceneToLoad);
         }
         else
         {

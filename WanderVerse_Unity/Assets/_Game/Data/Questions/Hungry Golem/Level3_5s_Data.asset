@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: Count by 3s
   description: 
   gameType: 0
+  parentMapSceneName: Golem_Game_Map
+  nextLevelSceneName: 
   targetScore: 10
   possibleTargets: 0f0000000a00000014000000190000001e00000023000000
   pointsForCorrect: 5
