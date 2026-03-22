@@ -39,6 +39,10 @@ public abstract class BaseLevelController : MonoBehaviour
     public System.Action<float> OnTimerUpdated;
     public System.Action<bool> OnLevelEnded;
 
+    public int CurrentScore => currentScore;
+    public int MistakeCount => mistakeCount;
+    public LevelData CurrentLevelData => levelData;
+
     protected virtual void Awake()
     {
         // If you need to initialize any level specific internal variables, do it here
@@ -48,18 +52,17 @@ public abstract class BaseLevelController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
-        if (GameManager.Instance != null) 
-        {
-            LevelData injectedData = GameManager.Instance.GetPendingLevelData();
-
-            if (injectedData != null) 
-            {
-                levelData = injectedData;
-                Debug.Log($"[BaseLevelController] LevelData injected from Menu: {levelData.levelTitle}");
-            }
-        }
-
         if (!ValidateLevelData()) return;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetCurrentLevelData(levelData);
+            Debug.Log($"[BaseLevelController] Registered LevelData: {levelData.levelTitle}");
+        }
+        else
+        {
+            Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
+        }
 
         LoadBaseData();
         InitializeLevel();
