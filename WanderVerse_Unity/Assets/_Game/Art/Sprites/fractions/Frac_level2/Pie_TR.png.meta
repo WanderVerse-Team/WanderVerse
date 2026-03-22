@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6b71fc637fb7a9342894d8b62346e84b
+guid: be7b3ea412b97114e81c8f1ceac15fe2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 222753993883822482
-    second: cake_left (1)_0
+      213: 8633479032998652296
+    second: Pie_TL_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cake_left (1)_0
+      name: Pie_TL_0
       rect:
         serializedVersion: 2
-        x: 191
-        y: 47
-        width: 250
-        height: 424
+        x: 0
+        y: 0
+        width: 162
+        height: 151
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 299aeb5c391671300800000000000000
-      internalID: 222753993883822482
+      spriteID: 889eaa9307740d770800000000000000
+      internalID: 8633479032998652296
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cake_left (1)_0: 222753993883822482
+      Pie_TL_0: 8633479032998652296
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
