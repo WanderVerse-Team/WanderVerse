@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   lessonID: '"vertical_addition"'
   lessonTitle: 
-  levelID: power_station_1
+  levelID: None
   levelTitle: 
   description: 
   gameType: 2
-  targetScore: 10
+  targetScore: 3
   possibleTargets: 
   pointsForCorrect: 1
   pointsForWrong: 1
