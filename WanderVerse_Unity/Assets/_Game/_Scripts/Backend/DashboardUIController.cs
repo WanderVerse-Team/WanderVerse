@@ -38,7 +38,7 @@ namespace WanderVerse.Backend.UI
 
                 // Map & Subject Progress
                 float totalProgress = CalculateSubjectProgress(data);
-                subjectProgressBar.value = totalProgress;
+                subjectProgressBar.value = Mathf.Clamp01(totalProgress);
                 
                 map1PercentageText.text = $"Island 1: {(totalProgress * 100):F0}%";
 

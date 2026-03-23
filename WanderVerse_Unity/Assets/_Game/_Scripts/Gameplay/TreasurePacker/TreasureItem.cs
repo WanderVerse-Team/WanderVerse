@@ -4,12 +4,12 @@ using UnityEngine;
 public class TreasureItem : MonoBehaviour
 {
     [Header("Item Value")]
-    public int goldValue = 1; // Set to 10 for Gold Bars, 1 for Coins
+    public int goldValue = 1; 
 
-    // This is used to prevent multiple counting of the same item if it triggers the chest multiple times before being destroyed
+    
     [HideInInspector] 
     public bool hasBeenCounted = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         
@@ -25,11 +25,11 @@ public class TreasureItem : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        // 1. Find the controller and the value script
+        // Find the controller and the value script
         TreasurePackerController controller = FindObjectOfType<TreasurePackerController>();
         TreasureItem itemValue = GetComponent<TreasureItem>();
 
-        // 3. Destroy as usual
+        // Destroy as usual
         if (gameObject != null)
         {
             Destroy(gameObject);

@@ -175,11 +175,11 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1819
+        width: 1687
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 1, w: 0}
       customData: 
       outline: []
       physicsShape: []
@@ -195,13 +195,13 @@ TextureImporter:
       name: machine_overload_1
       rect:
         serializedVersion: 2
-        x: 1819
+        x: 1850
         y: 0
-        width: 1819
+        width: 1689
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 1, w: 0}
       customData: 
       outline: []
       physicsShape: []
@@ -217,9 +217,9 @@ TextureImporter:
       name: machine_overload_2
       rect:
         serializedVersion: 2
-        x: 3638
+        x: 3685
         y: 0
-        width: 1819
+        width: 1695
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -239,9 +239,9 @@ TextureImporter:
       name: machine_overload_3
       rect:
         serializedVersion: 2
-        x: 5457
+        x: 5542
         y: 0
-        width: 1819
+        width: 1675
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -261,9 +261,9 @@ TextureImporter:
       name: machine_overload_4
       rect:
         serializedVersion: 2
-        x: 7276
+        x: 7383
         y: 0
-        width: 1819
+        width: 1681
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -283,9 +283,9 @@ TextureImporter:
       name: machine_overload_5
       rect:
         serializedVersion: 2
-        x: 9095
+        x: 9225
         y: 0
-        width: 1819
+        width: 1670
         height: 2528
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
