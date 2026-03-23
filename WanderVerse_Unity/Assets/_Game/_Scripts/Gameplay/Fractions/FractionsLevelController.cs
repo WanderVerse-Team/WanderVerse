@@ -431,20 +431,33 @@ public class FractionsLevelController : BaseLevelController
         string msg = levelMode == FractionMode.Halves ? halvesComplete : quartersComplete;
         StartCoroutine(ShowBubble(msg, 3f));
 
-        CheckWinCondition();
+        //CheckWinCondition();
 
-        if (audioSource != null && levelCompleteSound != null)
-            audioSource.PlayOneShot(levelCompleteSound);
+        //if (audioSource != null && levelCompleteSound != null)
+        //    audioSource.PlayOneShot(levelCompleteSound);
 
-        if (confetti != null)
-        {
-            confetti.gameObject.SetActive(true);
-            confetti.Play();
-        }
+        //if (confetti != null)
+        //{
+        //    confetti.gameObject.SetActive(true);
+        //    confetti.Play();
+        //}
 
-        if (victoryPanel != null) victoryPanel.SetActive(true);
+        //if (victoryPanel != null) victoryPanel.SetActive(true);
 
+        //StartCoroutine(CrumbleCelebration());
+
+        StartCoroutine(LevelCompleteSequence());
+    }
+
+    private IEnumerator LevelCompleteSequence()
+    {
         StartCoroutine(CrumbleCelebration());
+
+        string msg = levelMode == FractionMode.Halves ? halvesComplete : quartersComplete;
+
+        yield return StartCoroutine(ShowBubble(msg, 3f));
+
+        base.EndLevel(true);
     }
 
     // ================================================================
