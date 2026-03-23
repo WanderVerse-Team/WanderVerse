@@ -36,6 +36,8 @@ namespace WanderVerse.Backend.Services
         private FirebaseFirestore _db; 
         private bool _isWorking = false;
         private bool _firebaseReady = false;
+        private bool _isRedirecting = false;
+        private bool _didInitialSessionCheck = false;
 
         void Start()
         {
@@ -63,10 +65,33 @@ namespace WanderVerse.Backend.Services
             // Now safely initialize Firebase services
             _auth = FirebaseAuth.DefaultInstance;
             _db = FirebaseFirestore.DefaultInstance;
+            _auth.StateChanged += OnAuthStateChanged;
             _firebaseReady = true;
 
             Debug.Log("[Auth] Firebase initialized successfully.");
             SetupUI();
+        }
+
+        private void OnDestroy()
+        {
+            if (_auth != null)
+            {
+                _auth.StateChanged -= OnAuthStateChanged;
+            }
+        }
+
+        private void OnAuthStateChanged(object sender, EventArgs eventArgs)
+        {
+            if (!_firebaseReady || _auth == null || _isRedirecting)
+            {
+                return;
+            }
+
+            if (_auth.CurrentUser != null)
+            {
+                Debug.Log($"[Auth] Session restored for {_auth.CurrentUser.UserId}");
+                BeginAutoLogin();
+            }
         }
 
         private void SetupUI()
@@ -90,16 +115,55 @@ namespace WanderVerse.Backend.Services
 
             Debug.Log("<color=cyan>[Auth] All UI listeners hard-wired via code.</color>");
 
-            // Set initial panel visibility (show SignUp, hide SignIn by default)
+            // Hide auth panels while we quickly check for a persisted Firebase session.
+            if (panelSignIn != null) panelSignIn.SetActive(false);
+            if (panelSignUp != null) panelSignUp.SetActive(false);
+
+            StartCoroutine(InitialSessionCheckRoutine());
+        }
+
+        private IEnumerator InitialSessionCheckRoutine()
+        {
+            UpdateFeedback("Checking saved session...", false);
+
+            float timeout = 2.5f;
+            float elapsed = 0f;
+
+            while (_auth != null && _auth.CurrentUser == null && elapsed < timeout)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            _didInitialSessionCheck = true;
+
+            if (_auth != null && _auth.CurrentUser != null)
+            {
+                BeginAutoLogin();
+                yield break;
+            }
+
+            ShowAuthPanels();
+            UpdateFeedback("WanderVerse Ready...", false);
+        }
+
+        private void BeginAutoLogin()
+        {
+            if (_isRedirecting)
+            {
+                return;
+            }
+
+            UpdateFeedback("Welcome back! Signing you in...", false);
+            Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
+            LoadWorldMap();
+        }
+
+        private void ShowAuthPanels()
+        {
+            // Keep existing UX: show SignUp first and allow switching to SignIn via button.
             if (panelSignIn != null) panelSignIn.SetActive(false);
             if (panelSignUp != null) panelSignUp.SetActive(true);
-
-            // Auto logs in a user
-            if (_auth.CurrentUser != null)
-            {
-                Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
-                LoadWorldMap();
-            }
         }
 
         // A helper method to keep Start() clean
@@ -492,7 +556,32 @@ namespace WanderVerse.Backend.Services
 
         private void LoadWorldMap()
         {
-            if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
+            if (_isRedirecting)
+            {
+                return;
+            }
+
+            _isRedirecting = true;
+
+            if (_auth == null || _auth.CurrentUser == null)
+            {
+                _isRedirecting = false;
+                if (_didInitialSessionCheck)
+                {
+                    ShowAuthPanels();
+                }
+                return;
+            }
+
+            if (CloudSyncManager.Instance == null)
+            {
+                Debug.LogWarning("[Auth] CloudSyncManager missing. Loading World Map directly.");
+                _isRedirecting = false;
+                SceneManager.LoadScene("Scene_WorldMap");
+                return;
+            }
+
+            if (CloudSyncManager.Instance != null)
             {
                 // Tell CloudSyncManager to fetch the user data
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
@@ -520,6 +609,8 @@ namespace WanderVerse.Backend.Services
                 Debug.Log("[Auth] New User detected. Loading Grade Selection...");
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
+
+            _isRedirecting = false;
         }
 
         private void UpdateFeedback(string msg, bool isError = false) 
