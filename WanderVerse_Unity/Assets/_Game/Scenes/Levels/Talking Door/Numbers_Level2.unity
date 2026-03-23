@@ -232,6 +232,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 978213183}
     - target: {fileID: 7666155153041667689, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
+      propertyPath: mainMenuSceneName
+      value: TalkingDoor_Game_Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666155153041667689, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
       propertyPath: masterVolumeSlider
       value: 
       objectReference: {fileID: 561980445}

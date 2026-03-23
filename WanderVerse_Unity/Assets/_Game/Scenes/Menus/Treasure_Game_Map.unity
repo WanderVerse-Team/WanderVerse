@@ -270,7 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575b500762fd56a4dac2a243f77173f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectButton
-  levelDataForThisButton: {fileID: 0}
   sceneToLoad: 
   outOfEnergyPopup: {fileID: 0}
 --- !u!1 &488739622
@@ -525,8 +524,8 @@ RectTransform:
   m_GameObject: {fileID: 1517614589}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11.4, y: 23.1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 13, y: 26.342108, z: 1.1403509}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1678439128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -956,6 +955,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 10.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6811320027398927502}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickPlayLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LevelSelectButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361284973118456105, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7366137780789673118, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
       propertyPath: sceneToLoad
       value: TreasurePacker_Level1
@@ -965,6 +992,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+--- !u!114 &6811320027398927502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7366137780789673118, guid: 9bb0351e9bbeff3478affa8dcce952b7, type: 3}
+  m_PrefabInstance: {fileID: 6811320027398927501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575b500762fd56a4dac2a243f77173f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSelectButton
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

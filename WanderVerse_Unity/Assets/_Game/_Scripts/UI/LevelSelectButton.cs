@@ -26,7 +26,8 @@ public class LevelSelectButton : MonoBehaviour
             return;
         }
 
-        bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+        //bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+        bool canPlay = true; // TEMP OVERRIDE FOR TESTING
 
         if (canPlay)
         {
