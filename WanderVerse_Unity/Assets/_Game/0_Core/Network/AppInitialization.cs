@@ -17,7 +17,7 @@ public class AppInitialization : MonoBehaviour
 
             if (dependencyStatus == DependencyStatus.Available)
             {
-                // Firebase is ready!
+                // Firebase is ready
                 Debug.Log("Firebase is ready! Proceeding to game...");
             }
             else
