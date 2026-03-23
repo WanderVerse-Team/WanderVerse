@@ -316,7 +316,7 @@ Transform:
   m_GameObject: {fileID: 372890271}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: 0.19, z: 0}
+  m_LocalPosition: {x: -0.02, y: 0.5, z: 0}
   m_LocalScale: {x: 0.94, y: 0.92, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -982,7 +982,7 @@ MonoBehaviour:
   mainCamera: {fileID: 667389042}
   scrollSpeed: 0.01
   minY: -2
-  maxY: 200
+  maxY: 5
 --- !u!4 &844519495
 Transform:
   m_ObjectHideFlags: 0
@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1585,7 +1585,7 @@ Transform:
   m_GameObject: {fileID: 2093534499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.57, y: -3.36, z: 0}
+  m_LocalPosition: {x: 0.57, y: -3.12, z: 0}
   m_LocalScale: {x: 0.88, y: 0.93, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
