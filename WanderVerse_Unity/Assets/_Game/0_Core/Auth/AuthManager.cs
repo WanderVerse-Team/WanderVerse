@@ -25,8 +25,9 @@ namespace WanderVerse.Backend.Services
         public TMP_InputField signUpPasswordInput;
         public TMP_InputField signUpConfirmPasswordInput; 
 
-        [Header("General UI")]
-        public TextMeshProUGUI feedbackText; 
+        [Header("Feedback UI")]
+        public TextMeshProUGUI signInFeedbackText;
+        public TextMeshProUGUI signUpFeedbackText;
 
         [Header("UI Panels")]
         public GameObject panelSignIn; 
@@ -41,13 +42,29 @@ namespace WanderVerse.Backend.Services
         {
             StartCoroutine(InitializeFirebaseAndSetup());
 
-            loginEmailInput.onValueChanged.AddListener(delegate { ClearError(); });
-            loginPasswordInput.onValueChanged.AddListener(delegate { ClearError(); });
+            if (loginEmailInput != null)
+                loginEmailInput.onValueChanged.AddListener(delegate { ClearSignInError(); });
+
+            if (loginPasswordInput != null)
+                loginPasswordInput.onValueChanged.AddListener(delegate { ClearSignInError(); });
+
+            if (signUpUsernameInput != null)
+                signUpUsernameInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
+
+            if (signUpEmailInput != null)
+                signUpEmailInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
+
+            if (signUpPasswordInput != null)
+                signUpPasswordInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
+
+            if (signUpConfirmPasswordInput != null)
+                signUpConfirmPasswordInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
         }
 
         private IEnumerator InitializeFirebaseAndSetup()
         {
-            if (feedbackText != null) feedbackText.text = "Initializing...";
+            if (signInFeedbackText != null) signInFeedbackText.text = "Initializing...";
+            if (signUpFeedbackText != null) signUpFeedbackText.text = "Initializing...";
 
             // Wait for Firebase to be ready
             var checkTask = FirebaseApp.CheckAndFixDependenciesAsync();
@@ -56,7 +73,8 @@ namespace WanderVerse.Backend.Services
             if (checkTask.Result != DependencyStatus.Available)
             {
                 Debug.LogError($"[Auth] Firebase not available: {checkTask.Result}");
-                if (feedbackText != null) feedbackText.text = "Firebase Error. Please restart.";
+                if (signInFeedbackText != null) signInFeedbackText.text = "Firebase Error. Please restart.";
+                if (signUpFeedbackText != null) signUpFeedbackText.text = "Firebase Error. Please restart.";
                 yield break;
             }
 
@@ -71,14 +89,12 @@ namespace WanderVerse.Backend.Services
 
         private void SetupUI()
         {
-
-            if (feedbackText != null) feedbackText.text = "WanderVerse Ready...";
+            if (signInFeedbackText != null) signInFeedbackText.text = "";
+            if (signUpFeedbackText != null) signUpFeedbackText.text = "";
 
             if (signUpUsernameInput != null) signUpUsernameInput.readOnly = true;
 
-            // 2. HARD-WIRE ALL BUTTONS
             // IMPORTANT: Activate both panels before setting up buttons
-            // GameObject.Find() only works on active GameObjects
             if (panelSignIn != null) panelSignIn.SetActive(true);
             if (panelSignUp != null) panelSignUp.SetActive(true);
 
@@ -87,24 +103,29 @@ namespace WanderVerse.Backend.Services
             SetupButton("Btn_SignIn", OnLoginButton);
             SetupButton("Btn_Guest", OnGuestLoginButton);
 
-            SetupButton("Btn_GoToSignUp", () => { panelSignIn.SetActive(false); panelSignUp.SetActive(true); });
-            SetupButton("Btn_GoToSignIn", () => { panelSignUp.SetActive(false); panelSignIn.SetActive(true); });
+            SetupButton("Btn_GoToSignUp", () => 
+            { 
+                ClearSignInError();
+                ClearSignUpError();
+                panelSignIn.SetActive(false); 
+                panelSignUp.SetActive(true); 
+            });
+
+            SetupButton("Btn_GoToSignIn", () => 
+            { 
+                ClearSignInError();
+                ClearSignUpError();
+                panelSignUp.SetActive(false); 
+                panelSignIn.SetActive(true); 
+            });
 
             Debug.Log("<color=cyan>[Auth] All UI listeners hard-wired via code.</color>");
 
             // Now set initial panel visibility (show SignUp, hide SignIn by default)
             if (panelSignIn != null) panelSignIn.SetActive(false);
             if (panelSignUp != null) panelSignUp.SetActive(true);
-
-            // Auto logs in a user
-            /*if (_auth.CurrentUser != null)
-            {
-                Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
-                LoadWorldMap();
-            }*/
         }
 
-        // A helper method to keep your Start() clean
         private void SetupButton(string gameObjectName, UnityEngine.Events.UnityAction action)
         {
             GameObject btnObj = GameObject.Find(gameObjectName);
@@ -123,7 +144,6 @@ namespace WanderVerse.Backend.Services
                 Debug.LogWarning($"<color=yellow>[Auto-Link] Optional button '{gameObjectName}' not found in this panel.</color>");
             }
         }
-
 
         public void OnGenerateUsernameButton()
         {
@@ -175,12 +195,10 @@ namespace WanderVerse.Backend.Services
                                     "Namespace","Identifier","Symbol","Literal","Opcode","Instruction","Register",
                                     "Core","Chip","Die","Wafer","Fabric","Mesh"};
 
-            // This will appear in the Console in WHITE text
             Debug.Log("System: Generate Button was pressed!"); 
 
             if (signUpUsernameInput == null)
             {
-                // This will appear in RED text if the Inspector is empty
                 Debug.LogError("System: You haven't linked the InputField to _AppSystems!");
                 return;
             }
@@ -189,23 +207,41 @@ namespace WanderVerse.Backend.Services
             string randomNoun = nouns[UnityEngine.Random.Range(0, nouns.Length)];
 
             signUpUsernameInput.text = $"{randomAdj}{randomNoun}";
-            
             signUpUsernameInput.ForceLabelUpdate(); 
-            UpdateFeedback("Username generated!");
+
+            UpdateSignUpFeedback("Username generated!", false);
         }
         
         public void OnSignUpButton() 
         {
-            if (!_firebaseReady) { UpdateFeedback("Firebase not ready. Please wait..."); return; }
+            if (!_firebaseReady) 
+            { 
+                UpdateSignUpFeedback("Firebase not ready. Please wait...", true); 
+                return; 
+            }
 
             string p1 = signUpPasswordInput.text;
             string p2 = signUpConfirmPasswordInput.text;
             string uName = signUpUsernameInput.text;
             string emailInput = signUpEmailInput.text;
 
-            if (string.IsNullOrEmpty(uName)) { UpdateFeedback("Please generate a username."); return; }
-            if (string.IsNullOrEmpty(p1)) { UpdateFeedback("Password cannot be empty."); return; }
-            if (p1 != p2) { UpdateFeedback("Passwords do not match!"); return; }
+            if (string.IsNullOrEmpty(uName)) 
+            { 
+                UpdateSignUpFeedback("Please generate a username.", true); 
+                return; 
+            }
+
+            if (string.IsNullOrEmpty(p1)) 
+            { 
+                UpdateSignUpFeedback("Password cannot be empty.", true); 
+                return; 
+            }
+
+            if (p1 != p2) 
+            { 
+                UpdateSignUpFeedback("Passwords do not match.", true); 
+                return; 
+            }
 
             string finalEmail = emailInput;
             if (string.IsNullOrEmpty(finalEmail))
@@ -218,14 +254,18 @@ namespace WanderVerse.Backend.Services
 
         public void OnLoginButton() 
         {
-            if (!_firebaseReady) { UpdateFeedback("Firebase not ready. Please wait..."); return; }
+            if (!_firebaseReady) 
+            { 
+                UpdateSignInFeedback("Firebase not ready. Please wait...", true); 
+                return; 
+            }
 
             string input = loginEmailInput.text;
             string pass = loginPasswordInput.text;
 
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(pass)) 
             {
-                UpdateFeedback("Please fill all fields.");
+                UpdateSignInFeedback("Username or password incorrect. Please enter again", true);
                 return;
             }
 
@@ -241,10 +281,13 @@ namespace WanderVerse.Backend.Services
 
         public void OnGuestLoginButton() 
         {
-            // Guest mode doesn't require Firebase, but we wait for it anyway for consistency
-            if (!_firebaseReady) { UpdateFeedback("Please wait..."); return; }
+            if (!_firebaseReady) 
+            { 
+                UpdateSignInFeedback("Please wait...", false); 
+                return; 
+            }
 
-            UpdateFeedback("Starting Offline Mode...");
+            UpdateSignInFeedback("Starting Offline Mode...", false);
             
             if (CloudSyncManager.Instance != null)
             {
@@ -266,7 +309,6 @@ namespace WanderVerse.Backend.Services
             {
                 Debug.LogWarning("[Auth] CloudSyncManager missing!");
                 SceneManager.LoadScene("Scene_GradeSelection");
-
             }
         }
 
@@ -276,20 +318,19 @@ namespace WanderVerse.Backend.Services
 
             if (string.IsNullOrEmpty(input))
             {
-                UpdateFeedback("Enter your email to reset password.", true);
+                UpdateSignInFeedback("Enter your email to reset password.", true);
                 return;
             }
 
-            // Since usernames only have dummy emails, we block this immediately.
             if (!input.Contains("@"))
             {
-                UpdateFeedback("Password reset is only available via linked Email accounts.", true);
+                UpdateSignInFeedback("Password reset is only available via linked Email accounts.", true);
                 return;
             }
 
             if (input.EndsWith("@wanderverse.wuaze.com")) 
             {
-                UpdateFeedback("This account does not have a recovery email linked.", true);
+                UpdateSignInFeedback("This account does not have a recovery email linked.", true);
                 return;
             }
 
@@ -298,45 +339,44 @@ namespace WanderVerse.Backend.Services
 
         private IEnumerator PerformPasswordReset(string email)
         {
-            UpdateFeedback("Sending reset link...", false);
+            UpdateSignInFeedback("Sending reset link...", false);
 
             var task = _auth.SendPasswordResetEmailAsync(email);
             yield return new WaitUntil(() => task.IsCompleted);
 
             if (task.Exception != null)
             {
-                UpdateFeedback("Account not found or invalid email.", true);
+                UpdateSignInFeedback("Account not found or invalid email.", true);
             }
             else
             {
-                UpdateFeedback("Recovery email sent! Check your inbox.", false);
+                UpdateSignInFeedback("Recovery email sent! Check your inbox.", false);
             }
         }
-
 
         private IEnumerator SignUpRoutine(string username, string email, string password)
         {
             if (_isWorking) yield break;
             _isWorking = true;
             
-            UpdateFeedback("Checking availability...");
+            UpdateSignUpFeedback("Checking availability...", false);
             var checkTask = _db.Collection("usernames").Document(username).GetSnapshotAsync();
             yield return new WaitUntil(() => checkTask.IsCompleted);
 
             if (checkTask.Result.Exists)
             {
-                UpdateFeedback($"'{username}' is taken! Try another.");
+                UpdateSignUpFeedback("Username already taken. Please try again.", true);
                 _isWorking = false;
                 yield break;
             }
 
-            UpdateFeedback("Creating Account...");
+            UpdateSignUpFeedback("Creating account...", false);
             var authTask = _auth.CreateUserWithEmailAndPasswordAsync(email, password);
             yield return new WaitUntil(() => authTask.IsCompleted);
 
             if (authTask.Exception != null) 
             {
-                UpdateFeedback($"Error: {authTask.Exception.InnerException?.Message}");
+                UpdateSignUpFeedback("Sign up failed. Please check your details and try again.", true);
                 _isWorking = false;
             } 
             else 
@@ -345,7 +385,7 @@ namespace WanderVerse.Backend.Services
                 yield return StartCoroutine(RegisterUsernameInDB(username, email, uid));
                 InitializeNewUserData(uid);
 
-                UpdateFeedback("Account Created! Redirecting...");
+                UpdateSignUpFeedback("Account created!", false);
                 yield return new WaitForSeconds(1.5f); 
 
                 _auth.SignOut(); 
@@ -355,7 +395,7 @@ namespace WanderVerse.Backend.Services
 
                 if (loginEmailInput != null) loginEmailInput.text = username; 
 
-                UpdateFeedback("Success! Please log in.");
+                UpdateSignInFeedback("Success! Please log in.", false);
                 _isWorking = false; 
             }
         }
@@ -376,35 +416,32 @@ namespace WanderVerse.Backend.Services
         {
             if (_isWorking) yield break;
             _isWorking = true;
-            UpdateFeedback("Veryfying username...", false);
+            UpdateSignInFeedback("Verifying username...", false);
 
-            // Finds the email for this username
             var docTask = _db.Collection("usernames").Document(username).GetSnapshotAsync();
             yield return new WaitUntil(() => docTask.IsCompleted);
 
             if (!docTask.Result.Exists)
             {
-                UpdateFeedback("Username not found", true);
+                UpdateSignInFeedback("Username or password incorrect. Please enter again", true);
                 _isWorking = false;
                 yield break;
             }
 
-            // Get the real email (or shadow email)
             string realEmail = docTask.Result.GetValue<string>("email");
-            UpdateFeedback("Authenticating...", false);
+            UpdateSignInFeedback("Authenticating...", false);
 
-            // Login with that email
             var authTask = _auth.SignInWithEmailAndPasswordAsync(realEmail, password);
             yield return new WaitUntil(() => authTask.IsCompleted);
 
             if (authTask.Exception != null)
             {
-                UpdateFeedback("Invalid password. Please try again.", true);                
+                UpdateSignInFeedback("Username or password incorrect. Please enter again", true);                
                 _isWorking = false;
             }
             else
             {
-                UpdateFeedback("Welcome!", false);
+                UpdateSignInFeedback("Welcome!", false);
                 LoadWorldMap();
             }
         }
@@ -413,23 +450,20 @@ namespace WanderVerse.Backend.Services
         {
             if (_isWorking) yield break;
             _isWorking = true;
-            UpdateFeedback("Logging in...", false);
+            UpdateSignInFeedback("Logging in...", false);
 
             var authTask = _auth.SignInWithEmailAndPasswordAsync(email, password);
             yield return new WaitUntil(() => authTask.IsCompleted);
 
             if (authTask.Exception != null)
             {
-                // Log the actual error for the developer
                 Debug.LogWarning($"[Auth] Login Failed: {authTask.Exception.InnerException?.Message}");
-                
-                // Display a user-friendly message to the player
-                UpdateFeedback("Incorrect email or password. Please try again.", true);
+                UpdateSignInFeedback("Username or password incorrect. Please enter again", true);
                 _isWorking = false;
             }
             else
             {
-                UpdateFeedback("Login Successful!", false);
+                UpdateSignInFeedback("Login Successful!", false);
                 LoadWorldMap();
             }
         }
@@ -438,19 +472,19 @@ namespace WanderVerse.Backend.Services
         {
             if (_isWorking) yield break;
             _isWorking = true;
-            UpdateFeedback("Processing...");
+            UpdateSignInFeedback("Processing...", false);
 
             var task = authTask();
             yield return new WaitUntil(() => task.IsCompleted);
 
             if (task.Exception != null) 
             {
-                UpdateFeedback($"Error: {task.Exception.InnerException?.Message}");
+                UpdateSignInFeedback("Something went wrong. Please try again.", true);
                 _isWorking = false;
             } 
             else 
             {
-                UpdateFeedback("Success!");
+                UpdateSignInFeedback("Success!", false);
                 string uid = task.Result.User.UserId;
                 if (isNewUser) InitializeNewUserData(uid);
                 LoadWorldMap();
@@ -465,10 +499,8 @@ namespace WanderVerse.Backend.Services
 
             PlayerData dataToSave;
 
-            // Checks if we already have Guest data in memory
             if (CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null)
             {
-                // If we have guest data, just attach the new UserID and Name to it.
                 dataToSave = CloudSyncManager.Instance.CurrentData;
                 dataToSave.userID = uid;
                 dataToSave.userName = finalUsername;
@@ -476,7 +508,6 @@ namespace WanderVerse.Backend.Services
             }
             else
             {
-                // No guest data, create fresh profile
                 dataToSave = new PlayerData 
                 { 
                     userID = uid,
@@ -485,7 +516,6 @@ namespace WanderVerse.Backend.Services
                 Debug.Log($"[Auth] Created fresh user: {finalUsername}");
             }
 
-            // Now sync this merged data to the cloud
             if (CloudSyncManager.Instance != null)
             {
                 CloudSyncManager.Instance.SyncProgress(dataToSave); 
@@ -496,22 +526,17 @@ namespace WanderVerse.Backend.Services
         {
             if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
             {
-                // 1. Tell CloudSyncManager to fetch the user data
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
-                
-                // 2. Start a Coroutine to wait for the data to arrive before switching scenes
                 StartCoroutine(WaitForDataAndRedirect());
             }
         }
 
         private IEnumerator WaitForDataAndRedirect()
         {
-            // Wait until CloudSyncManager has finished fetching the profile
             yield return new WaitUntil(() => CloudSyncManager.Instance.CurrentData != null);
 
             PlayerData data = CloudSyncManager.Instance.CurrentData;
 
-            // Check the flag defined in PlayerData.cs
             if (data.hasCompletedOnboarding)
             {
                 Debug.Log("[Auth] User has completed onboarding. Loading World Map...");
@@ -524,19 +549,32 @@ namespace WanderVerse.Backend.Services
             }
         }
 
-        private void UpdateFeedback(string msg, bool isError = false) 
-        { 
-            if (feedbackText != null) 
+        private void UpdateSignInFeedback(string msg, bool isError = false)
+        {
+            if (signInFeedbackText != null)
             {
-                feedbackText.text = msg;
-                feedbackText.color = isError ? Color.red : Color.white; 
+                signInFeedbackText.text = msg;
+                signInFeedbackText.color = isError ? Color.red : Color.white;
             }
         }
 
-        private void ClearError()
+        private void UpdateSignUpFeedback(string msg, bool isError = false)
         {
-            // This resets the text to empty and the color back to white
-            UpdateFeedback("", false); 
+            if (signUpFeedbackText != null)
+            {
+                signUpFeedbackText.text = msg;
+                signUpFeedbackText.color = isError ? Color.red : Color.white;
+            }
+        }
+
+        private void ClearSignInError()
+        {
+            UpdateSignInFeedback("", false);
+        }
+
+        private void ClearSignUpError()
+        {
+            UpdateSignUpFeedback("", false);
         }
     }
 }
