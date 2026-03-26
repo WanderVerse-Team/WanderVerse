@@ -1564,6 +1564,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277291399}
   m_CullTransparentMesh: 1
+--- !u!1 &340097391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 340097393}
+  - component: {fileID: 340097392}
+  m_Layer: 0
+  m_Name: OnboaringController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &340097392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340097391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca0931cd7218ae458b581c586879847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OnboardingManager
+--- !u!4 &340097393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340097391}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 213.90005, y: 1072.0137, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &343161634
 GameObject:
   m_ObjectHideFlags: 0
@@ -2532,8 +2576,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -41.1, y: -138.5}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -67.1, y: -138.5}
+  m_SizeDelta: {x: 145, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &614287707
 MonoBehaviour:
@@ -3594,7 +3638,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 147.03, y: -0.5}
+  m_AnchoredPosition: {x: 175.3, y: -0.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &808965586
@@ -3641,7 +3685,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1795313766}
+      - m_Target: {fileID: 1935153021}
         m_TargetAssemblyTypeName: WanderVerse.Backend.Services.AuthManager, Assembly-CSharp
         m_MethodName: ResetPassword
         m_Mode: 1
@@ -4768,9 +4812,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
-        m_MethodName: OnLoginButton
+      - m_Target: {fileID: 340097392}
+        m_TargetAssemblyTypeName: OnboardingManager, Assembly-CSharp
+        m_MethodName: StartOnboarding
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6654,9 +6698,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1795313766}
-        m_TargetAssemblyTypeName: WanderVerse.Backend.Services.AuthManager, Assembly-CSharp
-        m_MethodName: OnGuestLoginButton
+      - m_Target: {fileID: 340097392}
+        m_TargetAssemblyTypeName: OnboardingManager, Assembly-CSharp
+        m_MethodName: StartOnboarding
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6818,60 +6862,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!1 &1795313765
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1795313767}
-  - component: {fileID: 1795313766}
-  m_Layer: 0
-  m_Name: AuthManagerController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1795313766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795313765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2add7999453fa994ba385469d7f1bd84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WanderVerse.Backend.Services.AuthManager
-  loginEmailInput: {fileID: 0}
-  loginPasswordInput: {fileID: 0}
-  signUpUsernameInput: {fileID: 0}
-  signUpEmailInput: {fileID: 0}
-  signUpPasswordInput: {fileID: 0}
-  signUpConfirmPasswordInput: {fileID: 0}
-  signInFeedbackText: {fileID: 494720733}
-  signUpFeedbackText: {fileID: 1387294685}
-  panelSignIn: {fileID: 0}
-  panelSignUp: {fileID: 0}
---- !u!4 &1795313767
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795313765}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1438.5023, y: 494.06567, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1816633178
 GameObject:
   m_ObjectHideFlags: 0
@@ -7292,8 +7282,8 @@ MonoBehaviour:
   signUpEmailInput: {fileID: 745399463}
   signUpPasswordInput: {fileID: 108585746}
   signUpConfirmPasswordInput: {fileID: 1106613664}
-  signInFeedbackText: {fileID: 0}
-  signUpFeedbackText: {fileID: 0}
+  signInFeedbackText: {fileID: 494720733}
+  signUpFeedbackText: {fileID: 1387294685}
   panelSignIn: {fileID: 865422493}
   panelSignUp: {fileID: 215015721}
 --- !u!1 &1951527608
@@ -7675,8 +7665,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+      - m_Target: {fileID: 1935153021}
+        m_TargetAssemblyTypeName: WanderVerse.Backend.Services.AuthManager, Assembly-CSharp
         m_MethodName: OnSignUpButton
         m_Mode: 1
         m_Arguments:
@@ -8062,4 +8052,4 @@ SceneRoots:
   - {fileID: 1019959345}
   - {fileID: 1935153020}
   - {fileID: 2126413518}
-  - {fileID: 1795313767}
+  - {fileID: 340097393}
