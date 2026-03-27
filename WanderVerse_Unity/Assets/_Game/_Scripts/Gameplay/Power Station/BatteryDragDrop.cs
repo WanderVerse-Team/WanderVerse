@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 /// <summary>
 /// Handles drag-and-drop for battery UI elements.
@@ -15,7 +16,6 @@ public class BatteryDragDrop : MonoBehaviour,
     private CanvasGroup canvasGroup;
     private BatteryIdentity batteryIdentity;
     private Vector2 originalSizeDelta;
-    private Vector2 dragPointerOffset;
     private Vector3 originalPosition;
     private Transform originalParent;
     private bool isPlaced = false;
@@ -67,7 +67,17 @@ public class BatteryDragDrop : MonoBehaviour,
         if (parentCanvas != null)
             transform.SetParent(parentCanvas.transform, true);
 
-        dragPointerOffset = (Vector2)rectTransform.position - eventData.position;
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        rectTransform.localScale = Vector3.one;
+        if (originalSizeDelta != Vector2.zero)
+            rectTransform.sizeDelta = originalSizeDelta;
+
+        Vector3 beginDragLocalPos = rectTransform.localPosition;
+        rectTransform.localPosition = new Vector3(beginDragLocalPos.x, beginDragLocalPos.y, 0f);
+
+        MoveToPointer(eventData);
 
         // Render on top of everything
         transform.SetAsLastSibling();
@@ -75,17 +85,47 @@ public class BatteryDragDrop : MonoBehaviour,
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (canvasRectTransform == null || rectTransform == null) return;
+        MoveToPointer(eventData);
+    }
 
-        Vector2 screenPosition = eventData.position + dragPointerOffset;
+    private void MoveToPointer(PointerEventData eventData)
+    {
+        if (canvasRectTransform == null || rectTransform == null || eventData == null) return;
+
+        Camera eventCamera = GetEventCamera(eventData);
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvasRectTransform,
-                screenPosition,
-                eventData.pressEventCamera,
+                eventData.position,
+                eventCamera,
                 out Vector2 localPoint))
         {
-            rectTransform.localPosition = localPoint;
+            rectTransform.anchoredPosition = localPoint;
+            Vector3 dragLocalPos = rectTransform.localPosition;
+            rectTransform.localPosition = new Vector3(dragLocalPos.x, dragLocalPos.y, 0f);
         }
+    }
+
+    private Camera GetEventCamera(PointerEventData eventData)
+    {
+        if (eventData != null)
+        {
+            if (eventData.pressEventCamera != null)
+                return eventData.pressEventCamera;
+
+            if (eventData.enterEventCamera != null)
+                return eventData.enterEventCamera;
+        }
+
+        if (parentCanvas != null)
+        {
+            if (parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                return null;
+
+            if (parentCanvas.worldCamera != null)
+                return parentCanvas.worldCamera;
+        }
+
+        return Camera.main;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -121,28 +161,142 @@ public class BatteryDragDrop : MonoBehaviour,
         EnsureSocketsExistInScene();
 
         BatterySocket[] sockets = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
+        if (sockets == null || sockets.Length == 0)
+        {
+            Debug.LogWarning("[BatteryDragDrop] No BatterySocket components found at drop time.");
+            return false;
+        }
+
+        Vector2 releaseScreenPoint = eventData != null ? eventData.position : Vector2.zero;
+
+        // 0) Fast path: socket directly under pointerEnter hierarchy.
+        if (eventData != null && eventData.pointerEnter != null)
+        {
+            BatterySocket pointerSocket = eventData.pointerEnter.GetComponentInParent<BatterySocket>();
+            if (pointerSocket != null && pointerSocket.gameObject.activeInHierarchy && pointerSocket.currentBattery == null)
+            {
+                if (pointerSocket.TryAcceptBattery(this, batteryIdentity))
+                    return true;
+            }
+        }
+
+        // 1) Preferred: use EventSystem raycast results at release point.
+        if (EventSystem.current != null)
+        {
+            PointerEventData releaseEvent = new PointerEventData(EventSystem.current)
+            {
+                position = releaseScreenPoint
+            };
+
+            List<RaycastResult> hits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(releaseEvent, hits);
+
+            for (int i = 0; i < hits.Count; i++)
+            {
+                GameObject hitObject = hits[i].gameObject;
+                if (hitObject == null) continue;
+
+                BatterySocket hitSocket = hitObject.GetComponentInParent<BatterySocket>();
+                if (hitSocket == null) continue;
+                if (!hitSocket.gameObject.activeInHierarchy) continue;
+                if (hitSocket.currentBattery != null) continue;
+
+                if (hitSocket.TryAcceptBattery(this, batteryIdentity))
+                    return true;
+            }
+        }
+
+        BatterySocket nearestSocket = null;
+        float nearestDistance = float.MaxValue;
+        BatterySocket bestExpandedRectSocket = null;
+        float expandedRectNearestDistance = float.MaxValue;
+
         foreach (BatterySocket socket in sockets)
         {
             if (socket == null || !socket.gameObject.activeInHierarchy) continue;
+            if (socket.currentBattery != null) continue;
 
             RectTransform socketRect = socket.transform as RectTransform;
             if (socketRect == null) continue;
 
-            if (!RectTransformUtility.RectangleContainsScreenPoint(socketRect, eventData.position, eventData.enterEventCamera))
-                continue;
+            bool containsReleasePoint = RectTransformUtility.RectangleContainsScreenPoint(
+                socketRect,
+                releaseScreenPoint,
+                eventData != null ? eventData.enterEventCamera : null);
 
-            if (socket.TryAcceptBattery(this, batteryIdentity))
+            bool inExpandedRect = IsWithinExpandedRect(socketRect, releaseScreenPoint, eventData != null ? eventData.enterEventCamera : null, 80f);
+
+            if (containsReleasePoint)
+            {
+                if (socket.TryAcceptBattery(this, batteryIdentity))
+                    return true;
+            }
+
+            if (inExpandedRect)
+            {
+                float screenDistance = Vector2.Distance(releaseScreenPoint, RectTransformUtility.WorldToScreenPoint(eventData != null ? eventData.enterEventCamera : null, socketRect.position));
+                if (screenDistance < expandedRectNearestDistance)
+                {
+                    expandedRectNearestDistance = screenDistance;
+                    bestExpandedRectSocket = socket;
+                }
+            }
+
+            float distance = Vector2.Distance(rectTransform.position, socketRect.position);
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestSocket = socket;
+            }
+        }
+
+        if (bestExpandedRectSocket != null && bestExpandedRectSocket.TryAcceptBattery(this, batteryIdentity))
+            return true;
+
+        // 2) Fallback: snap to nearest empty socket with dynamic threshold.
+        float maxSnapDistance = 240f;
+        if (nearestSocket != null)
+        {
+            RectTransform nearestRect = nearestSocket.transform as RectTransform;
+            if (nearestRect != null)
+            {
+                Vector2 rectSize = nearestRect.rect.size;
+                float sizeBasedThreshold = Mathf.Max(rectSize.x, rectSize.y) * 1.25f;
+                if (sizeBasedThreshold > maxSnapDistance)
+                    maxSnapDistance = sizeBasedThreshold;
+            }
+        }
+
+        if (nearestSocket != null && nearestDistance <= maxSnapDistance)
+        {
+            if (nearestSocket.TryAcceptBattery(this, batteryIdentity))
                 return true;
         }
 
         return false;
     }
 
+    private bool IsWithinExpandedRect(RectTransform rect, Vector2 screenPoint, Camera eventCamera, float padding)
+    {
+        if (rect == null) return false;
+
+        Vector3[] corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+
+        Vector2 min = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
+        Vector2 max = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
+
+        Rect expanded = Rect.MinMaxRect(
+            Mathf.Min(min.x, max.x) - padding,
+            Mathf.Min(min.y, max.y) - padding,
+            Mathf.Max(min.x, max.x) + padding,
+            Mathf.Max(min.y, max.y) + padding);
+
+        return expanded.Contains(screenPoint);
+    }
+
     private void EnsureSocketsExistInScene()
     {
-        BatterySocket[] existing = FindObjectsByType<BatterySocket>(FindObjectsSortMode.None);
-        if (existing != null && existing.Length > 0) return;
-
         RectTransform[] rects = FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
         foreach (RectTransform rect in rects)
         {

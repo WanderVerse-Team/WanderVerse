@@ -188,5 +188,6 @@ public class WinScreenController : MonoBehaviour
             string mapScene = GameManager.Instance.CurrentLevelData.parentMapSceneName;
             SceneManager.LoadScene(mapScene);
         }
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 }

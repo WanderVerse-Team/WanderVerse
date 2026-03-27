@@ -51,6 +51,12 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Treasure_Game_Map.unity
     guid: eaa29ff38ca6fae4a8e135a5b34f6139
   - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level1.unity
+    guid: 69eca5f6136a747498e3c6a8a03d74f8
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level2.unity
+    guid: 17570d88193fbb044bef841e32a8781b
+  - enabled: 1
     path: Assets/_Game/Scenes/Menus/City_Minimap.unity
     guid: e6dcc985871190648bd1ef4bfcdcf756
   - enabled: 1
@@ -72,11 +78,11 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Levels/Power Station/PowerStation_Lv1.unity
     guid: 3e22e15e009a2494286d86575eddb066
   - enabled: 1
-    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level1.unity
-    guid: 69eca5f6136a747498e3c6a8a03d74f8
+    path: Assets/_Game/Scenes/Levels/fractions/Crumble'sBakery_1.unity
+    guid: b018c147237dcca41886a4b2cedf6b89
   - enabled: 1
-    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level2.unity
-    guid: 17570d88193fbb044bef841e32a8781b
+    path: Assets/_Game/Scenes/Levels/fractions/Crumble'sBakery_2.unity
+    guid: ae1b5dc7e4ae31b4f9277331cbc0600e
   - enabled: 1
     path: Assets/_Game/Scenes/Levels/Treasure Packer/TreasurePacker_Level1.unity
     guid: 5fa1e7684fdbc914f87d60035f5e5ccc

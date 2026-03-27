@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:WanderVerse_Unity/Assets/_Game/Data/Questions/fractions_Levels.meta
+guid: 989713a0d96450b48a684896bc7075fe
+folderAsset: yes
+========
 guid: 9706effd3d54c174195b71bcc4348399
+>>>>>>>> develop:WanderVerse_Unity/Assets/_Game/Scenes/Sandbox/Settings.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
