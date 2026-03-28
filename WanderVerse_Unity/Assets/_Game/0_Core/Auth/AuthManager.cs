@@ -9,6 +9,7 @@ using System.Collections;
 using System.Threading.Tasks; 
 using System;
 using System.Collections.Generic; 
+using UnityEngine.UI;  // Added for Button components
 using WanderVerse.Framework.Data; 
 
 namespace WanderVerse.Backend.Services
@@ -32,6 +33,15 @@ namespace WanderVerse.Backend.Services
         [Header("UI Panels")]
         public GameObject panelSignIn; 
         public GameObject panelSignUp; 
+
+        [Header("Password Toggle Buttons")]
+        public Button loginPasswordToggleButton;
+        public Button signUpPasswordToggleButton;
+        public Button signUpConfirmPasswordToggleButton;
+
+        [Header("Eye Icons")]
+        public Sprite openEyeSprite;
+        public Sprite closedEyeSprite; 
 
         private FirebaseAuth _auth;
         private FirebaseFirestore _db; 
@@ -59,6 +69,24 @@ namespace WanderVerse.Backend.Services
 
             if (signUpConfirmPasswordInput != null)
                 signUpConfirmPasswordInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
+
+            // Set up password toggle buttons
+            if (loginPasswordToggleButton != null)
+                loginPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(loginPasswordInput, loginPasswordToggleButton));
+            
+            if (signUpPasswordToggleButton != null)
+                signUpPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(signUpPasswordInput, signUpPasswordToggleButton));
+            
+            if (signUpConfirmPasswordToggleButton != null)
+                signUpConfirmPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(signUpConfirmPasswordInput, signUpConfirmPasswordToggleButton));
+
+            // Set initial eye icons to closed
+            if (loginPasswordToggleButton != null && closedEyeSprite != null)
+                loginPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            if (signUpPasswordToggleButton != null && closedEyeSprite != null)
+                signUpPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            if (signUpConfirmPasswordToggleButton != null && closedEyeSprite != null)
+                signUpConfirmPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
         }
 
         private IEnumerator InitializeFirebaseAndSetup()
@@ -575,6 +603,21 @@ namespace WanderVerse.Backend.Services
         private void ClearSignUpError()
         {
             UpdateSignUpFeedback("", false);
+        }
+
+        private void TogglePasswordVisibility(TMP_InputField inputField, Button toggleButton)
+        {
+            if (inputField.contentType == TMP_InputField.ContentType.Password)
+            {
+                inputField.contentType = TMP_InputField.ContentType.Standard;
+                if (openEyeSprite != null) toggleButton.GetComponent<Image>().sprite = openEyeSprite;
+            }
+            else
+            {
+                inputField.contentType = TMP_InputField.ContentType.Password;
+                if (closedEyeSprite != null) toggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            }
+            inputField.ForceLabelUpdate();
         }
     }
 }
