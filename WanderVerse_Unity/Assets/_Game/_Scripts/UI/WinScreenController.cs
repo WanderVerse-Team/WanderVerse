@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
+using WanderVerse.Backend.Services;
 
 public class WinScreenController : MonoBehaviour
 {
@@ -26,6 +27,10 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private Button menuButton;
+
+    [Header("Energy Feedback")]
+    [Tooltip("Drag 'Out of Energy' UI panel here")]
+    [SerializeField] private GameObject outOfEnergyPopup;
 
     [Header("Effects")]
     //[Tooltip("Drag the Confetti_Particles here")]
@@ -161,6 +166,16 @@ public class WinScreenController : MonoBehaviour
 
     private void RestartLevel()
     {
+        if (EnergyManager.Instance != null)
+        {
+            bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+            if (!canPlay)
+            {
+                if (outOfEnergyPopup != null) outOfEnergyPopup.SetActive(true);
+                return;
+            }
+        }
+
         Time.timeScale = 1f;
         if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -168,6 +183,16 @@ public class WinScreenController : MonoBehaviour
 
     private void LoadNextLevel()
     {
+        if (EnergyManager.Instance != null)
+        {
+            bool canPlay = EnergyManager.Instance.TryConsumeEnergy();
+            if (!canPlay)
+            {
+                if (outOfEnergyPopup != null) outOfEnergyPopup.SetActive(true);
+                return;
+            }
+        }
+
         Time.timeScale = 1f;
         if (AudioManager.Instance != null) AudioManager.Instance.StopAllAudio();
 
