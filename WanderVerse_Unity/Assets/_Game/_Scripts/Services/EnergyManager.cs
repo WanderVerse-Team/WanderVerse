@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using WanderVerse.Framework.Data;
+using UnityEngine.InputSystem;
 
 namespace WanderVerse.Backend.Services
 {
@@ -27,6 +28,18 @@ namespace WanderVerse.Backend.Services
         {
             CheckDailyReset();
             RefreshEnergyUI();
+        }
+
+        private void Update()
+        {
+            // DEV CHEAT: Press 'E' to refill energy. ONLY works in the Unity Editor
+            if (Application.isEditor)
+            {
+                if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+                {
+                    RefillEnergyCheat();
+                }
+            }
         }
 
         /// <summary>
@@ -152,6 +165,18 @@ namespace WanderVerse.Backend.Services
             {
                 energyUI.RefreshEnergyUI();
             }
+        }
+
+        private void RefillEnergyCheat()
+        {
+            PlayerData data = CloudSyncManager.Instance?.CurrentData;
+            if (data == null) return;
+
+            data.energy = data.maxEnergy;
+            CloudSyncManager.Instance.SyncProgress(data);
+            RefreshEnergyUI();
+
+            Debug.Log("<color=cyan>[DEV CHEAT]</color> Energy fully restored!");
         }
     }
 }
