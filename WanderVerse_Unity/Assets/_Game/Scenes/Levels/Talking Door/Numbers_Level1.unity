@@ -722,7 +722,7 @@ MonoBehaviour:
   m_text: "\xFAiai"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
-  m_sharedMaterial: {fileID: 4762784361178176331, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
+  m_sharedMaterial: {fileID: 1472566310357592946, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2259,6 +2259,11 @@ PrefabInstance:
       value: TutorialPanel2-Portrait
       objectReference: {fileID: 0}
     - target: {fileID: 7831423198421700258, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
+      propertyPath: m_text
+      value: "fu;kska tydg hkakk\xEF f\xEF fodr lshk wxlhg .e,fmk ueksla legh Tnkak
+        fjkjd'"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7831423198421700258, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
       propertyPath: m_fontSize
       value: 60
       objectReference: {fileID: 0}
@@ -2269,7 +2274,7 @@ PrefabInstance:
     - target: {fileID: 7831423198421700258, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4762784361178176331, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
+      objectReference: {fileID: 1472566310357592946, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
     - target: {fileID: 7839846422980083112, guid: a5cf2008339091442b4b9c37a04bcd5e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

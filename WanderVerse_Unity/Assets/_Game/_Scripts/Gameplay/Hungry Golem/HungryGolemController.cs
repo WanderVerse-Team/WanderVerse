@@ -76,6 +76,7 @@ public class HungryGolemController : BaseLevelController
         golemRenderer.sprite = idleSprite;
         nextSpawnTime = Time.time + levelData.spawnRate;
         Debug.Log($"Golem is hungry for {targetScore} {levelData.levelTitle}s");
+        instructionText.text = $"{targetScore}";
     }
 
     //Spawn fruits at regular intervals
