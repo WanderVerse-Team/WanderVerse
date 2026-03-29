@@ -65,6 +65,7 @@ public class TreasurePackerController : BaseLevelController
     
     protected override void InitializeLevel()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         // Copy the rounds from LevelData into a temporary deck so to pull them randomly
         if (levelData.treasureRounds != null)
         {
@@ -80,7 +81,7 @@ public class TreasurePackerController : BaseLevelController
     
     protected override void BeginLevel()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        
         base.BeginLevel(); 
         
         // This shoots the coins for the Treasure Packer
