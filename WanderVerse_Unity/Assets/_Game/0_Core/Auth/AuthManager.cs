@@ -120,6 +120,9 @@ namespace WanderVerse.Backend.Services
             if (signInFeedbackText != null) signInFeedbackText.text = "";
             if (signUpFeedbackText != null) signUpFeedbackText.text = "";
 
+            ConfigureFeedbackText(signInFeedbackText);
+            ConfigureFeedbackText(signUpFeedbackText);
+
             if (signUpUsernameInput != null) signUpUsernameInput.readOnly = true;
 
             // IMPORTANT: Activate both panels before setting up buttons
@@ -581,8 +584,8 @@ namespace WanderVerse.Backend.Services
         {
             if (signInFeedbackText != null)
             {
-                signInFeedbackText.text = msg;
-                signInFeedbackText.color = isError ? Color.red : Color.white;
+                signInFeedbackText.text = NormalizeFeedbackMessage(msg);
+                signInFeedbackText.color = isError ? Color.red : Color.green;
             }
         }
 
@@ -590,9 +593,30 @@ namespace WanderVerse.Backend.Services
         {
             if (signUpFeedbackText != null)
             {
-                signUpFeedbackText.text = msg;
-                signUpFeedbackText.color = isError ? Color.red : Color.white;
+                signUpFeedbackText.text = NormalizeFeedbackMessage(msg);
+                signUpFeedbackText.color = isError ? Color.red : Color.green;
             }
+        }
+
+        private void ConfigureFeedbackText(TextMeshProUGUI feedbackText)
+        {
+            if (feedbackText == null)
+            {
+                return;
+            }
+
+            feedbackText.enableWordWrapping = true;
+            feedbackText.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        private string NormalizeFeedbackMessage(string msg)
+        {
+            if (string.IsNullOrEmpty(msg))
+            {
+                return string.Empty;
+            }
+
+            return msg.Replace("\\r\\n", "\n").Replace("\\n", "\n");
         }
 
         private void ClearSignInError()
