@@ -21,21 +21,21 @@ export const Aboutdata: aboutdata[] = [
     imgSrc: '/images/aboutus/imgOne.svg',
     paragraph:
       'We are a dedicated team of undergraduates in Computer Science studying at Informatics Institute of Technology(IIT) affiliated with the University of Westminster ',
-    link: 'Learn more',
+    link: 'Our Story',
   },
   {
     heading: 'Goals.',
     imgSrc: '/images/aboutus/imgTwo.svg',
     paragraph:
       'Developing new applications that enhance quality of life and promote sustainability.\nPromote technology-based solutions across every domain.',
-    link: 'Learn more',
+    link: 'Our Mission',
   },
   {
     heading: 'Our Works.',
     imgSrc: '/images/aboutus/imgThree.svg',
     paragraph:
       'WanderVerse--our maiden application that gamifies the local syllabus in schools, bridging school education, trends and technology.',
-    link: 'Learn more',
+    link: 'Featured Project',
   },
 ]
 
