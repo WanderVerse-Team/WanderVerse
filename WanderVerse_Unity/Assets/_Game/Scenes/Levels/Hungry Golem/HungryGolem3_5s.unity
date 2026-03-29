@@ -1063,6 +1063,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 48445768785066386, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
   m_PrefabInstance: {fileID: 434462317}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &871616951 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8877595354201155971, guid: 094287319defb45449578ee88e8898bd, type: 3}
+  m_PrefabInstance: {fileID: 720694952}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &895582136 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5888589675470568562, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
@@ -2553,7 +2564,7 @@ MonoBehaviour:
   visibleY: 43
   waitTime: 4
   targetX: 2.8
-  instructionText: {fileID: 0}
+  instructionText: {fileID: 871616951}
   victoryPanel: {fileID: 374150520}
   confetti: {fileID: 1042384521}
   fireworks: {fileID: 1278463515}
