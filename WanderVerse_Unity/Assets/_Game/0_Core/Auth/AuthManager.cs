@@ -132,7 +132,7 @@ namespace WanderVerse.Backend.Services
             SetupButton("Generate_Username", OnGenerateUsernameButton);
             SetupButton("Btn_SignUp", OnSignUpButton);
             SetupButton("Btn_SignIn", OnLoginButton);
-            SetupButton("Btn_Guest", OnGuestLoginButton);
+            SetupButton("Guest_Btn", OnGuestLoginButton);
 
             SetupButton("Btn_GoToSignUp", () => 
             { 
@@ -560,22 +560,30 @@ namespace WanderVerse.Backend.Services
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
                 StartCoroutine(WaitForDataAndRedirect());
             }
+            else
+            {
+                Debug.LogWarning("[Auth] Cannot continue login flow: missing CloudSyncManager or current user.");
+                UpdateSignInFeedback("Profile load failed. Please sign in again.", true);
+                _isWorking = false;
+            }
         }
 
         private IEnumerator WaitForDataAndRedirect()
         {
-            yield return new WaitUntil(() => CloudSyncManager.Instance.CurrentData != null);
+            yield return new WaitUntil(() => CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null);
 
             PlayerData data = CloudSyncManager.Instance.CurrentData;
 
             if (data.hasCompletedOnboarding)
             {
                 Debug.Log("[Auth] User has completed onboarding. Loading World Map...");
+                _isWorking = false;
                 SceneManager.LoadScene("Scene_WorldMap");
             }
             else
             {
                 Debug.Log("[Auth] New User detected. Loading Grade Selection...");
+                _isWorking = false;
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
         }
@@ -605,7 +613,7 @@ namespace WanderVerse.Backend.Services
                 return;
             }
 
-            feedbackText.enableWordWrapping = true;
+            feedbackText.textWrappingMode = TextWrappingModes.Normal;
             feedbackText.overflowMode = TextOverflowModes.Overflow;
         }
 
