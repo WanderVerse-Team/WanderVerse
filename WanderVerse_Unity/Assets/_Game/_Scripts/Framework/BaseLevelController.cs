@@ -37,7 +37,6 @@ public abstract class BaseLevelController : MonoBehaviour
     // Events to update the UI
     public System.Action<int> OnScoreUpdated;
     public System.Action<float> OnTimerUpdated;
-    public System.Action<bool> OnLevelEnded;
 
     public int CurrentScore => currentScore;
     public int MistakeCount => mistakeCount;
@@ -286,9 +285,6 @@ public abstract class BaseLevelController : MonoBehaviour
         }
 
         Debug.Log($"[BaseLevel] Level Over. Success: {isSuccess}. Mistakes: {mistakeCount}");
-
-        // Tell UI to open the Win/Lose screen
-        OnLevelEnded?.Invoke(isSuccess);
     }
 
     private void SpawnWinScreen()
