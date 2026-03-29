@@ -9,6 +9,7 @@ using System.Collections;
 using System.Threading.Tasks; 
 using System;
 using System.Collections.Generic; 
+using UnityEngine.UI;  // Added for Button components
 using WanderVerse.Framework.Data; 
 
 namespace WanderVerse.Backend.Services
@@ -33,12 +34,19 @@ namespace WanderVerse.Backend.Services
         public GameObject panelSignIn; 
         public GameObject panelSignUp; 
 
+        [Header("Password Toggle Buttons")]
+        public Button loginPasswordToggleButton;
+        public Button signUpPasswordToggleButton;
+        public Button signUpConfirmPasswordToggleButton;
+
+        [Header("Eye Icons")]
+        public Sprite openEyeSprite;
+        public Sprite closedEyeSprite; 
+
         private FirebaseAuth _auth;
         private FirebaseFirestore _db; 
         private bool _isWorking = false;
         private bool _firebaseReady = false;
-        private bool _isRedirecting = false;
-        private bool _didInitialSessionCheck = false;
 
         void Start()
         {
@@ -61,6 +69,24 @@ namespace WanderVerse.Backend.Services
 
             if (signUpConfirmPasswordInput != null)
                 signUpConfirmPasswordInput.onValueChanged.AddListener(delegate { ClearSignUpError(); });
+
+            // Set up password toggle buttons
+            if (loginPasswordToggleButton != null)
+                loginPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(loginPasswordInput, loginPasswordToggleButton));
+            
+            if (signUpPasswordToggleButton != null)
+                signUpPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(signUpPasswordInput, signUpPasswordToggleButton));
+            
+            if (signUpConfirmPasswordToggleButton != null)
+                signUpConfirmPasswordToggleButton.onClick.AddListener(() => TogglePasswordVisibility(signUpConfirmPasswordInput, signUpConfirmPasswordToggleButton));
+
+            // Set initial eye icons to closed
+            if (loginPasswordToggleButton != null && closedEyeSprite != null)
+                loginPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            if (signUpPasswordToggleButton != null && closedEyeSprite != null)
+                signUpPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            if (signUpConfirmPasswordToggleButton != null && closedEyeSprite != null)
+                signUpConfirmPasswordToggleButton.GetComponent<Image>().sprite = closedEyeSprite;
         }
 
         private IEnumerator InitializeFirebaseAndSetup()
@@ -83,33 +109,10 @@ namespace WanderVerse.Backend.Services
             // Now safely initialize Firebase services
             _auth = FirebaseAuth.DefaultInstance;
             _db = FirebaseFirestore.DefaultInstance;
-            _auth.StateChanged += OnAuthStateChanged;
             _firebaseReady = true;
 
             Debug.Log("[Auth] Firebase initialized successfully.");
             SetupUI();
-        }
-
-        private void OnDestroy()
-        {
-            if (_auth != null)
-            {
-                _auth.StateChanged -= OnAuthStateChanged;
-            }
-        }
-
-        private void OnAuthStateChanged(object sender, EventArgs eventArgs)
-        {
-            if (!_firebaseReady || _auth == null || _isRedirecting)
-            {
-                return;
-            }
-
-            if (_auth.CurrentUser != null)
-            {
-                Debug.Log($"[Auth] Session restored for {_auth.CurrentUser.UserId}");
-                BeginAutoLogin();
-            }
         }
 
         private void SetupUI()
@@ -117,9 +120,11 @@ namespace WanderVerse.Backend.Services
             if (signInFeedbackText != null) signInFeedbackText.text = "";
             if (signUpFeedbackText != null) signUpFeedbackText.text = "";
 
+            ConfigureFeedbackText(signInFeedbackText);
+            ConfigureFeedbackText(signUpFeedbackText);
+
             if (signUpUsernameInput != null) signUpUsernameInput.readOnly = true;
 
-            // HARD-WIRE ALL BUTTONS
             // IMPORTANT: Activate both panels before setting up buttons
             if (panelSignIn != null) panelSignIn.SetActive(true);
             if (panelSignUp != null) panelSignUp.SetActive(true);
@@ -147,58 +152,8 @@ namespace WanderVerse.Backend.Services
 
             Debug.Log("<color=cyan>[Auth] All UI listeners hard-wired via code.</color>");
 
-            // Hide auth panels while we quickly check for a persisted Firebase session.
+            // Now set initial panel visibility (show SignUp, hide SignIn by default)
             if (panelSignIn != null) panelSignIn.SetActive(false);
-            if (panelSignUp != null) panelSignUp.SetActive(false);
-
-            StartCoroutine(InitialSessionCheckRoutine());
-        }
-
-        private IEnumerator InitialSessionCheckRoutine()
-        {
-            UpdateFeedback("Checking saved session...", false);
-
-            float timeout = 2.5f;
-            float elapsed = 0f;
-
-            while (_auth != null && _auth.CurrentUser == null && elapsed < timeout)
-            {
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            _didInitialSessionCheck = true;
-
-            if (_auth != null && _auth.CurrentUser != null)
-            {
-                BeginAutoLogin();
-                yield break;
-            }
-
-            ShowAuthPanels();
-            UpdateFeedback("WanderVerse Ready...", false);
-        }
-
-        private void BeginAutoLogin()
-        {
-            if (_isRedirecting)
-            {
-                return;
-            }
-
-            UpdateFeedback("Welcome back! Signing you in...", false);
-            Debug.Log($"[Auth] Welcome back, {_auth.CurrentUser.UserId}");
-            LoadWorldMap();
-        }
-
-        private void ShowAuthPanels()
-        {
-            // Keep existing UX: show SignUp first and allow switching to SignIn via button.
-            if (panelSignIn != null) panelSignIn.SetActive(false);
-            if (panelSignUp != null) panelSignUp.SetActive(true);
-        }
-
-        // A helper method to keep Start() clean
             if (panelSignUp != null) panelSignUp.SetActive(true);
         }
 
@@ -600,37 +555,8 @@ namespace WanderVerse.Backend.Services
 
         private void LoadWorldMap()
         {
-            if (_isRedirecting)
+            if (CloudSyncManager.Instance != null && _auth.CurrentUser != null)
             {
-                return;
-            }
-
-            _isRedirecting = true;
-
-            if (_auth == null || _auth.CurrentUser == null)
-            {
-                _isRedirecting = false;
-                if (_didInitialSessionCheck)
-                {
-                    ShowAuthPanels();
-                }
-                return;
-            }
-
-            if (CloudSyncManager.Instance == null)
-            {
-                Debug.LogWarning("[Auth] CloudSyncManager missing. Loading World Map directly.");
-                _isRedirecting = false;
-                SceneManager.LoadScene("Scene_WorldMap");
-                return;
-            }
-
-            if (CloudSyncManager.Instance != null)
-            {
-                // Tell CloudSyncManager to fetch the user data
-                CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
-                
-                // Start a Coroutine to wait for the data to arrive before switching scenes
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
                 StartCoroutine(WaitForDataAndRedirect());
             }
@@ -652,16 +578,14 @@ namespace WanderVerse.Backend.Services
                 Debug.Log("[Auth] New User detected. Loading Grade Selection...");
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
-
-            _isRedirecting = false;
         }
 
         private void UpdateSignInFeedback(string msg, bool isError = false)
         {
             if (signInFeedbackText != null)
             {
-                signInFeedbackText.text = msg;
-                signInFeedbackText.color = isError ? Color.red : Color.white;
+                signInFeedbackText.text = NormalizeFeedbackMessage(msg);
+                signInFeedbackText.color = isError ? Color.red : Color.green;
             }
         }
 
@@ -669,9 +593,30 @@ namespace WanderVerse.Backend.Services
         {
             if (signUpFeedbackText != null)
             {
-                signUpFeedbackText.text = msg;
-                signUpFeedbackText.color = isError ? Color.red : Color.white;
+                signUpFeedbackText.text = NormalizeFeedbackMessage(msg);
+                signUpFeedbackText.color = isError ? Color.red : Color.green;
             }
+        }
+
+        private void ConfigureFeedbackText(TextMeshProUGUI feedbackText)
+        {
+            if (feedbackText == null)
+            {
+                return;
+            }
+
+            feedbackText.enableWordWrapping = true;
+            feedbackText.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        private string NormalizeFeedbackMessage(string msg)
+        {
+            if (string.IsNullOrEmpty(msg))
+            {
+                return string.Empty;
+            }
+
+            return msg.Replace("\\r\\n", "\n").Replace("\\n", "\n");
         }
 
         private void ClearSignInError()
@@ -682,6 +627,21 @@ namespace WanderVerse.Backend.Services
         private void ClearSignUpError()
         {
             UpdateSignUpFeedback("", false);
+        }
+
+        private void TogglePasswordVisibility(TMP_InputField inputField, Button toggleButton)
+        {
+            if (inputField.contentType == TMP_InputField.ContentType.Password)
+            {
+                inputField.contentType = TMP_InputField.ContentType.Standard;
+                if (openEyeSprite != null) toggleButton.GetComponent<Image>().sprite = openEyeSprite;
+            }
+            else
+            {
+                inputField.contentType = TMP_InputField.ContentType.Password;
+                if (closedEyeSprite != null) toggleButton.GetComponent<Image>().sprite = closedEyeSprite;
+            }
+            inputField.ForceLabelUpdate();
         }
     }
 }
