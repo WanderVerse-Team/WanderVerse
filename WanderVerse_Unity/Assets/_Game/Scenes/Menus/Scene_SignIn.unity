@@ -5055,9 +5055,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 340097392}
-        m_TargetAssemblyTypeName: OnboardingManager, Assembly-CSharp
-        m_MethodName: StartOnboarding
+      - m_Target: {fileID: 1935153021}
+        m_TargetAssemblyTypeName: WanderVerse.Backend.Services.AuthManager, Assembly-CSharp
+        m_MethodName: OnLoginButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7061,9 +7061,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 340097392}
-        m_TargetAssemblyTypeName: OnboardingManager, Assembly-CSharp
-        m_MethodName: StartOnboarding
+      - m_Target: {fileID: 1935153021}
+        m_TargetAssemblyTypeName: WanderVerse.Backend.Services.AuthManager, Assembly-CSharp
+        m_MethodName: OnGuestLoginButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

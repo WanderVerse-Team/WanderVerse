@@ -132,7 +132,7 @@ namespace WanderVerse.Backend.Services
             SetupButton("Generate_Username", OnGenerateUsernameButton);
             SetupButton("Btn_SignUp", OnSignUpButton);
             SetupButton("Btn_SignIn", OnLoginButton);
-            SetupButton("Btn_Guest", OnGuestLoginButton);
+            SetupButton("Guest_Btn", OnGuestLoginButton);
 
             SetupButton("Btn_GoToSignUp", () => 
             { 
@@ -319,43 +319,26 @@ namespace WanderVerse.Backend.Services
             }
 
             UpdateSignInFeedback("Starting Offline Mode...", false);
-
-            CloudSyncManager sync = CloudSyncManager.Instance;
-            if (sync == null)
+            
+            if (CloudSyncManager.Instance != null)
             {
-                GameObject syncPrefab = Resources.Load<GameObject>("CloudSyncManager");
-                if (syncPrefab != null)
+                CloudSyncManager.Instance.InitializeAsGuest();
+
+                if (CloudSyncManager.Instance.CurrentData != null && 
+                    CloudSyncManager.Instance.CurrentData.hasCompletedOnboarding)
                 {
-                    GameObject syncInstance = Instantiate(syncPrefab);
-                    syncInstance.name = "CloudSyncManager";
-                    sync = syncInstance.GetComponent<CloudSyncManager>();
+                    Debug.Log("[Auth] Guest returning. Loading World Map.");
+                    SceneManager.LoadScene("Scene_WorldMap");
                 }
-            }
-
-            if (sync == null)
-            {
-                Debug.LogWarning("[Auth] CloudSyncManager missing! Cannot start guest mode.");
-                UpdateSignInFeedback("Offline mode unavailable. Please restart and try again.", true);
-                return;
-            }
-
-            sync.InitializeAsGuest();
-
-            if (sync.CurrentData == null)
-            {
-                Debug.LogWarning("[Auth] Guest initialization failed: CurrentData is null.");
-                UpdateSignInFeedback("Offline mode initialization failed. Please try again.", true);
-                return;
-            }
-
-            if (sync.CurrentData.hasCompletedOnboarding)
-            {
-                Debug.Log("[Auth] Guest returning. Loading World Map.");
-                SceneManager.LoadScene("Scene_WorldMap");
+                else
+                {
+                    Debug.Log("[Auth] New Guest. Loading Onboarding.");
+                    SceneManager.LoadScene("Scene_GradeSelection");
+                }
             }
             else
             {
-                Debug.Log("[Auth] New Guest. Loading Onboarding.");
+                Debug.LogWarning("[Auth] CloudSyncManager missing!");
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
         }
@@ -577,22 +560,30 @@ namespace WanderVerse.Backend.Services
                 CloudSyncManager.Instance.InitializeAsUser(_auth.CurrentUser.UserId);
                 StartCoroutine(WaitForDataAndRedirect());
             }
+            else
+            {
+                Debug.LogWarning("[Auth] Cannot continue login flow: missing CloudSyncManager or current user.");
+                UpdateSignInFeedback("Profile load failed. Please sign in again.", true);
+                _isWorking = false;
+            }
         }
 
         private IEnumerator WaitForDataAndRedirect()
         {
-            yield return new WaitUntil(() => CloudSyncManager.Instance.CurrentData != null);
+            yield return new WaitUntil(() => CloudSyncManager.Instance != null && CloudSyncManager.Instance.CurrentData != null);
 
             PlayerData data = CloudSyncManager.Instance.CurrentData;
 
             if (data.hasCompletedOnboarding)
             {
                 Debug.Log("[Auth] User has completed onboarding. Loading World Map...");
+                _isWorking = false;
                 SceneManager.LoadScene("Scene_WorldMap");
             }
             else
             {
                 Debug.Log("[Auth] New User detected. Loading Grade Selection...");
+                _isWorking = false;
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
         }
