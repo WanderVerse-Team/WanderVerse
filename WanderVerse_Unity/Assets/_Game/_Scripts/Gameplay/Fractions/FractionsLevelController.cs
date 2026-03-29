@@ -111,6 +111,7 @@ public class FractionsLevelController : BaseLevelController
     // ================================================================
     protected override void InitializeLevel()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         foreach (GameObject item in foodItems)
             item.SetActive(false);
 
@@ -129,6 +130,7 @@ public class FractionsLevelController : BaseLevelController
     protected override void BeginLevel()
     {
         base.BeginLevel();
+        
         StartCoroutine(MrCrumbleEntrance());
     }
 
