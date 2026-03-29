@@ -62,7 +62,7 @@ namespace WanderVerse.Backend.Services
                 InitializeAsGuest();
             }
         }
-        
+
         public void InitializeAsGuest()
         {
             Debug.Log("[Sync] Initializing Guest Mode...");
