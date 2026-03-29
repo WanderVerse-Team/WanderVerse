@@ -613,7 +613,7 @@ namespace WanderVerse.Backend.Services
                 return;
             }
 
-            feedbackText.enableWordWrapping = true;
+            feedbackText.textWrappingMode = TextWrappingModes.Normal;
             feedbackText.overflowMode = TextOverflowModes.Overflow;
         }
 
