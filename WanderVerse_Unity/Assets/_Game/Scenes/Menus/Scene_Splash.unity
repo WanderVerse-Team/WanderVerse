@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SplashController
   videoPlayer: {fileID: 1210378867}
-  nextSceneName: Boot
+  nextSceneName: Scene_SignIn
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

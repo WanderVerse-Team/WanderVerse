@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
@@ -5,16 +6,28 @@ using UnityEngine.SceneManagement;
 public class SplashController : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    public string nextSceneName = "Boot";
+    public string nextSceneName = "Scene_SignIn";
 
     void Start()
     {
-        videoPlayer.loopPointReached += OnVideoEnd;
-        videoPlayer.Play();
+        StartCoroutine(PlaySplashVideo());
     }
 
-    void OnVideoEnd(VideoPlayer vp)
+    private IEnumerator PlaySplashVideo()
     {
-        SceneManager.LoadScene("Scene_SignIn");
+        videoPlayer.Prepare();
+
+        while (!videoPlayer.isPrepared)
+        {
+            yield return null;
+        }
+
+        videoPlayer.Play();
+
+        float waitTime = (float)videoPlayer.length - 0.1f;
+        yield return new WaitForSeconds(waitTime);
+
+        Debug.Log("[SplashController] Splash video complete. Loading Sign In...");
+        SceneManager.LoadScene(nextSceneName);
     }
 }
