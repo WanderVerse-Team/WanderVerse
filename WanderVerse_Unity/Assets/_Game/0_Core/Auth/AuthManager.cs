@@ -319,26 +319,43 @@ namespace WanderVerse.Backend.Services
             }
 
             UpdateSignInFeedback("Starting Offline Mode...", false);
-            
-            if (CloudSyncManager.Instance != null)
-            {
-                CloudSyncManager.Instance.InitializeAsGuest();
 
-                if (CloudSyncManager.Instance.CurrentData != null && 
-                    CloudSyncManager.Instance.CurrentData.hasCompletedOnboarding)
+            CloudSyncManager sync = CloudSyncManager.Instance;
+            if (sync == null)
+            {
+                GameObject syncPrefab = Resources.Load<GameObject>("CloudSyncManager");
+                if (syncPrefab != null)
                 {
-                    Debug.Log("[Auth] Guest returning. Loading World Map.");
-                    SceneManager.LoadScene("Scene_WorldMap");
+                    GameObject syncInstance = Instantiate(syncPrefab);
+                    syncInstance.name = "CloudSyncManager";
+                    sync = syncInstance.GetComponent<CloudSyncManager>();
                 }
-                else
-                {
-                    Debug.Log("[Auth] New Guest. Loading Onboarding.");
-                    SceneManager.LoadScene("Scene_GradeSelection");
-                }
+            }
+
+            if (sync == null)
+            {
+                Debug.LogWarning("[Auth] CloudSyncManager missing! Cannot start guest mode.");
+                UpdateSignInFeedback("Offline mode unavailable. Please restart and try again.", true);
+                return;
+            }
+
+            sync.InitializeAsGuest();
+
+            if (sync.CurrentData == null)
+            {
+                Debug.LogWarning("[Auth] Guest initialization failed: CurrentData is null.");
+                UpdateSignInFeedback("Offline mode initialization failed. Please try again.", true);
+                return;
+            }
+
+            if (sync.CurrentData.hasCompletedOnboarding)
+            {
+                Debug.Log("[Auth] Guest returning. Loading World Map.");
+                SceneManager.LoadScene("Scene_WorldMap");
             }
             else
             {
-                Debug.LogWarning("[Auth] CloudSyncManager missing!");
+                Debug.Log("[Auth] New Guest. Loading Onboarding.");
                 SceneManager.LoadScene("Scene_GradeSelection");
             }
         }
