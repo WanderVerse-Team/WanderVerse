@@ -50,6 +50,7 @@ namespace WanderVerse.Backend.Services
 
         void Start()
         {
+            ResolveFeedbackReferences();
             StartCoroutine(InitializeFirebaseAndSetup());
 
             if (loginEmailInput != null)
@@ -91,6 +92,8 @@ namespace WanderVerse.Backend.Services
 
         private IEnumerator InitializeFirebaseAndSetup()
         {
+            ResolveFeedbackReferences();
+
             if (signInFeedbackText != null) signInFeedbackText.text = "Initializing...";
             if (signUpFeedbackText != null) signUpFeedbackText.text = "Initializing...";
 
@@ -117,6 +120,8 @@ namespace WanderVerse.Backend.Services
 
         private void SetupUI()
         {
+            ResolveFeedbackReferences();
+
             if (signInFeedbackText != null) signInFeedbackText.text = "";
             if (signUpFeedbackText != null) signUpFeedbackText.text = "";
 
@@ -607,6 +612,95 @@ namespace WanderVerse.Backend.Services
 
             feedbackText.enableWordWrapping = true;
             feedbackText.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        private void ResolveFeedbackReferences()
+        {
+            signInFeedbackText = ResolveSingleFeedbackReference(signInFeedbackText, panelSignIn, "sign in");
+            signUpFeedbackText = ResolveSingleFeedbackReference(signUpFeedbackText, panelSignUp, "sign up");
+        }
+
+        private TextMeshProUGUI ResolveSingleFeedbackReference(TextMeshProUGUI currentRef, GameObject panel, string contextName)
+        {
+            if (IsValidFeedbackTarget(currentRef))
+            {
+                return currentRef;
+            }
+
+            if (currentRef != null)
+            {
+                Debug.LogWarning($"[Auth] The {contextName} feedback text reference points to a button label. Attempting auto-fix.");
+            }
+
+            TextMeshProUGUI resolved = FindFeedbackTextInPanel(panel);
+            if (resolved != null)
+            {
+                Debug.Log($"[Auth] Auto-linked {contextName} feedback text to '{resolved.gameObject.name}'.");
+                return resolved;
+            }
+
+            Debug.LogWarning($"[Auth] Could not auto-link {contextName} feedback text. Assign a non-button TextMeshProUGUI in the Inspector.");
+            return null;
+        }
+
+        private TextMeshProUGUI FindFeedbackTextInPanel(GameObject panel)
+        {
+            if (panel == null)
+            {
+                return null;
+            }
+
+            TextMeshProUGUI[] texts = panel.GetComponentsInChildren<TextMeshProUGUI>(true);
+            for (int i = 0; i < texts.Length; i++)
+            {
+                TextMeshProUGUI candidate = texts[i];
+                if (!IsValidFeedbackTarget(candidate))
+                {
+                    continue;
+                }
+
+                string name = candidate.gameObject.name.ToLowerInvariant();
+                if (name.Contains("feedback") || name.Contains("error") || name.Contains("message") || name.Contains("status"))
+                {
+                    return candidate;
+                }
+            }
+
+            for (int i = 0; i < texts.Length; i++)
+            {
+                if (IsValidFeedbackTarget(texts[i]))
+                {
+                    return texts[i];
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsValidFeedbackTarget(TextMeshProUGUI text)
+        {
+            if (text == null)
+            {
+                return false;
+            }
+
+            return !IsInsideButton(text.transform);
+        }
+
+        private bool IsInsideButton(Transform target)
+        {
+            Transform current = target;
+            while (current != null)
+            {
+                if (current.GetComponent<Button>() != null)
+                {
+                    return true;
+                }
+
+                current = current.parent;
+            }
+
+            return false;
         }
 
         private string NormalizeFeedbackMessage(string msg)
