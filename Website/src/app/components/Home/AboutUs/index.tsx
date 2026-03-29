@@ -118,9 +118,6 @@ const Aboutus = () => {
                         <span className="text-xl bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-sm border border-black/5 transform group-hover/minimal:-rotate-12 transition-transform duration-300">
                           {accent.emoji}
                         </span>
-                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] bg-clip-text text-transparent bg-gradient-to-r ${accent.gradient} opacity-0 group-hover/minimal:opacity-100 transform -translate-x-4 group-hover/minimal:translate-x-0 transition-all duration-300`}>
-                          Interactive
-                        </span>
                       </div>
                       <h3 className="text-3xl leading-none font-black text-black tracking-tight transform group-hover/minimal:translate-x-1 transition-transform duration-300">
                         {item.heading}
@@ -134,15 +131,12 @@ const Aboutus = () => {
 
                   {/* Footer */}
                   <div className="mt-auto flex items-center justify-between border-t border-black/5 pt-5 group-hover/minimal:border-black/20 transition-colors duration-300">
-                    <span className="text-sm font-bold tracking-widest uppercase text-black">
-                      {item.link || "Discover"}
+                    <span className={`text-xs font-black uppercase tracking-[0.18em] bg-clip-text text-transparent bg-gradient-to-r ${accent.gradient}`}>
+                      {item.link || 'Team Insight'}
                     </span>
-                    <div className="w-10 h-10 rounded-full border border-black text-black flex items-center justify-center group-hover/minimal:bg-black group-hover/minimal:text-white transition-all duration-300 transform group-hover/minimal:translate-x-1 relative overflow-hidden">
-                      <div className={`absolute inset-0 bg-gradient-to-br ${accent.gradient} opacity-0 group-hover/minimal:opacity-100 transition-opacity duration-300`} />
-                      <svg className="w-4 h-4 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-black/45">
+                      WanderVerse
+                    </span>
                   </div>
                 </div>
               </motion.div>

@@ -8,7 +8,7 @@ const PANELS = [
         id: 'game',
         label: '01 / THE GAME',
         headline: ['Where', 'Learning', 'Meets Play.'],
-        sub: 'WanderVerse turns the Grade 3 Sri Lankan Mathematics syllabus into an immersive, gamified adventure with Willow the Otter.',
+        sub: 'WanderVerse turns the Sri Lankan school syllabus into an immersive, gamified adventure with Willow the Otter.',
         accent: '#f35b03',
         bg: '#0d0a04',
         emoji: '🎮',
@@ -28,11 +28,11 @@ const PANELS = [
         id: 'mission',
         label: '03 / OUR MISSION',
         headline: ['Education,', 'Reimagined', 'for All.'],
-        sub: 'Built by IIT students for Sri Lankan Grade 3 classrooms — bridging school education, modern trends, and technology.',
+        sub: 'Built by IIT students for Sri Lankan school classrooms — bridging school education, modern trends, and technology.',
         accent: '#f7b801',
         bg: '#0a0800',
         emoji: '🚀',
-        stats: [{ v: 'IIT', l: 'University' }, { v: '6', l: 'Makers' }, { v: '2024', l: 'Founded' }],
+        stats: [{ v: 'IIT', l: 'University' }, { v: '6', l: 'Makers' }, { v: '2025', l: 'Founded' }],
     },
 ]
 

@@ -73,7 +73,7 @@ const footer = () => {
 
             <p className="text-white/50 text-base leading-relaxed max-w-xs mb-8">
               Gamifying the local school syllabus — bridging education, trends, and
-              technology for Grade 3 students across Sri Lanka.
+              technology for School Students across Sri Lanka.
             </p>
 
             {/* Social icons */}
