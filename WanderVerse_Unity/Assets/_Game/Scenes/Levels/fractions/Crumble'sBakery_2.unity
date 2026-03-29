@@ -7192,7 +7192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1695042527
 SpriteRenderer:
   serializedVersion: 2
@@ -8471,7 +8471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 612.14, y: -181}
+  m_AnchoredPosition: {x: 668, y: -165.9}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2022480490
@@ -8494,7 +8494,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "uu ;uhs l%\xEFn,a'Thd,d ug Wo\xF5 lrkak \xB4k f\xEF lEu wjYH .dkg ms.dkg
+    od.kak'"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
   m_sharedMaterial: {fileID: 1472566310357592946, guid: 6a009c013b5e59c4e93a77166e5c9f01, type: 2}
