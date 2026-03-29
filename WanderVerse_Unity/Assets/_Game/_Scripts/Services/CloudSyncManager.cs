@@ -212,8 +212,7 @@ namespace WanderVerse.Backend.Services
             SyncProgress(CurrentData);
         }
 
-        // SAVE GRADE & SUBJECT (ONBOARDING)
-        // Seshani can call this function when her UI is ready.
+        // SAVE GRADE & SUBJECT 
         public void UpdateUserPreferences(int grade, string subject)
         {
             if (CurrentData == null) 

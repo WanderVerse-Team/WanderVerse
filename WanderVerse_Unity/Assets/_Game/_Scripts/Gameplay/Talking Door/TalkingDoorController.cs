@@ -7,13 +7,13 @@ using System.Collections;
 public class TalkingDoorController : BaseLevelController
 {
     [Header("--- Talking Door UI ---")]
-    public TextMeshProUGUI doorPromptText;   // The text on the Door (e.g., "Find the number...")
-    public Button[] answerButtons;           // Drag your 3 Buttons here
-    public TextMeshProUGUI[] buttonLabels;   // Drag the Text inside those 3 buttons here
+    public TextMeshProUGUI doorPromptText;   
+    public Button[] answerButtons;           
+    public TextMeshProUGUI[] buttonLabels;   
 
     [Header("--- Audio ---")]
-    public AudioSource feedbackSpeaker;       // Source for correct/wrong sounds
-    public AudioSource doorSpeaker;          // Source for the voice lines
+    public AudioSource feedbackSpeaker;       
+    public AudioSource doorSpeaker;          
     public AudioClip correctSound;
     public AudioClip wrongSound;
     public AudioClip victorySound;
@@ -59,10 +59,7 @@ public class TalkingDoorController : BaseLevelController
 
         doorPromptText.text = currentQuestion.promptText;
         
-        // if (currentQuestion.promptAudio != null && doorSpeaker != null)
-        // {
-        //     doorSpeaker.PlayOneShot(currentQuestion.promptAudio);
-        // }
+       
 
         if (isGameActive)
         {

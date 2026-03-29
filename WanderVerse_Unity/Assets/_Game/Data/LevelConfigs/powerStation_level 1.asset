@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: 
   description: 
   gameType: 2
+  parentMapSceneName: Factory_Game_Map
+  nextLevelSceneName: 
   targetScore: 3
   possibleTargets: 
   pointsForCorrect: 1

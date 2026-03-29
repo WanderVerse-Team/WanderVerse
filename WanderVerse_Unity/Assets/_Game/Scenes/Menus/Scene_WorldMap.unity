@@ -316,7 +316,7 @@ Transform:
   m_GameObject: {fileID: 372890271}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: 0.19, z: 0}
+  m_LocalPosition: {x: -0.02, y: 0.5, z: 0}
   m_LocalScale: {x: 0.94, y: 0.92, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -982,7 +982,7 @@ MonoBehaviour:
   mainCamera: {fileID: 667389042}
   scrollSpeed: 0.01
   minY: -2
-  maxY: 200
+  maxY: 5
 --- !u!4 &844519495
 Transform:
   m_ObjectHideFlags: 0
@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1551,9 +1551,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnergyBarUIController
   energyBarImage: {fileID: 850191817}
-  energy0Sprite: {fileID: -7137430845809653168, guid: 6f35e7bdccf4f9041915663ce4bfc447, type: 3}
+  energy0Sprite: {fileID: -5197565138111973518, guid: 6f35e7bdccf4f9041915663ce4bfc447, type: 3}
   energy1Sprite: {fileID: -2360459021828394732, guid: f68664668a7bf234ea88aa34a2be88f8, type: 3}
-  energy2Sprite: {fileID: -2854170015155760022, guid: d89f786e7a13a2e42a93b72ed2b9125a, type: 3}
+  energy2Sprite: {fileID: 6000382632299904631, guid: d89f786e7a13a2e42a93b72ed2b9125a, type: 3}
   energy3Sprite: {fileID: -3757505223757376012, guid: 975218c6cf3fc764e83d021bd64736f3, type: 3}
   energy4Sprite: {fileID: 2279242574084708537, guid: d3b19a045824e91428ff2ef3c2003190, type: 3}
   energy5Sprite: {fileID: -1310740148408294803, guid: c30f5ecf749b37e4290eca96363e2cd7, type: 3}
@@ -1585,7 +1585,7 @@ Transform:
   m_GameObject: {fileID: 2093534499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.57, y: -3.36, z: 0}
+  m_LocalPosition: {x: 0.57, y: -3.12, z: 0}
   m_LocalScale: {x: 0.88, y: 0.93, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

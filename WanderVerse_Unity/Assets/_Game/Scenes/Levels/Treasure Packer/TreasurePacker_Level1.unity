@@ -1055,7 +1055,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 36744873996416595, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 101070653189788399, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1085,6 +1085,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingsCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3980650350728521284, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7431125462549315614, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1103,7 +1107,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9097356287112613249, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9162878900668564280, guid: 74c50a425da54284e8f9b2114e1e5880, type: 3}
       propertyPath: m_Pivot.x
@@ -1369,11 +1373,12 @@ Transform:
   m_GameObject: {fileID: 611879238}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9999895, z: -0, w: 0.004589845}
-  m_LocalPosition: {x: 3.72, y: -1.04, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalPosition: {x: -398.92877, y: -185.18071, z: 0}
+  m_LocalScale: {x: 0.34557235, y: 0.34557238, z: 0.34557235}
   m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
+  m_Children:
+  - {fileID: 1650170958}
+  m_Father: {fileID: 1294829115}
   m_LocalEulerAnglesHint: {x: 0, y: 179.474, z: 0}
 --- !u!1 &612202439
 GameObject:
@@ -1974,6 +1979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialPanel2
       objectReference: {fileID: 0}
+    - target: {fileID: 7683982309595302552, guid: 7f170ee7fca741e4894b9e50e160275b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2412,7 +2421,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1650170958}
+  - {fileID: 611879241}
   - {fileID: 374126007}
   - {fileID: 1392659195}
   - {fileID: 187881773}
@@ -2575,16 +2584,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650170957}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0.9999895, z: -0, w: 0.004589845}
+  m_LocalPosition: {x: 0, y: 0, z: 18}
+  m_LocalScale: {x: 2.893749, y: 2.8937495, z: 2.893749}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1294829115}
+  m_Father: {fileID: 611879241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -98, y: -30}
+  m_AnchoredPosition: {x: -1938, y: 449.0542}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1650170959
@@ -2769,11 +2778,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1941642604324971295, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 8
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1941642604324971295, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -8
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 1941642604324971295, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2799,6 +2808,10 @@ PrefabInstance:
       propertyPath: quitGameButton
       value: 
       objectReference: {fileID: 1391419849}
+    - target: {fileID: 7666155153041667689, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
+      propertyPath: mainMenuSceneName
+      value: Treasure_Game_Map
+      objectReference: {fileID: 0}
     - target: {fileID: 7666155153041667689, guid: a6c676fd82717734ca956d670c4622f2, type: 3}
       propertyPath: masterVolumeSlider
       value: 
@@ -3283,7 +3296,6 @@ SceneRoots:
   - {fileID: 2095856175}
   - {fileID: 498312813}
   - {fileID: 983678592}
-  - {fileID: 611879241}
   - {fileID: 1294829115}
   - {fileID: 1815525273}
   - {fileID: 2127301364}

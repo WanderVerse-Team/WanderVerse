@@ -69,21 +69,20 @@ namespace WanderVerse.Backend.UI
 
             private int CalculateStreak(PlayerData data)
             {
-                DateTime lastReset = DateTimeOffset
-                    .FromUnixTimeSeconds(data.lastDailyResetTimestamp)
-                    .LocalDateTime.Date;
+                if (data == null) return 1;
 
-                DateTime today = DateTime.Now.Date;
+                int savedStreak = Mathf.Max(1, data.loginStreak);
+                if (data.lastDailyResetTimestamp <= 0) return savedStreak;
 
-                int difference = (today - lastReset).Days;
+                DateTime lastResetDate = DateTimeOffset.FromUnixTimeSeconds(data.lastDailyResetTimestamp).LocalDateTime.Date;
+                DateTime currentDate = DateTimeOffset.Now.Date;
+                int dayGap = (currentDate - lastResetDate).Days;
 
-                if (difference == 0)
-                    return data.loginStreak;
+                if (dayGap <= 0) return savedStreak;
+                if (dayGap == 1) return savedStreak + 1;
 
-                if (difference == 1)
-                    return data.loginStreak + 1;
-
-                return 1; // reset streak
+                // Missed one or more days, so streak resets.
+                return 1;
             }
         }
 }

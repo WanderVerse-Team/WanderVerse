@@ -18,6 +18,8 @@ MonoBehaviour:
   levelTitle: 
   description: 
   gameType: 1
+  parentMapSceneName: TalkingDoor_Game_Map
+  nextLevelSceneName: Numbers_Level2
   targetScore: 20
   possibleTargets: 
   pointsForCorrect: 1

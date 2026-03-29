@@ -419,9 +419,15 @@ public class PowerStationController : BaseLevelController
             submitButton.onClick.RemoveAllListeners();
             submitButton.onClick.AddListener(OnSubmitPressed);
         }
+    }
 
-        // Start the first turn
-        StartNextTurn();
+    protected override void BeginLevel()
+    {
+        base.BeginLevel();
+
+        // Start the first turn only after BaseLevelController marks the level active.
+        if (currentTurn == 0)
+            StartNextTurn();
     }
 
     private void EnsureLevelIdConfiguredForPowerStation()
@@ -1817,7 +1823,11 @@ public class PowerStationController : BaseLevelController
         if (waitDuration > 0f)
             yield return new WaitForSecondsRealtime(waitDuration);
 
-        EndLevel(true);
+        if (GameManager.Instance == null)
+            Debug.LogError("[PowerStation] GameManager.Instance is null at victory. Standard WinScreen event flow requires GameManager (usually from Boot scene).");
+
+        base.EndLevel(true);
+
         isProcessingResult = false;
     }
 

@@ -8,8 +8,8 @@ public class LevelSelectButton : MonoBehaviour
     [Tooltip("Enter the exact name of the Unity Scene to load")]
     public string sceneToLoad = "";
 
-    [Header("UI Feedback")]
-    [Tooltip("Drag Seshani's 'Out of Energy' UI panel here")]
+    [Header("Energy Feedback")]
+    [Tooltip("Drag 'Out of Energy' UI panel here")]
     public GameObject outOfEnergyPopup;
 
     // Link this method to the Button's OnClick() event in the Inspector
