@@ -1753,8 +1753,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnifeCutter
   knifeTransform: {fileID: 370062332}
-  cutTolerance: 1.2
+  cutTolerance: 1.5
   knifeTipOffset: 0.5
+  grabRadius: 1.5
   levelController: {fileID: 524858635}
 --- !u!4 &370062332
 Transform:

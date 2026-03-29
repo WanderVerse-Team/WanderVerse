@@ -255,6 +255,17 @@ public class QuarterCutter : MonoBehaviour
         knifeTransform.position = knifeStartPosition;
         knifeTransform.localEulerAngles = new Vector3(0, 0, 0);
 
+        // Save post-cut positions for reset on wrong answer
+    foreach (string name in new string[]{"TopLeft","TopRight","BottomLeft","BottomRight"})
+    {
+        Transform piece = currentItem.transform.Find(name);
+        if (piece != null)
+    {
+        PieceDragger dragger = piece.GetComponent<PieceDragger>();
+        if (dragger != null) dragger.SetResetPosition();
+    }
+    }
+
         levelController.OnBothCutsDone();
     }
 

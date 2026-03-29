@@ -11,6 +11,7 @@ public class KnifeCutter : MonoBehaviour
     [Header("--- Cut Settings ---")]
     public float cutTolerance = 1.0f;
     public float knifeTipOffset = 0.5f;
+    public float grabRadius = 1.5f; // How close player needs to tap to grab knife
 
     [Header("--- Level Controller ---")]
     public FractionsLevelController levelController;
@@ -36,7 +37,6 @@ public class KnifeCutter : MonoBehaviour
         cutDone          = false;
         knifeEnteredItem = false;
 
-        // Use collider bounds center — fixes offset sprites!
         Collider2D col = item.GetComponent<Collider2D>();
         itemCenter = col != null ? col.bounds.center : item.transform.position;
 
@@ -56,7 +56,6 @@ public class KnifeCutter : MonoBehaviour
         if (cutDone) return;
         if (currentItem == null) return;
 
-        // Use Pointer — works for both mouse and touch automatically
         var pointer = Pointer.current;
         if (pointer == null) return;
 
@@ -64,11 +63,11 @@ public class KnifeCutter : MonoBehaviour
         Vector2 worldPos  = Camera.main.ScreenToWorldPoint(
             new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane));
 
-        // Press
+        // Press — use radius check for forgiving touch area
         if (pointer.press.wasPressedThisFrame && !isDragging)
         {
-            Collider2D hit = Physics2D.OverlapPoint(worldPos);
-            if (hit != null && hit.transform == knifeTransform)
+            float dist = Vector2.Distance(worldPos, knifeTransform.position);
+            if (dist <= grabRadius)
             {
                 isDragging       = true;
                 knifeEnteredItem = false;
@@ -117,7 +116,6 @@ public class KnifeCutter : MonoBehaviour
 
     private void ValidateCut()
     {
-        // Refresh center using collider bounds
         Collider2D col = currentItem.GetComponent<Collider2D>();
         itemCenter = col != null ? col.bounds.center : currentItem.transform.position;
 
@@ -180,7 +178,6 @@ public class KnifeCutter : MonoBehaviour
             yield return null;
         }
 
-        // Reset immediately to start position
         knifeTransform.position = knifeStartPosition;
     }
 

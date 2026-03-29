@@ -10,29 +10,26 @@ public class PieceDragger : MonoBehaviour
     public Transform plate;
 
     [Header("--- Settings ---")]
-    [Tooltip("How close to plate center to count as placed")]
     public float snapDistance = 1.5f;
 
-    // -------------------------------------------------------
     // STATE
-    // -------------------------------------------------------
-    private bool isDragging   = false;
-    private bool isPlaced     = false;
-    private Vector3 startPos;
+    private bool isDragging = false;
+    private bool isPlaced   = false;
+    private Vector3 resetPos; // Position after cut — reset here on wrong answer
     private Camera mainCam;
 
-    // -------------------------------------------------------
-    // START
-    // -------------------------------------------------------
     private void Start()
     {
-        startPos  = transform.position;
-        mainCam   = Camera.main;
+        mainCam  = Camera.main;
+        resetPos = transform.position;
     }
 
-    // -------------------------------------------------------
-    // UPDATE
-    // -------------------------------------------------------
+    // Call this after cut animation completes to save the post-cut position
+    public void SetResetPosition()
+    {
+        resetPos = transform.position;
+    }
+
     private void Update()
     {
         if (isPlaced) return;
@@ -69,9 +66,6 @@ public class PieceDragger : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------------
-    // CHECK IF PLACED ON PLATE
-    // -------------------------------------------------------
     private void CheckIfOnPlate()
     {
         if (plate == null) return;
@@ -81,11 +75,10 @@ public class PieceDragger : MonoBehaviour
 
         if (dist <= snapDistance)
         {
-            // Snap to plate
             isPlaced = true;
             transform.position = plate.position + new Vector3(
-                Random.Range(-0.3f, 0.3f), 
-                Random.Range(-0.3f, 0.3f), 
+                Random.Range(-0.3f, 0.3f),
+                Random.Range(-0.3f, 0.3f),
                 0f);
 
             Debug.Log($"[PieceDragger] Placed on plate!");
@@ -93,21 +86,18 @@ public class PieceDragger : MonoBehaviour
             if (levelController != null)
                 levelController.OnPiecePlaced();
 
-            // Disable collider so it can't be moved again
             Collider2D col = GetComponent<Collider2D>();
             if (col != null) col.enabled = false;
         }
         else
         {
-            // Return to start position
-            transform.position = startPos;
-            Debug.Log($"[PieceDragger] Missed plate, returned to start.");
+            // Return to post-cut position
+            transform.position = resetPos;
+            Debug.Log($"[PieceDragger] Missed plate, returned to cut position.");
         }
     }
 
-    // -------------------------------------------------------
-    // RESET (called when new item starts)
-    // -------------------------------------------------------
+    // Called on wrong answer — animate back to post-cut position
     public void ResetPiece()
     {
         isPlaced   = false;
@@ -116,19 +106,19 @@ public class PieceDragger : MonoBehaviour
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = true;
 
-        StartCoroutine(AnimateBackToStart());
+        StartCoroutine(AnimateBackToReset());
     }
 
-    private IEnumerator AnimateBackToStart()
+    private IEnumerator AnimateBackToReset()
     {
         Vector3 from = transform.position;
         float t = 0;
         while (t < 1f)
         {
             t += Time.deltaTime * 5f;
-            transform.position = Vector3.Lerp(from, startPos, t);
+            transform.position = Vector3.Lerp(from, resetPos, t);
             yield return null;
         }
-        transform.position = startPos;
+        transform.position = resetPos;
     }
 }
