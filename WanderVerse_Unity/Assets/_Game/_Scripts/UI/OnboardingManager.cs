@@ -11,6 +11,16 @@ public class OnboardingManager : MonoBehaviour
         SceneManager.LoadScene("Scene_GradeSelection");
     }
 
+    public void StartGuestOnboarding()
+    {
+        Debug.Log("[Onboarding] Starting Guest Onboarding...");
+
+        // Initialize the Guest Data
+        CloudSyncManager.Instance.InitializeAsGuest();
+
+        SceneManager.LoadScene("Scene_GradeSelection");
+    }
+
     // 1. Link this to your Grade 3 Button
     public void SelectGrade(int grade)
     {
