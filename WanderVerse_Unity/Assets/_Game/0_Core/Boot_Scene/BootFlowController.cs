@@ -5,17 +5,17 @@ public class BootFlowController : MonoBehaviour
 {
     private void OnEnable()
     {
-        AppInitialization.OnInitializationComplete += TransitionToSplashScreen;
+        AppInitialization.OnInitializationComplete += TransitionToSignInScene;
     }
 
     private void OnDisable()
     {
-        AppInitialization.OnInitializationComplete -= TransitionToSplashScreen;
+        AppInitialization.OnInitializationComplete -= TransitionToSignInScene;
     }
 
-    private void TransitionToSplashScreen() 
+    private void TransitionToSignInScene() 
     {
-        Debug.Log("[BootFlowController] All systems green. Loading Splash Screen...");
-        SceneManager.LoadScene(1);
+        Debug.Log("[BootFlowController] All systems green. Loading SignIn Scene...");
+        SceneManager.LoadScene("Scene_SignIn");
     }
 }

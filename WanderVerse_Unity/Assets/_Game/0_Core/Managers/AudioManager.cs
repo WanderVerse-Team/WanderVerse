@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager Instance { get; private set; }
 
     // private Coroutine musicFadeRoutine; // Add a coroutine to fade music in and out
 
@@ -82,6 +82,16 @@ public class AudioManager : MonoBehaviour
     public void StopMusic()
     {
         musicSource.Stop();
+    }
+
+    public void StopAllAudio()
+    {
+        if (musicSource != null) musicSource.Stop();
+        if (sfxSource != null) sfxSource.Stop();
+        if (voiceSource != null) voiceSource.Stop();
+
+        StopAllCoroutines();
+        mainMixer.SetFloat("MusicVol", PlayerPrefs.GetFloat("MusicVol", 0f));
     }
 
     // ========================================================================

@@ -1,23 +1,33 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 
 public class SplashController : MonoBehaviour
 {
-    [SerializeField] private Animator laserAnimator; 
-    [SerializeField] private float delayBeforeSwitch = 3.0f;
+    public VideoPlayer videoPlayer;
+    public string nextSceneName = "Scene_SignIn";
 
     void Start()
     {
-        if (laserAnimator != null)
-        {
-            laserAnimator.Play("Laser_Sweep_Anim"); 
-        }
-
-        Invoke("SwitchToSignIn", delayBeforeSwitch);
+        StartCoroutine(PlaySplashVideo());
     }
 
-    void SwitchToSignIn()
+    private IEnumerator PlaySplashVideo()
     {
-        SceneManager.LoadScene("Scene_SignIn");
+        videoPlayer.Prepare();
+
+        while (!videoPlayer.isPrepared)
+        {
+            yield return null;
+        }
+
+        videoPlayer.Play();
+
+        float waitTime = (float)videoPlayer.length - 0.1f;
+        yield return new WaitForSeconds(waitTime);
+
+        Debug.Log("[SplashController] Splash video complete. Loading Sign In...");
+        SceneManager.LoadScene(nextSceneName);
     }
 }

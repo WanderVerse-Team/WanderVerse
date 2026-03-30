@@ -1,5 +1,3 @@
-
-
 //Importing dependencies
 require('dotenv').config();
 const express = require('express');
@@ -26,7 +24,13 @@ if(!admin.apps.length){
         });
     } else {
         console.log("Initializing Firebase with Environment Variables")
-        admin.initializeApp();
+        admin.initializeApp({
+            credential: admin.credential.cert({
+                projectId: process.env.FIREBASE_PROJECT_ID,
+                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+            })
+        });
     }
 }
 
@@ -62,8 +66,8 @@ app.get('/api/keys', verifyToken, (req, res) => {
     });
 });
 
-//GET leaderboard endpoint
-app.get('/api/leaderboard', leaderboardController.getGlobalLeaderboard);
+//GET leaderboard endpoint (auth required - guests cannot access)
+app.get('/api/leaderboard', verifyToken, leaderboardController.getGlobalLeaderboard);
 
 //app object is exported so Vercel can use it to start the server
 module.exports = app;

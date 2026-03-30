@@ -12,19 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac25f2abb44d67048b01407e824ebb84, type: 3}
   m_Name: Level3_5s_Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  possibleTargets: 0f0000000a00000014000000190000001e00000023000000
   lessonID: 
   lessonTitle: 
-  levelID: 
+  levelID: L01_GOL_3
   levelTitle: Count by 3s
   description: 
   gameType: 0
+  parentMapSceneName: Golem_Game_Map
+  nextLevelSceneName: 
   targetScore: 10
+  possibleTargets: 0f0000000a00000014000000190000001e00000023000000
   pointsForCorrect: 5
   pointsForWrong: 1
+  maxMistakes: 0
   useTimer: 0
   levelTimeLimit: 0
-  maxMistakes: 0
+  maxXpReward: 100
+  baseXpReward: 20
+  xpDeductionPerMistake: 5
+  perfectRunBonus: 5
+  maxMistakesFor3Stars: 0
+  maxMistakesFor2Stars: 2
+  backgroundMusic: {fileID: 0}
   spawnItems:
   - {fileID: 260998855790233345, guid: caf15f172f20d454eb9026cf89aa29ad, type: 3}
   - {fileID: 2432229838946283954, guid: 3ce3c83e47b69114da73c5bc0562293b, type: 3}
@@ -37,6 +46,16 @@ MonoBehaviour:
   - {fileID: 4241116998263851838, guid: 1d7e77c8bbfed0d4e999a33d2eb8ce54, type: 3}
   - {fileID: 6397541237196930485, guid: 698f01e8fee372b498106f7c61cbc0a2, type: 3}
   validValue: 5
-  countByStep: 1
   spawnRate: 2
   itemFallSpeed: 3
+  questions: []
+  totalTurns: 3
+  batteryRows: 2
+  minTargetPower: 20
+  maxTargetPower: 99
+  extraDistractorBatteries: 3
+  totalItems: 10
+  guidedItemCount: 5
+  cutTolerance: 0.4
+  treasureRounds: []
+  correctDaysSequence: []

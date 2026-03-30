@@ -17,15 +17,15 @@ public class TreasurePackerController : BaseLevelController
     public Sprite chestClosedSprite;
 
     [Header("--- PLACE VALUE UI ---")]
-    public TMP_Text signPromptText;  // The instruction sign
+    public TMP_Text signPromptText;  
     public TMP_Text tensCounter; 
     public TMP_Text onesCounter;     
 
     [Header("--- SPAWNER SETTINGS ---")]
     public GameObject goldBarPrefab;
     public GameObject singleCoinPrefab;
-    public Transform barSpawnPoint;  // Where bars shoot from (e.g., a pipe or off-screen)
-    public Transform coinSpawnPoint; // Where coins shoot from
+    public Transform barSpawnPoint;  
+    public Transform coinSpawnPoint; 
     public int batchSpawnAmount = 5; // How many to shoot out at once
 
     [Header("--- THROW PHYSICS ---")]
@@ -56,16 +56,17 @@ public class TreasurePackerController : BaseLevelController
     private bool isSpawningBars = false;
     private bool isSpawningCoins = false;
 
-    // Our "Deck" of random rounds
+    
     private List<TreasureRound> availableRounds = new List<TreasureRound>();
 
-    // 1. Tell the Base Controller what type of game this is
+    // Tell the Base Controller what type of game this is
     protected override GameType SupportedGameType => GameType.PlaceValue;
 
-    // 2. Initialize our specific Place Value data
+    
     protected override void InitializeLevel()
     {
-        // Copy the rounds from LevelData into our temporary deck so we can pull them randomly
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        // Copy the rounds from LevelData into a temporary deck so to pull them randomly
         if (levelData.treasureRounds != null)
         {
             availableRounds = new List<TreasureRound>(levelData.treasureRounds);
@@ -80,14 +81,15 @@ public class TreasurePackerController : BaseLevelController
     
     protected override void BeginLevel()
     {
-        base.BeginLevel(); // This sets up the timer/score in the Base class
         
-        // This shoots the coins for the Treasure Packer!
+        base.BeginLevel(); 
+        
+        // This shoots the coins for the Treasure Packer
         StartCoroutine(SpawnBarsRoutine());
         StartCoroutine(SpawnCoinsRoutine());
         LoadNextRound();
     }
-// --- NEW: ASYNC SPAWNING COROUTINES ---
+
 
     private IEnumerator SpawnBarsRoutine()
     {
@@ -142,31 +144,31 @@ public class TreasurePackerController : BaseLevelController
         {
             rb.bodyType = RigidbodyType2D.Dynamic; 
 
-            // 1. Add some random spread so it looks like a natural fountain
+            // Add some random spread 
             float finalAngle = baseAngle + Random.Range(-throwSpread, throwSpread);
             
-            // 2. Convert degrees to radians (Unity's math functions require radians)
+            
             float angleRad = finalAngle * Mathf.Deg2Rad;
 
-            // 3. Calculate the exact X and Y direction using Cos and Sin
+            // Calculate the exact X and Y direction using Cos and Sin
             Vector2 throwDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 
-            // 4. Apply the force (with a tiny bit of random strength for variety)
+            // Apply the force 
             float randomForce = Random.Range(throwForce * 0.8f, throwForce * 1.2f);
             rb.AddForce(throwDirection * randomForce, ForceMode2D.Impulse);
             
-            // 5. Give it a random spin
+            
             rb.AddTorque(Random.Range(-15f, 15f));
         }
     }
 
-    // --- UPDATED: CONSUME ITEM ---
+   
 
     public void ConsumeItem(int amount)
     {
         if (!isGameActive || isRoundTransitioning) return;
 
-        // 1. Keep track of what we just ate (Spawning logic)
+        // Keep track of the number of item in the scene for spawning.
         if (amount == 10) 
         {
             activeBarsInScene--;
@@ -178,7 +180,7 @@ public class TreasurePackerController : BaseLevelController
             if (activeCoinsInScene <= 1 && !isSpawningCoins) StartCoroutine(SpawnCoinsRoutine());
         }
 
-        // 2. Just do the math and update the UI. No automatic checking!
+        
         currentChestValue += amount;
         UpdateCounterUI();
     }
@@ -191,7 +193,7 @@ public class TreasurePackerController : BaseLevelController
 
         OpenChest(); // Make sure the chest is open for the next round
 
-        // Safety check: If we run out of questions before the level ends, refill the deck!
+        
         if (availableRounds.Count == 0)
         {
             availableRounds = new List<TreasureRound>(levelData.treasureRounds);
@@ -212,7 +214,7 @@ public class TreasurePackerController : BaseLevelController
         
         UpdateCounterUI();
     }
-    // --- NEW: CONFIRMATION LOGIC ---
+    
     public void ConfirmChest()
     {
         if (!isGameActive || isRoundTransitioning) return;
@@ -222,7 +224,7 @@ public class TreasurePackerController : BaseLevelController
             chestVisual.sprite = chestClosedSprite;
         }
 
-        // Check if they packed the exact right amount
+        // Check if it packed the exact right amount
         if (currentChestValue == currentRoundTargetValue)
         {
             Debug.Log("Perfect Match! You locked in the right amount.");
@@ -238,7 +240,7 @@ public class TreasurePackerController : BaseLevelController
         }
         else 
         {
-            // If it's wrong (either too heavy OR too light)
+            // If the answer is wrong.
             Debug.Log($"Wrong amount! You packed {currentChestValue}, but needed {currentRoundTargetValue}.");
             HandleWrongAnswer(); 
             if (AudioManager.Instance != null)
@@ -246,7 +248,7 @@ public class TreasurePackerController : BaseLevelController
                 AudioManager.Instance.PlayError();
             }
             
-            // Empty the chest so they can try again
+            // Empty the chest so to try again
             currentChestValue = 0; 
             UpdateCounterUI();
 

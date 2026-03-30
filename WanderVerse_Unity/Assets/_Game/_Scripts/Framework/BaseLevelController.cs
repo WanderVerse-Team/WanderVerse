@@ -37,28 +37,31 @@ public abstract class BaseLevelController : MonoBehaviour
     // Events to update the UI
     public System.Action<int> OnScoreUpdated;
     public System.Action<float> OnTimerUpdated;
-    public System.Action<bool> OnLevelEnded;
+
+    public int CurrentScore => currentScore;
+    public int MistakeCount => mistakeCount;
+    public LevelData CurrentLevelData => levelData;
 
     protected virtual void Awake()
     {
         // If you need to initialize any level specific internal variables, do it here
+        SpawnWinScreen();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
-        if (GameManager.Instance != null) 
-        {
-            LevelData injectedData = GameManager.Instance.GetPendingLevelData();
-
-            if (injectedData != null) 
-            {
-                levelData = injectedData;
-                Debug.Log($"[BaseLevelController] LevelData injected from Menu: {levelData.levelTitle}");
-            }
-        }
-
         if (!ValidateLevelData()) return;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetCurrentLevelData(levelData);
+            Debug.Log($"[BaseLevelController] Registered LevelData: {levelData.levelTitle}");
+        }
+        else
+        {
+            Debug.LogWarning("[BaseLevelController] No GameManager found! Starting in DEBUG mode.");
+        }
 
         LoadBaseData();
         InitializeLevel();
@@ -282,9 +285,25 @@ public abstract class BaseLevelController : MonoBehaviour
         }
 
         Debug.Log($"[BaseLevel] Level Over. Success: {isSuccess}. Mistakes: {mistakeCount}");
+    }
 
-        // Tell UI to open the Win/Lose screen
-        OnLevelEnded?.Invoke(isSuccess);
+    private void SpawnWinScreen()
+    {
+        if (FindAnyObjectByType<WinScreenController>() != null) return;
+
+        // Load the prefab directly from the Resources folder
+        GameObject winScreenPrefab = Resources.Load<GameObject>("WinScreen_Canvas");
+
+        // Spawn it into the hierarchy
+        if (winScreenPrefab != null)
+        {
+            Instantiate(winScreenPrefab);
+            Debug.Log("[BaseLevelController] Successfully spawned the Win Screen UI.");
+        }
+        else
+        {
+            Debug.LogError("[BaseLevelController] Could not find 'WinScreen_Canvas' in a Resources folder!");
+        }
     }
 
 }

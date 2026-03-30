@@ -10,7 +10,7 @@ public class FruitIdentity : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Tell the controller "I am gone, you can spawn another one!"
+        // To notify the controller when this fruit is destroyed.
         if (controller != null)
         {
             controller.RemoveFruit(this);
@@ -21,7 +21,7 @@ public class FruitIdentity : MonoBehaviour
 {
     if (!Application.isPlaying) return;
 
-    // Check if THIS object still exists before destroying it
+    // Check if this object still exists before destroying it
     if (gameObject != null)
     {
         Destroy(gameObject);

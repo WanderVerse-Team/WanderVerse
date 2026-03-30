@@ -1,6 +1,6 @@
 export type link = {
   label: string
-  href?: string
+  href: string
 }
 
 export type footerlinks = {

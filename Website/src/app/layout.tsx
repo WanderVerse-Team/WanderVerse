@@ -4,6 +4,7 @@ import Header from '@/app/components/Layout/Header'
 import Footer from '@/app/components/Layout/Footer'
 import ScrollToTop from '@/app/components/ScrollToTop'
 import Aoscompo from '@/utils/aos'
+import CustomCursor from '@/app/components/CustomCursor'
 const font = Manrope({ subsets: ['latin'] })
 
 // at top-level of src/app/layout.tsx
@@ -23,7 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${font.className}`}>
+      <body className={`${font.className} cursor-none`}>
+        <CustomCursor />
         <Aoscompo>
           <Header />
           {children}

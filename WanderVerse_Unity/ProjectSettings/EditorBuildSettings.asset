@@ -30,11 +30,41 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/Menus/Scene_WorldMap.unity
     guid: 03d7bb7baf020f348af1bddcd7c087c1
   - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Scene_Dashboard.unity
+    guid: f636d67b48ba7aa42a9eede0cbfe14c1
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Scene_Leaderboard.unity
+    guid: b79287ed60eaa224ca543d85e7191c51
+  - enabled: 1
     path: Assets/_Game/Scenes/Menus/Forest_Minimap.unity
     guid: cc8e314648f33a944865a0ebedda708b
   - enabled: 1
     path: Assets/_Game/Scenes/Menus/Golem_Game_Map.unity
     guid: c8e03513295a243439401ab2e8611f53
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Space_Game_Map.unity
+    guid: fffb2a657dbc9b9499523bbc348b59a0
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/TalkingDoor_Game_Map.unity
+    guid: 15f1b16318fd2c947b20eaf904ebff2d
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Treasure_Game_Map.unity
+    guid: eaa29ff38ca6fae4a8e135a5b34f6139
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level1.unity
+    guid: 69eca5f6136a747498e3c6a8a03d74f8
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Talking Door/Numbers_Level2.unity
+    guid: 17570d88193fbb044bef841e32a8781b
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/City_Minimap.unity
+    guid: e6dcc985871190648bd1ef4bfcdcf756
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Factory_Game_Map.unity
+    guid: ca30ee1c75974d344863869d3943c25c
+  - enabled: 1
+    path: Assets/_Game/Scenes/Menus/Bakery_Game_Map.unity
+    guid: f70a6c282a40fba41af08c5af9797c2f
   - enabled: 1
     path: Assets/_Game/Scenes/Levels/Hungry Golem/HungryGolem1_1s.unity
     guid: 2438b70a3bb959f42b7bcfd94a3b427d
@@ -44,6 +74,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Game/Scenes/Levels/Hungry Golem/HungryGolem3_5s.unity
     guid: c4f818c46eaccb5458c62d0fbcd29d4d
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Power Station/PowerStation_Lv1.unity
+    guid: 3e22e15e009a2494286d86575eddb066
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/fractions/Crumble'sBakery_1.unity
+    guid: b018c147237dcca41886a4b2cedf6b89
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/fractions/Crumble'sBakery_2.unity
+    guid: ae1b5dc7e4ae31b4f9277331cbc0600e
+  - enabled: 1
+    path: Assets/_Game/Scenes/Levels/Treasure Packer/TreasurePacker_Level1.unity
+    guid: 5fa1e7684fdbc914f87d60035f5e5ccc
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

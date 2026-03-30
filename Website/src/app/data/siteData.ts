@@ -21,21 +21,21 @@ export const Aboutdata: aboutdata[] = [
     imgSrc: '/images/aboutus/imgOne.svg',
     paragraph:
       'We are a dedicated team of undergraduates in Computer Science studying at Informatics Institute of Technology(IIT) affiliated with the University of Westminster ',
-    link: 'Learn more',
+    link: 'Our Story',
   },
   {
     heading: 'Goals.',
     imgSrc: '/images/aboutus/imgTwo.svg',
     paragraph:
       'Developing new applications that enhance quality of life and promote sustainability.\nPromote technology-based solutions across every domain.',
-    link: 'Learn more',
+    link: 'Our Mission',
   },
   {
     heading: 'Our Works.',
     imgSrc: '/images/aboutus/imgThree.svg',
     paragraph:
       'WanderVerse--our maiden application that gamifies the local syllabus in schools, bridging school education, trends and technology.',
-    link: 'Learn more',
+    link: 'Featured Project',
   },
 ]
 
@@ -45,31 +45,49 @@ export const WorkData: workdata[] = [
     profession: 'UI/UX Developer',
     name: 'Seshani Balasooriya',
     imgSrc: '/images/wework/Seshani.jpeg',
+    github: 'https://github.com/seshanib',
+    linkedin: 'https://linkedin.com/in/seshanib',
+    email: 'seshanib@gmail.com',
   },
   {
     profession: 'Gameplay Designer',
     name: 'Theshara Rajapaksha',
     imgSrc: '/images/wework/theshara.jpeg',
+    github: 'https://github.com/Theshar2004',
+    linkedin: 'https://linkedin.com/in/thesharar',
+    email: 'theshara2023@gmail.com',
   },
   {
     profession: 'Level Designer',
     name: 'Vihanga Sathsari',
-    imgSrc: '/images/wework/Sakuni3.jpg',
+    imgSrc: '/images/wework/Sakuni.jpg',
+    github: 'https://github.com/vihangasathsari',
+    linkedin: 'https://linkedin.com/in/vihangas',
+    email: 'rhvsathsari111@gmail.com',
   },
   {
     profession: 'Cloud Integration Engineer',
     name: 'Himashi Dissanayake',
     imgSrc: '/images/wework/Himashi.jpg',
+    github: 'https://github.com/himashi0514',
+    linkedin: 'https://www.linkedin.com/in/himashi-dissanayake-00b318211',
+    email: 'himashi0514@gmail.com',
   },
   {
     profession: 'Systems Engineer',
     name: 'Randiv Mendis',
     imgSrc: '/images/wework/Randiv.jpg',
+    github: 'https://github.com/RandivMendis',
+    linkedin: 'https://www.linkedin.com/in/randiv-mendis-b6749a335',
+    email: 'randivmendis14@gmail.com',
   },
   {
     profession: 'Backend Developer',
     name: 'Senmith Sahajeewa',
     imgSrc: '/images/wework/Senmith.jpeg',
+    github: 'https://github.com/senmith',
+    linkedin: 'https://linkedin.com/in/senmith',
+    email: 'senmithsahajeewa@gmail.com',
   },
 ]
 
